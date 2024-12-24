@@ -25,7 +25,7 @@
     "Parameters": [
       {
         "Name": "loginRequest",
-        "Type": "IFRS16_Backend.Models.User",
+        "Type": "IFRS16_Backend.Models.Login",
         "IsRequired": true
       }
     ],

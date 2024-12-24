@@ -171,3 +171,4 @@ D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\IFRS16_Backend.g
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\ref\IFRS16_Backend.dll
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\IFRS16_Backend.sourcelink.json

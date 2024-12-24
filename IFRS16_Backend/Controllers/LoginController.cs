@@ -15,36 +15,44 @@ namespace IFRS16_Backend.Controllers
         private readonly IConfiguration _configuration = configuration;
 
         [HttpPost]
-        public IActionResult Login([FromBody] User loginRequest)
+        public IActionResult Login([FromBody] Login loginRequest)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == loginRequest.Username);
+            var user = _context.Users.FirstOrDefault(u => u.Email == loginRequest.Email && u.IsActive==true);
             if (user == null || user.PasswordHash != loginRequest.PasswordHash)
-                return Unauthorized("Invalid username or password.");
+                return Unauthorized("   ");
 
             var token = GenerateJwtToken(user);
 
-            return Ok(new { Token = token });
+            return Ok(new
+            {
+                Token = token,
+                User = (new
+                {
+                    user.UserID,
+                    user.Username,
+                    user.Email,
+                    user.PhoneNumber,
+                    user.UserAddress,
+                })
+            });
         }
 
         private string GenerateJwtToken(User user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
+                Subject = new ClaimsIdentity([
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
+                ]),
+                Expires = DateTime.UtcNow.AddHours(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
-            var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.UtcNow.AddMinutes(15),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

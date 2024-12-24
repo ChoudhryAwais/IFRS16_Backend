@@ -6,6 +6,7 @@ namespace IFRS16_Backend.Models
     {
         [Key]
         public int LeaseId { get; set; }
+        public int UserID { get; set; }
         public string LeaseName { get; set; }
         public long Rental { get; set; }
         public DateTime CommencementDate { get; set; }
