@@ -5,6 +5,44 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/LeaseFormData/GetAllLeases": {
+      "get": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaseFormData"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaseFormData"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaseFormData"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/LeaseFormData": {
       "post": {
         "tags": [
@@ -117,6 +155,10 @@
         "type": "object",
         "properties": {
           "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userID": {
             "type": "integer",
             "format": "int32"
           },

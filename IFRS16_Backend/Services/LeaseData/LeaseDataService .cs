@@ -20,5 +20,10 @@ namespace IFRS16_Backend.Services.LeaseData
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public IEnumerable<LeaseFormData> GetAllLeases()
+        {
+            return [.. _context.LeaseData];
+        }
     }
 }

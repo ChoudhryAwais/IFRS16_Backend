@@ -5,5 +5,6 @@ namespace IFRS16_Backend.Services.LeaseDataService
     public interface ILeaseDataService
     {
         Task<bool> AddLeaseFormDataAsync(LeaseFormData leaseFormData);
+        IEnumerable<LeaseFormData> GetAllLeases();
     }
 }

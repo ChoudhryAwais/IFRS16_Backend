@@ -12,6 +12,14 @@ namespace IFRS16_Backend.Controllers
         private readonly ILeaseDataService _leaseFormDataService = leaseFormDataService;
 
 
+        [HttpGet("GetAllLeases")]
+        public ActionResult<IEnumerable<LeaseFormData>> GetProducts()
+        {
+            var leases = _leaseFormDataService.GetAllLeases();
+            return Ok(leases);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> PostLeaseFormData([FromBody] LeaseFormData leaseFormData)
         {
