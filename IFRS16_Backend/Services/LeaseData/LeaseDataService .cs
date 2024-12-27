@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using IFRS16_Backend.Models;
-using IFRS16_Backend.Services.LeaseDataService;
 using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Services.LeaseData

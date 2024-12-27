@@ -3,8 +3,8 @@ using IFRS16_Backend.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-using IFRS16_Backend.Services.LeaseDataService;
 using IFRS16_Backend.Services.LeaseData;
+using IFRS16_Backend.Services.InitialRecognition;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +32,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<ILeaseDataService, LeaseDataService>();
+builder.Services.AddScoped<IInitialRecognitionService, InitialRecognitionService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

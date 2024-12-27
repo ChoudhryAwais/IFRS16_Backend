@@ -1,6 +1,6 @@
 ﻿using IFRS16_Backend.Models;
 
-namespace IFRS16_Backend.Services.LeaseDataService
+namespace IFRS16_Backend.Services.LeaseData
 {
     public interface ILeaseDataService
     {

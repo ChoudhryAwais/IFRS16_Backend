@@ -1,5 +1,5 @@
 ﻿using IFRS16_Backend.Models;
-using IFRS16_Backend.Services.LeaseDataService;
+using IFRS16_Backend.Services.LeaseData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +13,16 @@ namespace IFRS16_Backend.Controllers
 
 
         [HttpGet("GetAllLeases")]
-        public ActionResult<IEnumerable<LeaseFormData>> GetProducts()
+        public ActionResult<IEnumerable<LeaseFormData>> GetAllLeases()
         {
-            var leases = _leaseFormDataService.GetAllLeases();
-            return Ok(leases);
+            try
+            {
+                var leases = _leaseFormDataService.GetAllLeases();
+                return Ok(leases);
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
         }
 
 

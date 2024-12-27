@@ -1,5 +1,31 @@
 [
   {
+    "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
+    "Method": "GetInitialRecognitionForLease",
+    "RelativePath": "api/InitialRecognition/{leaseId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.InitialRecognitionResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
     "Method": "PostLeaseFormData",
     "RelativePath": "api/LeaseFormData",
@@ -17,7 +43,7 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
-    "Method": "GetProducts",
+    "Method": "GetAllLeases",
     "RelativePath": "api/LeaseFormData/GetAllLeases",
     "HttpMethod": "GET",
     "IsController": true,
