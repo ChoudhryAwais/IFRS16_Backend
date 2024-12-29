@@ -1,0 +1,6 @@
+services:
+  ifrs16_backend:
+    image: ${DOCKER_REGISTRY-}ifrs16backend
+    build:
+      context: .
+      dockerfile: IFRS16_Backend/Dockerfile

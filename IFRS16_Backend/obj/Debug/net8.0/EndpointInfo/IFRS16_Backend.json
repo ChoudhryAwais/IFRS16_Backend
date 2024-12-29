@@ -5,22 +5,30 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/InitialRecognition/{leaseId}": {
-      "get": {
+    "/api/InitialRecognition": {
+      "post": {
         "tags": [
           "InitialRecognition"
         ],
-        "parameters": [
-          {
-            "name": "leaseId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -176,6 +184,54 @@
         }
       }
     },
+    "/api/ROUSchedule": {
+      "post": {
+        "tags": [
+          "ROUSchedule"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ROUScheduleRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ROUScheduleRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ROUScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ROUScheduleTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ROUScheduleTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ROUScheduleTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Values/getdummyusers": {
       "get": {
         "tags": [
@@ -297,6 +353,41 @@
           "passwordHash": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ROUScheduleRequest": {
+        "type": "object",
+        "properties": {
+          "leaseData": {
+            "$ref": "#/components/schemas/LeaseFormData"
+          },
+          "totalNPV": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ROUScheduleTable": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "opening": {
+            "type": "number",
+            "format": "double"
+          },
+          "amortization": {
+            "type": "number",
+            "format": "double"
+          },
+          "closing": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

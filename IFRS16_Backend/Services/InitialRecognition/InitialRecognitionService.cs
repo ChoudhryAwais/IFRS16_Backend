@@ -5,18 +5,11 @@ using Microsoft.SqlServer.Server;
 
 namespace IFRS16_Backend.Services.InitialRecognition
 {
-    public class InitialRecognitionService(ApplicationDbContext context) : IInitialRecognitionService
+    public class InitialRecognitionService() : IInitialRecognitionService
     {
-        private readonly ApplicationDbContext _context = context;
-
-        public InitialRecognitionResult GetInitialRecognitionForLease(int leaseId)
+        public InitialRecognitionResult GetInitialRecognitionForLease(LeaseFormData leaseSpecificData)
         {
-            var leaseSpecificData = _context.LeaseData.FirstOrDefault(l => l.LeaseId == leaseId);
-            if (leaseSpecificData == null)
-            {
-                throw new ArgumentException($"Lease with ID {leaseId} not found.");
-            }
-            var (TotalYears, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate);
+            var (TotalYears, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate);
             var startTable = (leaseSpecificData.Annuity == "advance") ? 0 : 1;
             var endTable = (leaseSpecificData.Annuity == "advance") ? TotalYears -1 : TotalYears;
             decimal rental = leaseSpecificData.Rental;

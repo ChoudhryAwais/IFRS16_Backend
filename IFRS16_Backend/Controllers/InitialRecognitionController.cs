@@ -10,12 +10,12 @@ namespace IFRS16_Backend.Controllers
     {
         private readonly IInitialRecognitionService _intialRecognitionService = intialRecognitionService;
 
-        [HttpGet("{leaseId}")]
-        public ActionResult<InitialRecognitionResult> GetInitialRecognitionForLease(int leaseId)
+        [HttpPost]
+        public ActionResult<InitialRecognitionResult> GetInitialRecognitionForLease([FromBody] LeaseFormData leaseData)
         {
             try
             {
-                var leases = _intialRecognitionService.GetInitialRecognitionForLease(leaseId);
+                var leases = _intialRecognitionService.GetInitialRecognitionForLease(leaseData);
                 return Ok(leases);
             }
             catch (Exception ex)

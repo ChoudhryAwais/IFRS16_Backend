@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using IFRS16_Backend.Services.LeaseData;
 using IFRS16_Backend.Services.InitialRecognition;
+using IFRS16_Backend.Services.ROUSchedule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<ILeaseDataService, LeaseDataService>();
 builder.Services.AddScoped<IInitialRecognitionService, InitialRecognitionService>();
+builder.Services.AddScoped<IROUScheduleService, ROUScheduleService>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -4,6 +4,6 @@ namespace IFRS16_Backend.Services.InitialRecognition
 {
     public interface IInitialRecognitionService
     {
-        InitialRecognitionResult GetInitialRecognitionForLease(int leaseId);
+        InitialRecognitionResult GetInitialRecognitionForLease(LeaseFormData leaseSpecificData);
     }
 }

@@ -2,14 +2,14 @@
   {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetInitialRecognitionForLease",
-    "RelativePath": "api/InitialRecognition/{leaseId}",
-    "HttpMethod": "GET",
+    "RelativePath": "api/InitialRecognition",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "leaseId",
-        "Type": "System.Int32",
+        "Name": "leaseData",
+        "Type": "IFRS16_Backend.Models.LeaseFormData",
         "IsRequired": true
       }
     ],
@@ -92,6 +92,32 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",
+    "Method": "GetROUSchedule",
+    "RelativePath": "api/ROUSchedule",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.ROUScheduleRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.ROUScheduleTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.ValuesController",
