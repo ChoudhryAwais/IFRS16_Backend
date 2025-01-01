@@ -1,4 +1,5 @@
-﻿using IFRS16_Backend.Helper;
+﻿using IFRS16_Backend.enums;
+using IFRS16_Backend.Helper;
 using IFRS16_Backend.Models;
 using IFRS16_Backend.Services.LeaseData;
 using Microsoft.SqlServer.Server;
@@ -9,13 +10,14 @@ namespace IFRS16_Backend.Services.InitialRecognition
     {
         public InitialRecognitionResult GetInitialRecognitionForLease(LeaseFormData leaseSpecificData)
         {
-            var (TotalYears, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate);
-            var startTable = (leaseSpecificData.Annuity == "advance") ? 0 : 1;
-            var endTable = (leaseSpecificData.Annuity == "advance") ? TotalYears -1 : TotalYears;
+            var (TotalInitialRecoDuration, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate,leaseSpecificData.Frequency);
+            var startTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1;
+            var endTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? TotalInitialRecoDuration - 1: TotalInitialRecoDuration;
             decimal rental = leaseSpecificData.Rental;
-            int IBR = leaseSpecificData.IBR;    
+            int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
+            int IBR = leaseSpecificData.IBR/ (12 / frequecnyFactor);
             decimal totalNPV = 0;
-            decimal discountFactor = 1 + (IBR / 100m);
+            decimal discountFactor = (1 + (IBR / 100m));
             List<double> cashFlow = [];
             List<DateTime> dates = [];
             List<InitialRecognitionTable> initialRecognition = [];
@@ -24,8 +26,8 @@ namespace IFRS16_Backend.Services.InitialRecognition
             {
                 // Ensure IBR is in decimal for precision
                 decimal NPV = rental / DecimalPower.DecimalPowerCal(discountFactor, i);
-                DateTime newDate = leaseSpecificData.CommencementDate.AddYears(i);
-                if (leaseSpecificData.Annuity == "Arrears")
+                DateTime newDate = leaseSpecificData.CommencementDate.AddMonths(i * frequecnyFactor);
+                if (leaseSpecificData.Annuity == AnnuityType.Arrears)
                     newDate = newDate.AddDays(-1);
                 string formattedDate = newDate.ToString("yyyy-MM-dd");
                 DateTime formattedDateForXirr = newDate;
