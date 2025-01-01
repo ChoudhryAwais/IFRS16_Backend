@@ -62,6 +62,32 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
+    "Method": "GetLeaseLiability",
+    "RelativePath": "api/LeaseLiability",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseLiabilityRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.LeaseLiabilityTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.LoginController",
     "Method": "Login",
     "RelativePath": "api/Login",

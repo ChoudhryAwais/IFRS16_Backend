@@ -17,7 +17,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             decimal totalNPV = 0;
             decimal discountFactor = 1 + (IBR / 100m);
             List<double> cashFlow = [];
-            List<string> dates = [];
+            List<DateTime> dates = [];
             List<InitialRecognitionTable> initialRecognition = [];
 
             for (int i = startTable; i <= endTable; i++)
@@ -28,7 +28,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                 if (leaseSpecificData.Annuity == "Arrears")
                     newDate = newDate.AddDays(-1);
                 string formattedDate = newDate.ToString("yyyy-MM-dd");
-                string formattedDateForXirr = newDate.ToString("yyyyMMdd");
+                DateTime formattedDateForXirr = newDate;
                 totalNPV += NPV;
 
 
@@ -46,7 +46,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             }
 
             cashFlow.Insert(0, (double)-totalNPV);
-            dates.Insert(0, leaseSpecificData.CommencementDate.ToString("yyyyMMdd"));
+            dates.Insert(0, leaseSpecificData.CommencementDate);
 
             return new InitialRecognitionResult
             {

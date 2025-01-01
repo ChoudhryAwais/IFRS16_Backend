@@ -13,6 +13,6 @@
         public decimal TotalNPV { get; set; }
         public List<InitialRecognitionTable> InitialRecognition { get; set; }
         public List<double> CashFlow { get; set; }
-        public List<string> Dates { get; set; }
+        public List<DateTime> Dates { get; set; }
     }
 }
