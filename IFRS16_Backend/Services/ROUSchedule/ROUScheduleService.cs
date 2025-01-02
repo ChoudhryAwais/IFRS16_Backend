@@ -1,13 +1,15 @@
 ﻿using IFRS16_Backend.Helper;
 using IFRS16_Backend.Models;
 using IFRS16_Backend.Services.InitialRecognition;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 namespace IFRS16_Backend.Services.ROUSchedule
 {
-    public class ROUScheduleService() : IROUScheduleService
+    public class ROUScheduleService(ApplicationDbContext context) : IROUScheduleService
     {
-        public IEnumerable<ROUScheduleTable> GetROUSchedule(double totalNPV, LeaseFormData leaseData)
+        private readonly ApplicationDbContext _context = context;
+        public async Task<bool> PostROUSchedule(double totalNPV, LeaseFormData leaseData)
         {
             // Calculate amortization
             var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
@@ -23,7 +25,8 @@ namespace IFRS16_Backend.Services.ROUSchedule
                 // Add the ROU schedule entry
                 rouSchedule.Add(new ROUScheduleTable
                 {
-                    Date = currentDate,
+                    LeaseId=leaseData.LeaseId,
+                    ROU_Date = currentDate,
                     Opening = opening,
                     Amortization = amortization,
                     Closing = closing
@@ -35,7 +38,15 @@ namespace IFRS16_Backend.Services.ROUSchedule
                 closing = ((opening - amortization) + double.Epsilon) * 100 / 100;
             }
 
-            return rouSchedule;
+            _context.ROUSchedule.AddRange(rouSchedule);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        public IEnumerable<ROUScheduleTable> GetROUSchedule(int leaseId)
+        {
+            return [.. _context.ROUSchedule.Where(item => item.LeaseId == leaseId)];
+            
         }
     }
 }

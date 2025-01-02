@@ -6,8 +6,8 @@ namespace IFRS16_Backend.Models
     {
         public DbSet<User> Users { get; set; }
         public DbSet<LeaseFormData> LeaseData { get; set; }
-        //public DbSet<InitialRecognitionTable> InitialRecognition { get; set; }
-        //public DbSet<ROUScheduleTable> ROUSchedule { get; set; }
-        //public DbSet<LeaseLiabilityTable> LeaseLiability { get; set; }
+        public DbSet<InitialRecognitionTable> InitialRecognition { get; set; }
+        public DbSet<ROUScheduleTable> ROUSchedule { get; set; }
+        public DbSet<LeaseLiabilityTable> LeaseLiability { get; set; }
     }
 }

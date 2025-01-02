@@ -1,8 +1,13 @@
-﻿namespace IFRS16_Backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace IFRS16_Backend.Models
 {
     public class ROUScheduleTable
     {
-        public DateTime Date { get; set; }
+        [Key]
+        public int ID { get; set; }
+        public int LeaseId { get; set; }
+        public DateTime ROU_Date { get; set; }
         public double Opening { get; set; }
         public double Amortization { get; set; }
         public double Closing { get; set; }

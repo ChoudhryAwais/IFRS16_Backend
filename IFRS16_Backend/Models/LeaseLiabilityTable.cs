@@ -1,8 +1,13 @@
-﻿namespace IFRS16_Backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace IFRS16_Backend.Models
 {
     public class LeaseLiabilityTable
     {
-        public string Date { get; set; }
+        [Key]
+        public int ID { get; set; }
+        public int LeaseId { get; set; }
+        public DateTime LeaseLiability_Date { get; set; }
         public double Opening { get; set; }
         public double Interest { get; set; }
         public double Payment { get; set; }

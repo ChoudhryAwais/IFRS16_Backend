@@ -1,11 +1,13 @@
 ﻿using IFRS16_Backend.Helper;
 using IFRS16_Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Services.LeaseLiability
 {
-    public class LeaseLiabilityService() : ILeaseLiabilityService
+    public class LeaseLiabilityService(ApplicationDbContext context) : ILeaseLiabilityService
     {
-        public IEnumerable<LeaseLiabilityTable> GetLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData)
+        private readonly ApplicationDbContext _context = context;
+        public async Task<bool> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData)
         {
             var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             double xirr = XIRR.XIRRCalculation(cashFlow, dates);
@@ -25,15 +27,14 @@ namespace IFRS16_Backend.Services.LeaseLiability
             {
                 // Format the current date
                 string formattedDateForXirr = FormatDate.FormatDateSimple(currentDate);
-                string formattedDate = FormatDate.FormatDateSimple(currentDate);
 
                 // Determine the rental amount
                 double rental = 0;
                 if (dates.Contains(currentDate))
                 {
                     int indexOfDate = dates.FindIndex(date => FormatDate.FormatDateSimple(date) == formattedDateForXirr);
-                    
-                        rental = cashFlow[indexOfDate]; 
+
+                    rental = cashFlow[indexOfDate];
                 }
 
                 // Calculate interest and closing balance
@@ -43,7 +44,8 @@ namespace IFRS16_Backend.Services.LeaseLiability
                 // Create a new table entry
                 var tableObj = new LeaseLiabilityTable
                 {
-                    Date = formattedDate,
+                    LeaseId = leaseData.LeaseId,
+                    LeaseLiability_Date = currentDate,
                     Opening = opening,
                     Interest = interest,
                     Payment = rental,
@@ -58,7 +60,15 @@ namespace IFRS16_Backend.Services.LeaseLiability
                 leaseTable.Add(tableObj);
             }
 
-            return leaseTable;
+            _context.LeaseLiability.AddRange(leaseTable);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        public IEnumerable<LeaseLiabilityTable> GetLeaseLiability(int leaseId)
+        {
+            return [.. _context.LeaseLiability.Where(item => item.LeaseId == leaseId)];
+
         }
     }
 }

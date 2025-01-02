@@ -2,7 +2,33 @@
   {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetInitialRecognitionForLease",
-    "RelativePath": "api/InitialRecognition",
+    "RelativePath": "api/InitialRecognition/{leaseId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.InitialRecognitionResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
+    "Method": "PostInitialRecognitionForLease",
+    "RelativePath": "api/InitialRecognition/Add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -63,8 +89,34 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
-    "Method": "GetLeaseLiability",
-    "RelativePath": "api/LeaseLiability",
+    "Method": "GetLeaseLiabilityForLease",
+    "RelativePath": "api/LeaseLiability/{leaseId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.LeaseLiabilityTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
+    "Method": "PostLeaseLiability",
+    "RelativePath": "api/LeaseLiability/Add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -121,8 +173,34 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",
-    "Method": "GetROUSchedule",
-    "RelativePath": "api/ROUSchedule",
+    "Method": "GetROUScheduleForLease",
+    "RelativePath": "api/ROUSchedule/{leaseId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.InitialRecognitionResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",
+    "Method": "PostROUScheduleForLease",
+    "RelativePath": "api/ROUSchedule/Add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

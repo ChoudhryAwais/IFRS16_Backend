@@ -10,19 +10,34 @@ namespace IFRS16_Backend.Controllers
     {
         private readonly IInitialRecognitionService _intialRecognitionService = intialRecognitionService;
 
-        [HttpPost]
-        public ActionResult<InitialRecognitionResult> GetInitialRecognitionForLease([FromBody] LeaseFormData leaseData)
+        [HttpPost("Add")]
+        public async Task<ActionResult<InitialRecognitionResult>> PostInitialRecognitionForLease([FromBody] LeaseFormData leaseData)
         {
             try
             {
-                var leases = _intialRecognitionService.GetInitialRecognitionForLease(leaseData);
-                return Ok(leases);
+                var result = await _intialRecognitionService.PostInitialRecognitionForLease(leaseData);
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
          
+        }
+
+        [HttpGet("{leaseId}")]
+        public async Task<ActionResult<InitialRecognitionResult>> GetInitialRecognitionForLease(int leaseId)
+        {
+            try
+            {
+                var result = await _intialRecognitionService.GetInitialRecognitionForLease(leaseId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
     }

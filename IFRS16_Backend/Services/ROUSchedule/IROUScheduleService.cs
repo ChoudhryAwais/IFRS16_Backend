@@ -4,6 +4,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
 {
     public interface IROUScheduleService
     {
-        IEnumerable<ROUScheduleTable> GetROUSchedule(double totalNPV, LeaseFormData leaseData);
+        Task<bool> PostROUSchedule(double TotalNPV, LeaseFormData leaseData);
+        IEnumerable<ROUScheduleTable> GetROUSchedule(int leaseId);
     }
 }

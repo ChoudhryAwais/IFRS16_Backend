@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/InitialRecognition": {
+    "/api/InitialRecognition/Add": {
       "post": {
         "tags": [
           "InitialRecognition"
@@ -29,6 +29,46 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/InitialRecognition/{leaseId}": {
+      "get": {
+        "tags": [
+          "InitialRecognition"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -122,7 +162,7 @@
         }
       }
     },
-    "/api/LeaseLiability": {
+    "/api/LeaseLiability/Add": {
       "post": {
         "tags": [
           "LeaseLiability"
@@ -146,6 +186,46 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LeaseLiability/{leaseId}": {
+      "get": {
+        "tags": [
+          "LeaseLiability"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -232,7 +312,7 @@
         }
       }
     },
-    "/api/ROUSchedule": {
+    "/api/ROUSchedule/Add": {
       "post": {
         "tags": [
           "ROUSchedule"
@@ -273,6 +353,46 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ROUScheduleTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ROUSchedule/{leaseId}": {
+      "get": {
+        "tags": [
+          "ROUSchedule"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
                 }
               }
             }
@@ -331,13 +451,21 @@
       "InitialRecognitionTable": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "serialNo": {
             "type": "integer",
             "format": "int32"
           },
           "paymentDate": {
             "type": "string",
-            "nullable": true
+            "format": "date-time"
           },
           "rental": {
             "type": "number",
@@ -424,9 +552,17 @@
       "LeaseLiabilityTable": {
         "type": "object",
         "properties": {
-          "date": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseLiability_Date": {
             "type": "string",
-            "nullable": true
+            "format": "date-time"
           },
           "opening": {
             "type": "number",
@@ -477,7 +613,15 @@
       "ROUScheduleTable": {
         "type": "object",
         "properties": {
-          "date": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "roU_Date": {
             "type": "string",
             "format": "date-time"
           },
