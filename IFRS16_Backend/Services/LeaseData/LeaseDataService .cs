@@ -20,9 +20,17 @@ namespace IFRS16_Backend.Services.LeaseData
             return true;
         }
 
-        public IEnumerable<LeaseFormData> GetAllLeases()
+        public async Task<LeaseFormDataResult> GetAllLeases(int pageNumber,int pageSize)
         {
-            return [.. _context.LeaseData];
+
+            IEnumerable<ExtendedLeaseDataSP> leaseData = await _context.GetLeaseDataPaginatedAsync(pageNumber, pageSize);
+            int totalRecord = await _context.LeaseData.CountAsync();
+
+            return new()
+            {
+                Data = leaseData,
+                TotalRecords = totalRecord,
+            };
         }
     }
 }

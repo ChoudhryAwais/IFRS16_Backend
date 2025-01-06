@@ -53,19 +53,37 @@
         }
       }
     },
-    "/api/InitialRecognition/{leaseId}": {
+    "/api/InitialRecognition": {
       "get": {
         "tags": [
           "InitialRecognition"
         ],
         "parameters": [
           {
-            "name": "leaseId",
-            "in": "path",
-            "required": true,
+            "name": "pageNumber",
+            "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "leaseId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
             }
           }
         ],
@@ -98,6 +116,26 @@
         "tags": [
           "LeaseFormData"
         ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -106,7 +144,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/LeaseFormData"
+                    "$ref": "#/components/schemas/ExtendedLeaseDataSP"
                   }
                 }
               },
@@ -114,7 +152,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/LeaseFormData"
+                    "$ref": "#/components/schemas/ExtendedLeaseDataSP"
                   }
                 }
               },
@@ -122,7 +160,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/LeaseFormData"
+                    "$ref": "#/components/schemas/ExtendedLeaseDataSP"
                   }
                 }
               }
@@ -210,19 +248,37 @@
         }
       }
     },
-    "/api/LeaseLiability/{leaseId}": {
+    "/api/LeaseLiability": {
       "get": {
         "tags": [
           "LeaseLiability"
         ],
         "parameters": [
           {
-            "name": "leaseId",
-            "in": "path",
-            "required": true,
+            "name": "pageNumber",
+            "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "leaseId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
             }
           }
         ],
@@ -360,19 +416,37 @@
         }
       }
     },
-    "/api/ROUSchedule/{leaseId}": {
+    "/api/ROUSchedule": {
       "get": {
         "tags": [
           "ROUSchedule"
         ],
         "parameters": [
           {
-            "name": "leaseId",
-            "in": "path",
-            "required": true,
+            "name": "pageNumber",
+            "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "leaseId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
             }
           }
         ],
@@ -382,17 +456,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                  "$ref": "#/components/schemas/ROUScheduleResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                  "$ref": "#/components/schemas/ROUScheduleResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                  "$ref": "#/components/schemas/ROUScheduleResult"
                 }
               }
             }
@@ -415,6 +489,52 @@
   },
   "components": {
     "schemas": {
+      "ExtendedLeaseDataSP": {
+        "type": "object",
+        "properties": {
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "rental": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "commencementDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "annuity": {
+            "type": "string",
+            "nullable": true
+          },
+          "ibr": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "frequency": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "InitialRecognitionResult": {
         "type": "object",
         "properties": {
@@ -444,6 +564,10 @@
               "format": "date-time"
             },
             "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -606,6 +730,23 @@
           "totalNPV": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ROUScheduleResult": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ROUScheduleTable"
+            },
+            "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

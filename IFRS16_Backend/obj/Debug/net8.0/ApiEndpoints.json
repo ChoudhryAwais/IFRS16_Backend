@@ -2,15 +2,25 @@
   {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetInitialRecognitionForLease",
-    "RelativePath": "api/InitialRecognition/{leaseId}",
+    "RelativePath": "api/InitialRecognition",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
         "Name": "leaseId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -74,10 +84,21 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[IFRS16_Backend.Models.LeaseFormData, IFRS16_Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[IFRS16_Backend.Models.ExtendedLeaseDataSP, IFRS16_Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -90,15 +111,25 @@
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
     "Method": "GetLeaseLiabilityForLease",
-    "RelativePath": "api/LeaseLiability/{leaseId}",
+    "RelativePath": "api/LeaseLiability",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
         "Name": "leaseId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -174,20 +205,30 @@
   {
     "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",
     "Method": "GetROUScheduleForLease",
-    "RelativePath": "api/ROUSchedule/{leaseId}",
+    "RelativePath": "api/ROUSchedule",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
         "Name": "leaseId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "IFRS16_Backend.Models.InitialRecognitionResult",
+        "Type": "IFRS16_Backend.Models.ROUScheduleResult",
         "MediaTypes": [
           "text/plain",
           "application/json",

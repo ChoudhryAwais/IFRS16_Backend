@@ -25,7 +25,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
                 // Add the ROU schedule entry
                 rouSchedule.Add(new ROUScheduleTable
                 {
-                    LeaseId=leaseData.LeaseId,
+                    LeaseId = leaseData.LeaseId,
                     ROU_Date = currentDate,
                     Opening = opening,
                     Amortization = amortization,
@@ -43,10 +43,17 @@ namespace IFRS16_Backend.Services.ROUSchedule
 
             return true;
         }
-        public IEnumerable<ROUScheduleTable> GetROUSchedule(int leaseId)
+        public async Task<ROUScheduleResult> GetROUSchedule(int pageNumber, int pageSize, int leaseId)
         {
-            return [.. _context.ROUSchedule.Where(item => item.LeaseId == leaseId)];
-            
+            IEnumerable<ROUScheduleTable> rouSchedule = await _context.GetROUSchedulePaginatedAsync(pageNumber, pageSize, leaseId);
+            int totalRecord = await _context.ROUSchedule.Where(r => r.LeaseId == leaseId).CountAsync();
+
+            return new()
+            {
+                Data = rouSchedule,
+                TotalRecords = totalRecord,
+            };
+
         }
     }
 }

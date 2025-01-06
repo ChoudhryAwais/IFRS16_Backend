@@ -62,23 +62,20 @@ namespace IFRS16_Backend.Services.InitialRecognition
             };
         }
 
-        public async Task<InitialRecognitionResult> GetInitialRecognitionForLease(int leaseId)
+        public async Task<InitialRecognitionResult> GetInitialRecognitionForLease(int pageNumber,int pageSize, int leaseId)
         {
             LeaseFormData? leaseSpecificData = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseId) ?? throw new InvalidOperationException("No lease data found for the given LeaseId.");
-            List<InitialRecognitionTable> initialRecognitionTable =await _context.InitialRecognition.Where(item => item.LeaseId == leaseId).ToListAsync();
-            List<double> cashFlow = initialRecognitionTable.Select(item => (double)(item.Rental)).ToList();
-            List<DateTime> dates = initialRecognitionTable.Select(item => item.PaymentDate).ToList();
-            decimal totalNPV = initialRecognitionTable.Sum(item => item.NPV);
+            IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber,pageSize,leaseId);
+            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId).ToListAsync() ;
+            decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
+            int totalRecord = fullInitialRecognitionTable.Count;
 
-            cashFlow.Insert(0, (double)-totalNPV);
-            dates.Insert(0, leaseSpecificData.CommencementDate);
 
             return new InitialRecognitionResult
             {
                 TotalNPV = totalNPV,
                 InitialRecognition = initialRecognitionTable,
-                CashFlow = cashFlow,
-                Dates = dates
+                TotalRecords = totalRecord
             };
         }
 

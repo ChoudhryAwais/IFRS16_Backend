@@ -16,8 +16,10 @@ namespace IFRS16_Backend.Models
     public class InitialRecognitionResult
     {
         public decimal TotalNPV { get; set; }
-        public List<InitialRecognitionTable> InitialRecognition { get; set; }
-        public List<double> CashFlow { get; set; }
-        public List<DateTime> Dates { get; set; }
+        public IEnumerable<InitialRecognitionTable> InitialRecognition { get; set; }
+        public List<double>? CashFlow { get; set; }
+        public List<DateTime>? Dates { get; set; }
+        public int TotalRecords { get; set; }
+
     }
 }

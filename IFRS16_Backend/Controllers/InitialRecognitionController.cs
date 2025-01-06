@@ -22,15 +22,15 @@ namespace IFRS16_Backend.Controllers
             {
                 return BadRequest(ex.Message);
             }
-         
+
         }
 
-        [HttpGet("{leaseId}")]
-        public async Task<ActionResult<InitialRecognitionResult>> GetInitialRecognitionForLease(int leaseId)
+        [HttpGet]
+        public async Task<ActionResult<InitialRecognitionResult>> GetInitialRecognitionForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0)
         {
             try
             {
-                var result = await _intialRecognitionService.GetInitialRecognitionForLease(leaseId);
+                var result = await _intialRecognitionService.GetInitialRecognitionForLease(pageNumber, pageSize, leaseId);
                 return Ok(result);
             }
             catch (Exception ex)

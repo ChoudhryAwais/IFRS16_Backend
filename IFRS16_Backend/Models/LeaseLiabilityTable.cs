@@ -20,4 +20,10 @@ namespace IFRS16_Backend.Models
         public List<DateTime> Dates { get; set; }
         public LeaseFormData LeaseData { get; set; }
     }
+    public class LeaseLiabilityResult
+    {
+        public IEnumerable<LeaseLiabilityTable> Data { get; set; }
+        public int TotalRecords { get; set; }
+
+    }
 }

@@ -16,7 +16,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var leaseLiability = await _leaseLiabilityService.PostLeaseLiability(request.TotalNPV,request.CashFlow,request.Dates, request.LeaseData);
+                var leaseLiability = await _leaseLiabilityService.PostLeaseLiability(request.TotalNPV, request.CashFlow, request.Dates, request.LeaseData);
                 return Ok(leaseLiability);
             }
             catch (Exception ex)
@@ -26,12 +26,12 @@ namespace IFRS16_Backend.Controllers
 
         }
 
-        [HttpGet("{leaseId}")]
-        public ActionResult<LeaseLiabilityTable> GetLeaseLiabilityForLease(int leaseId)
+        [HttpGet]
+        public async Task<ActionResult<LeaseLiabilityTable>> GetLeaseLiabilityForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0)
         {
             try
             {
-                var result = _leaseLiabilityService.GetLeaseLiability(leaseId);
+                var result = await _leaseLiabilityService.GetLeaseLiability(pageNumber, pageSize, leaseId);
                 return Ok(result);
             }
             catch (Exception ex)

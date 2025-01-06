@@ -17,4 +17,11 @@ namespace IFRS16_Backend.Models
         public LeaseFormData LeaseData { get; set; }
         public double TotalNPV { get; set; }
     }
+
+    public class ROUScheduleResult
+    {
+        public IEnumerable<ROUScheduleTable> Data { get; set; }
+        public int TotalRecords { get; set; }
+
+    }
 }
