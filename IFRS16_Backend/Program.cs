@@ -7,6 +7,7 @@ using IFRS16_Backend.Services.LeaseData;
 using IFRS16_Backend.Services.InitialRecognition;
 using IFRS16_Backend.Services.ROUSchedule;
 using IFRS16_Backend.Services.LeaseLiability;
+using IFRS16_Backend.Services.LeaseDataWorkflow;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,8 @@ builder.Services.AddScoped<ILeaseDataService, LeaseDataService>();
 builder.Services.AddScoped<IInitialRecognitionService, InitialRecognitionService>();
 builder.Services.AddScoped<IROUScheduleService, ROUScheduleService>();
 builder.Services.AddScoped<ILeaseLiabilityService, LeaseLiabilityService>();
+builder.Services.AddScoped<ILeaseDataWorkflowService, LeaseDataWorkflowService>();
+
 
 
 

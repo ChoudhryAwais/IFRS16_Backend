@@ -2,6 +2,7 @@
 using IFRS16_Backend.Models;
 using IFRS16_Backend.Services.InitialRecognition;
 using IFRS16_Backend.Services.LeaseData;
+using IFRS16_Backend.Services.LeaseDataWorkflow;
 using IFRS16_Backend.Services.LeaseLiability;
 using IFRS16_Backend.Services.ROUSchedule;
 using Microsoft.AspNetCore.Http;
@@ -13,15 +14,11 @@ namespace IFRS16_Backend.Controllers
     [ApiController]
     public class LeaseFormDataController(
         ILeaseDataService leaseFormDataService,
-        IInitialRecognitionService initialRecognitionService,
-        ILeaseLiabilityService leaseLiabilityService,
-        IROUScheduleService rOUScheduleService
+        ILeaseDataWorkflowService leaseDataWorkflowService
         ) : ControllerBase
     {
         private readonly ILeaseDataService _leaseFormDataService = leaseFormDataService;
-        private readonly IInitialRecognitionService _intialRecognitionService = initialRecognitionService;
-        private readonly ILeaseLiabilityService _leaseLiabilityService = leaseLiabilityService;
-        private readonly IROUScheduleService _rouScheduleService = rOUScheduleService;
+        private readonly ILeaseDataWorkflowService _leaseDataWorkflowService = leaseDataWorkflowService;
 
 
         [HttpGet("GetAllLeases")]
@@ -44,46 +41,13 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                bool result = await _leaseFormDataService.AddLeaseFormDataAsync(leaseFormData);
-                try
-                {
-                    var initialRecognitionRes = await _intialRecognitionService.PostInitialRecognitionForLease(leaseFormData);
-                    try
-                    {
-                        ROUScheduleRequest request = new()
-                        {
-                            TotalNPV = (double)initialRecognitionRes.TotalNPV,
-                            LeaseData = leaseFormData
-
-                        };
-                        var rouSchedule = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
-                        try
-                        {
-                            var leaseLiability = await _leaseLiabilityService.PostLeaseLiability(request.TotalNPV, initialRecognitionRes.CashFlow, initialRecognitionRes.Dates, leaseFormData);
-                            return CreatedAtAction(nameof(PostLeaseFormData), new { id = leaseFormData.LeaseId }, leaseFormData);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            return BadRequest(ex.Message);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return BadRequest(ex.Message);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.InnerException);
-                }
+                await _leaseDataWorkflowService.ProcessLeaseFormDataAsync(leaseFormData);
+                return CreatedAtAction(nameof(PostLeaseFormData), new { id = leaseFormData.LeaseId }, leaseFormData);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.InnerException);
+                return BadRequest(ex.Message);
             }
-
-
         }
     }
 }
