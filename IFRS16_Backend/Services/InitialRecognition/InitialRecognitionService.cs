@@ -13,27 +13,37 @@ namespace IFRS16_Backend.Services.InitialRecognition
         private readonly ApplicationDbContext _context = context;
         public async Task<InitialRecognitionResult> PostInitialRecognitionForLease(LeaseFormData leaseSpecificData)
         {
-            var (TotalInitialRecoDuration, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate,leaseSpecificData.Frequency);
+            var (TotalInitialRecoDuration, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate, leaseSpecificData.Frequency);
             var startTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1;
-            var endTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? TotalInitialRecoDuration - 1: TotalInitialRecoDuration;
+            var endTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? TotalInitialRecoDuration - 1 : TotalInitialRecoDuration;
+            endTable = (leaseSpecificData.GRV != null & leaseSpecificData.GRV != 0) ? endTable + 1 : endTable   ;
             decimal rental = leaseSpecificData.Rental;
             int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
-            int IBR = leaseSpecificData.IBR/ (12 / frequecnyFactor);
+            int IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
             decimal totalNPV = 0;
             decimal discountFactor = (1 + (IBR / 100m));
             List<double> cashFlow = [];
             List<DateTime> dates = [];
             List<InitialRecognitionTable> initialRecognition = [];
+            decimal incremetPre = 0;
+            if (leaseSpecificData.Increment != null && leaseSpecificData.Increment != 0)
+            {
+                incremetPre = (1 + ((decimal)leaseSpecificData.Increment / 100m));
+            }
 
             for (int i = startTable; i <= endTable; i++)
             {
-                // Ensure IBR is in decimal for precision
-                decimal NPV = rental / DecimalPower.DecimalPowerCal(discountFactor, i);
                 DateTime newDate = leaseSpecificData.CommencementDate.AddMonths(i * frequecnyFactor);
                 if (leaseSpecificData.Annuity == AnnuityType.Arrears)
                     newDate = newDate.AddDays(-1);
-                totalNPV += NPV;
+                if (leaseSpecificData.GRV != null && leaseSpecificData.GRV != 0 && i == endTable)
+                {
+                    rental = (int)leaseSpecificData.GRV;
+                    newDate = leaseSpecificData.EndDate;
+                }
 
+                decimal NPV = rental / DecimalPower.DecimalPowerCal(discountFactor, i);
+                totalNPV += NPV;
 
                 InitialRecognitionTable tableObj = new()
                 {
@@ -45,6 +55,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                 };
                 cashFlow.Add((double)rental);
                 dates.Add(newDate);
+                rental = rental * incremetPre;
                 initialRecognition.Add(tableObj);
 
             }
@@ -62,11 +73,11 @@ namespace IFRS16_Backend.Services.InitialRecognition
             };
         }
 
-        public async Task<InitialRecognitionResult> GetInitialRecognitionForLease(int pageNumber,int pageSize, int leaseId)
+        public async Task<InitialRecognitionResult> GetInitialRecognitionForLease(int pageNumber, int pageSize, int leaseId)
         {
             LeaseFormData? leaseSpecificData = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseId) ?? throw new InvalidOperationException("No lease data found for the given LeaseId.");
-            IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber,pageSize,leaseId);
-            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId).ToListAsync() ;
+            IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber, pageSize, leaseId);
+            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId).ToListAsync();
             decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
             int totalRecord = fullInitialRecognitionTable.Count;
 

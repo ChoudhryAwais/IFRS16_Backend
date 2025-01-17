@@ -14,7 +14,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
             // Calculate amortization
             var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             double amortization = ((totalNPV / TotalDays) + double.Epsilon) * 100 / 100;
-            double opening = totalNPV;
+            double opening = totalNPV+ (leaseData.IDC ?? 0);
             double closing = ((totalNPV - amortization) + double.Epsilon) * 100 / 100;
 
             var rouSchedule = new List<ROUScheduleTable>();

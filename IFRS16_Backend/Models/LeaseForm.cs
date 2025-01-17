@@ -14,6 +14,9 @@ namespace IFRS16_Backend.Models
         public string Annuity { get; set; }
         public int IBR { get; set; }
         public string Frequency { get; set; }
+        public double? IDC { get; set; }
+        public double? GRV { get; set; }
+        public double? Increment { get; set; }
     }
     public class LeaseFormDataResult
     {

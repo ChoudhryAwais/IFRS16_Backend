@@ -169,6 +169,6 @@ D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\refint\IFRS16_Ba
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\IFRS16_Backend.pdb
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\IFRS16_Backend.genruntimeconfig.cache
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\ref\IFRS16_Backend.dll
-D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\IFRS16_Backend.sourcelink.json
+D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

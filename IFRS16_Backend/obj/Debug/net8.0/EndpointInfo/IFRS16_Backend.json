@@ -640,6 +640,21 @@
           "frequency": {
             "type": "string",
             "nullable": true
+          },
+          "idc": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "grv": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "increment": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
