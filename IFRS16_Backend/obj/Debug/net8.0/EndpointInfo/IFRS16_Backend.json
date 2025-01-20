@@ -505,8 +505,8 @@
             "nullable": true
           },
           "rental": {
-            "type": "integer",
-            "format": "int64"
+            "type": "number",
+            "format": "double"
           },
           "commencementDate": {
             "type": "string",
@@ -521,8 +521,8 @@
             "nullable": true
           },
           "ibr": {
-            "type": "integer",
-            "format": "int32"
+            "type": "number",
+            "format": "double"
           },
           "frequency": {
             "type": "string",
@@ -530,6 +530,21 @@
           },
           "username": {
             "type": "string",
+            "nullable": true
+          },
+          "idc": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "grv": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "increment": {
+            "type": "number",
+            "format": "double",
             "nullable": true
           }
         },
@@ -618,8 +633,8 @@
             "nullable": true
           },
           "rental": {
-            "type": "integer",
-            "format": "int64"
+            "type": "number",
+            "format": "double"
           },
           "commencementDate": {
             "type": "string",
@@ -634,8 +649,8 @@
             "nullable": true
           },
           "ibr": {
-            "type": "integer",
-            "format": "int32"
+            "type": "number",
+            "format": "double"
           },
           "frequency": {
             "type": "string",

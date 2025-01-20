@@ -1,4 +1,5 @@
-﻿using IFRS16_Backend.Helper;
+﻿using IFRS16_Backend.enums;
+using IFRS16_Backend.Helper;
 using IFRS16_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,9 +33,11 @@ namespace IFRS16_Backend.Services.LeaseLiability
                 double rental = 0;
                 if (dates.Contains(currentDate))
                 {
-                    int indexOfDate = dates.FindIndex(date => FormatDate.FormatDateSimple(date) == formattedDateForXirr);
-
-                    rental = cashFlow[indexOfDate];
+                    if(i!= TotalDays || leaseData.Annuity!=AnnuityType.Advance)
+                    {
+                        int indexOfDate = dates.FindIndex(date => FormatDate.FormatDateSimple(date) == formattedDateForXirr);
+                        rental = cashFlow[indexOfDate]; 
+                    }
                 }
 
                 // Calculate interest and closing balance

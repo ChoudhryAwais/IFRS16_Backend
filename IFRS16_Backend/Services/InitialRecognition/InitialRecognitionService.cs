@@ -17,15 +17,15 @@ namespace IFRS16_Backend.Services.InitialRecognition
             var startTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1;
             var endTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? TotalInitialRecoDuration - 1 : TotalInitialRecoDuration;
             endTable = (leaseSpecificData.GRV != null & leaseSpecificData.GRV != 0) ? endTable + 1 : endTable   ;
-            decimal rental = leaseSpecificData.Rental;
+            decimal rental = (decimal)leaseSpecificData.Rental;
             int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
-            int IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
+            double IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
             decimal totalNPV = 0;
-            decimal discountFactor = (1 + (IBR / 100m));
+            decimal discountFactor = (1 + ((decimal)IBR / 100m));
             List<double> cashFlow = [];
             List<DateTime> dates = [];
             List<InitialRecognitionTable> initialRecognition = [];
-            decimal incremetPre = 0;
+            decimal incremetPre = 1;
             if (leaseSpecificData.Increment != null && leaseSpecificData.Increment != 0)
             {
                 incremetPre = (1 + ((decimal)leaseSpecificData.Increment / 100m));
@@ -79,6 +79,8 @@ namespace IFRS16_Backend.Services.InitialRecognition
             IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber, pageSize, leaseId);
             List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId).ToListAsync();
             decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
+            List<DateTime> dates = fullInitialRecognitionTable.Select(item => item.PaymentDate).ToList();
+
             int totalRecord = fullInitialRecognitionTable.Count;
 
 
@@ -86,7 +88,8 @@ namespace IFRS16_Backend.Services.InitialRecognition
             {
                 TotalNPV = totalNPV,
                 InitialRecognition = initialRecognitionTable,
-                TotalRecords = totalRecord
+                TotalRecords = totalRecord,
+                Dates=dates
             };
         }
 
