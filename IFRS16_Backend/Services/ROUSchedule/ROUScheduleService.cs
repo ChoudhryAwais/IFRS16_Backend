@@ -9,7 +9,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
     public class ROUScheduleService(ApplicationDbContext context) : IROUScheduleService
     {
         private readonly ApplicationDbContext _context = context;
-        public async Task<bool> PostROUSchedule(double totalNPV, LeaseFormData leaseData)
+        public async Task<List<ROUScheduleTable>> PostROUSchedule(double totalNPV, LeaseFormData leaseData)
         {
             // Calculate amortization
             var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
@@ -41,7 +41,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
             _context.ROUSchedule.AddRange(rouSchedule);
             await _context.SaveChangesAsync();
 
-            return true;
+            return rouSchedule;
         }
         public async Task<ROUScheduleResult> GetROUSchedule(int pageNumber, int pageSize, int leaseId)
         {

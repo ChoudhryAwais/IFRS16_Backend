@@ -5,6 +5,7 @@ using IFRS16_Backend.Services.LeaseData;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
+using System.Linq;
 
 namespace IFRS16_Backend.Services.InitialRecognition
 {
@@ -16,9 +17,10 @@ namespace IFRS16_Backend.Services.InitialRecognition
             var (TotalInitialRecoDuration, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate, leaseSpecificData.Frequency);
             var startTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1;
             var endTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? TotalInitialRecoDuration - 1 : TotalInitialRecoDuration;
-            endTable = (leaseSpecificData.GRV != null & leaseSpecificData.GRV != 0) ? endTable + 1 : endTable   ;
+            endTable = (leaseSpecificData.GRV != null & leaseSpecificData.GRV != 0) ? endTable + 1 : endTable;
             decimal rental = (decimal)leaseSpecificData.Rental;
             int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
+            int incrementalFrequecnyFactor=1;
             double IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
             decimal totalNPV = 0;
             decimal discountFactor = (1 + ((decimal)IBR / 100m));
@@ -29,13 +31,19 @@ namespace IFRS16_Backend.Services.InitialRecognition
             if (leaseSpecificData.Increment != null && leaseSpecificData.Increment != 0)
             {
                 incremetPre = (1 + ((decimal)leaseSpecificData.Increment / 100m));
+                incrementalFrequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.IncrementalFrequency) / frequecnyFactor;
             }
 
-            for (int i = startTable; i <= endTable; i++)
+            for (int i = startTable, incremetPeriod = incrementalFrequecnyFactor + ((leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1); i <= endTable; i++)
             {
                 DateTime newDate = leaseSpecificData.CommencementDate.AddMonths(i * frequecnyFactor);
                 if (leaseSpecificData.Annuity == AnnuityType.Arrears)
                     newDate = newDate.AddDays(-1);
+                if (i == incremetPeriod && leaseSpecificData.Increment != null && leaseSpecificData.Increment != 0)
+                {
+                    rental *= incremetPre;
+                    incremetPeriod += incrementalFrequecnyFactor;
+                }
                 if (leaseSpecificData.GRV != null && leaseSpecificData.GRV != 0 && i == endTable)
                 {
                     rental = (int)leaseSpecificData.GRV;
@@ -55,9 +63,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                 };
                 cashFlow.Add((double)rental);
                 dates.Add(newDate);
-                rental = rental * incremetPre;
                 initialRecognition.Add(tableObj);
-
             }
             cashFlow.Insert(0, (double)-totalNPV);
             dates.Insert(0, leaseSpecificData.CommencementDate);

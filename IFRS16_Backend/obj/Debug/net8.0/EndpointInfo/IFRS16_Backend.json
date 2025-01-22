@@ -111,6 +111,64 @@
         }
       }
     },
+    "/api/JournalEntries": {
+      "get": {
+        "tags": [
+          "JournalEntries"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "leaseId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalEntryResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalEntryResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalEntryResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/LeaseFormData/GetAllLeases": {
       "get": {
         "tags": [
@@ -133,6 +191,15 @@
               "type": "integer",
               "format": "int32",
               "default": 10
+            }
+          },
+          {
+            "name": "companyID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
             }
           }
         ],
@@ -288,17 +355,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                  "$ref": "#/components/schemas/LeaseLiabilityResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                  "$ref": "#/components/schemas/LeaseLiabilityResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                  "$ref": "#/components/schemas/LeaseLiabilityResult"
                 }
               }
             }
@@ -546,6 +613,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "companyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -617,6 +688,53 @@
         },
         "additionalProperties": false
       },
+      "JournalEntryResult": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JournalEntryTable"
+            },
+            "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JournalEntryTable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "jE_Date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "particular": {
+            "type": "string",
+            "nullable": true
+          },
+          "debit": {
+            "type": "number",
+            "format": "double"
+          },
+          "credit": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "LeaseFormData": {
         "type": "object",
         "properties": {
@@ -670,6 +788,14 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "incrementalFrequency": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -699,6 +825,23 @@
           },
           "leaseData": {
             "$ref": "#/components/schemas/LeaseFormData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LeaseLiabilityResult": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeaseLiabilityTable"
+            },
+            "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -844,6 +987,10 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "companyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

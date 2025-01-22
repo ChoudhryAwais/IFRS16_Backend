@@ -22,11 +22,11 @@ namespace IFRS16_Backend.Controllers
 
 
         [HttpGet("GetAllLeases")]
-        public async Task<ActionResult<IEnumerable<ExtendedLeaseDataSP>>> GetAllLeases([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<ExtendedLeaseDataSP>>> GetAllLeases([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int companyID = 1)
         {
             try
             {
-                var leases = await _leaseFormDataService.GetAllLeases(pageNumber, pageSize);
+                var leases = await _leaseFormDataService.GetAllLeases(pageNumber, pageSize, companyID);
                 return Ok(leases);
             }
             catch (Exception ex)

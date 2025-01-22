@@ -8,7 +8,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
     public class LeaseLiabilityService(ApplicationDbContext context) : ILeaseLiabilityService
     {
         private readonly ApplicationDbContext _context = context;
-        public async Task<bool> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData)
+        public async Task<List<LeaseLiabilityTable>> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData)
         {
             var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             double xirr = XIRR.XIRRCalculation(cashFlow, dates);
@@ -66,7 +66,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
             _context.LeaseLiability.AddRange(leaseTable);
             await _context.SaveChangesAsync();
 
-            return true;
+            return leaseTable;
         }
         public async Task<LeaseLiabilityResult> GetLeaseLiability(int pageNumber, int pageSize, int leaseId)
         {

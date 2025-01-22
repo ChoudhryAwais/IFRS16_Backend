@@ -17,7 +17,8 @@ namespace IFRS16_Backend.Controllers
         [HttpPost]
         public IActionResult Login([FromBody] Login loginRequest)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == loginRequest.Email && u.IsActive==true);
+            User user = _context.Users.FirstOrDefault(u => u.Email == loginRequest.Email && u.IsActive==true);
+            CompanyProfile companyProfile = _context.CompanyProfile.FirstOrDefault(u => u.CompanyID == user.CompanyID);
             if (user == null || user.PasswordHash != loginRequest.PasswordHash)
                 return Unauthorized("   ");
 
@@ -33,7 +34,9 @@ namespace IFRS16_Backend.Controllers
                     user.Email,
                     user.PhoneNumber,
                     user.UserAddress,
-                })
+                    user.CompanyID
+                }),
+                CompanyProfile = companyProfile
             });
         }
 

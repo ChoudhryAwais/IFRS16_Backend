@@ -11,5 +11,9 @@
             }
             return result;
         }
+        public static bool IsDecimal(string value)
+        {
+            return decimal.TryParse(value, out _);
+        }
     }
 }

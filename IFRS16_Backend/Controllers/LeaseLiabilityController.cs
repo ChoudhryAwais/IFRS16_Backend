@@ -27,7 +27,7 @@ namespace IFRS16_Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<LeaseLiabilityTable>> GetLeaseLiabilityForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0)
+        public async Task<ActionResult<LeaseLiabilityResult>> GetLeaseLiabilityForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0)
         {
             try
             {

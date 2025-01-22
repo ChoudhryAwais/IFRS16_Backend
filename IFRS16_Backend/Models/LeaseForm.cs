@@ -17,6 +17,9 @@ namespace IFRS16_Backend.Models
         public double? IDC { get; set; }
         public double? GRV { get; set; }
         public double? Increment { get; set; }
+        public string? IncrementalFrequency { get; set; }
+        public int CompanyID { get; set; }
+
     }
     public class LeaseFormDataResult
     {
@@ -36,8 +39,9 @@ namespace IFRS16_Backend.Models
         public double IBR { get; set; }
         public string Frequency { get; set; }
         public string Username { get; set; }
-        public double? IDC { get; set; } 
+        public double? IDC { get; set; }
         public double? GRV { get; set; }
-        public double? Increment { get; set; } 
+        public double? Increment { get; set; }
+        public int CompanyID { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using IFRS16_Backend.Models;
 using IFRS16_Backend.Services.InitialRecognition;
+using IFRS16_Backend.Services.JournalEntries;
 using IFRS16_Backend.Services.LeaseData;
 using IFRS16_Backend.Services.LeaseLiability;
 using IFRS16_Backend.Services.ROUSchedule;
@@ -10,12 +11,15 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
         ILeaseDataService leaseFormDataService,
         IInitialRecognitionService initialRecognitionService,
         IROUScheduleService rouScheduleService,
-        ILeaseLiabilityService leaseLiabilityService) : ILeaseDataWorkflowService
+        ILeaseLiabilityService leaseLiabilityService,
+        IJournalEntriesService journalEntriesService
+        ) : ILeaseDataWorkflowService
     {
         private readonly ILeaseDataService _leaseFormDataService = leaseFormDataService;
         private readonly IInitialRecognitionService _initialRecognitionService = initialRecognitionService;
         private readonly IROUScheduleService _rouScheduleService = rouScheduleService;
         private readonly ILeaseLiabilityService _leaseLiabilityService = leaseLiabilityService;
+        private readonly IJournalEntriesService _journalEntriesService = journalEntriesService;
 
         public async Task<bool> ProcessLeaseFormDataAsync(LeaseFormData leaseFormData)
         {
@@ -40,11 +44,13 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     leaseFormData
                 );
 
+                var journalEntries = await _journalEntriesService.PostJEForLease(leaseFormData, leaseLiability, rouSchedule);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Log and handle exceptions appropriately
+                Console.WriteLine(ex);
                 throw;
             }
         }
