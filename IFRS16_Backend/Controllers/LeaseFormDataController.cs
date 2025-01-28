@@ -49,5 +49,22 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("BulkImport")]
+        public async Task<IActionResult> PostBulkLeaseFormData([FromBody] List<LeaseFormData> leaseFormData)
+        {
+            try
+            {
+                foreach (var lease in leaseFormData)
+                {
+                    await _leaseDataWorkflowService.ProcessLeaseFormDataAsync(lease);
+                }
+
+                return CreatedAtAction(nameof(PostLeaseFormData), new { count = leaseFormData.Count }, leaseFormData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

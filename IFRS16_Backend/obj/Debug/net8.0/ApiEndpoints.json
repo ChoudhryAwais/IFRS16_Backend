@@ -115,6 +115,22 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "PostBulkLeaseFormData",
+    "RelativePath": "api/LeaseFormData/BulkImport",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseFormData",
+        "Type": "System.Collections.Generic.List\u00601[[IFRS16_Backend.Models.LeaseFormData, IFRS16_Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
     "Method": "GetAllLeases",
     "RelativePath": "api/LeaseFormData/GetAllLeases",
     "HttpMethod": "GET",
