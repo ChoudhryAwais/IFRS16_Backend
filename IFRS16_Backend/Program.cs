@@ -9,6 +9,9 @@ using IFRS16_Backend.Services.ROUSchedule;
 using IFRS16_Backend.Services.LeaseLiability;
 using IFRS16_Backend.Services.LeaseDataWorkflow;
 using IFRS16_Backend.Services.JournalEntries;
+using IFRS16_Backend.Services.LeaseLiabilityAggregation;
+using IFRS16_Backend.Services.Currencies;
+using IFRS16_Backend.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +44,12 @@ builder.Services.AddScoped<IROUScheduleService, ROUScheduleService>();
 builder.Services.AddScoped<ILeaseLiabilityService, LeaseLiabilityService>();
 builder.Services.AddScoped<ILeaseDataWorkflowService, LeaseDataWorkflowService>();
 builder.Services.AddScoped<IJournalEntriesService, JournalEntriesService>();
+builder.Services.AddScoped<ILeaseReportService, LeaseReportService>();
+builder.Services.AddScoped<ICurrenciesService, CurrenciesService>();
+builder.Services.AddScoped<GetCurrecyRates>();
+
+
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

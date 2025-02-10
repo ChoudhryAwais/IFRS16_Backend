@@ -32,5 +32,12 @@ namespace IFRS16_Backend.Services.LeaseData
                 TotalRecords = totalRecord,
             };
         }
+
+        public async Task<List<LeaseFormData>> GetAllLeasesForCompany(int companyId)
+        {
+
+            List<LeaseFormData> leaseData = await _context.LeaseData.Where(item => item.CompanyID==companyId).ToListAsync();
+            return leaseData;
+        }
     }
 }

@@ -1,5 +1,25 @@
 [
   {
+    "ContainingType": "IFRS16_Backend.Controllers.CurrencyController",
+    "Method": "GetAllCurrencies",
+    "RelativePath": "api/Currency/GetAllCurrencies",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[IFRS16_Backend.Models.CurrenciesTable, IFRS16_Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetInitialRecognitionForLease",
     "RelativePath": "api/InitialRecognition",
@@ -166,6 +186,32 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "GetAllLeasesForCompany",
+    "RelativePath": "api/LeaseFormData/GetAllLeasesForCompany",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[IFRS16_Backend.Models.LeaseFormData, IFRS16_Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
     "Method": "GetLeaseLiabilityForLease",
     "RelativePath": "api/LeaseLiability",
@@ -185,6 +231,11 @@
       },
       {
         "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "fc_lease",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -218,6 +269,32 @@
     "ReturnTypes": [
       {
         "Type": "IFRS16_Backend.Models.LeaseLiabilityTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseReportController",
+    "Method": "GetLeaseLiabilityForLease",
+    "RelativePath": "api/LeaseReport",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.LeaseLiabilityResult",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -279,6 +356,11 @@
       },
       {
         "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "fc_lease",
         "Type": "System.Int32",
         "IsRequired": false
       }

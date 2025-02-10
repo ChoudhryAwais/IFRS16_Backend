@@ -21,6 +21,21 @@ namespace IFRS16_Backend.Controllers
         private readonly ILeaseDataWorkflowService _leaseDataWorkflowService = leaseDataWorkflowService;
 
 
+        [HttpGet("GetAllLeasesForCompany")]
+        public async Task<ActionResult<List<LeaseFormData>>> GetAllLeasesForCompany([FromQuery] int companyId = 1)
+        {
+            try
+            {
+                var leases = await _leaseFormDataService.GetAllLeasesForCompany(companyId);
+                return Ok(leases);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpGet("GetAllLeases")]
         public async Task<ActionResult<IEnumerable<ExtendedLeaseDataSP>>> GetAllLeases([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int companyID = 1)
         {

@@ -5,6 +5,44 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Currency/GetAllCurrencies": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrenciesTable"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrenciesTable"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrenciesTable"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/InitialRecognition/Add": {
       "post": {
         "tags": [
@@ -162,6 +200,55 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JournalEntryResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LeaseFormData/GetAllLeasesForCompany": {
+      "get": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaseFormData"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaseFormData"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaseFormData"
+                  }
                 }
               }
             }
@@ -387,8 +474,65 @@
               "format": "int32",
               "default": 0
             }
+          },
+          {
+            "name": "fc_lease",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LeaseReport": {
+      "post": {
+        "tags": [
+          "LeaseReport"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -555,6 +699,15 @@
               "format": "int32",
               "default": 0
             }
+          },
+          {
+            "name": "fc_lease",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
           }
         ],
         "responses": {
@@ -596,6 +749,24 @@
   },
   "components": {
     "schemas": {
+      "CurrenciesTable": {
+        "type": "object",
+        "properties": {
+          "currencyID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "currencyName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ExtendedLeaseDataSP": {
         "type": "object",
         "properties": {
@@ -657,6 +828,53 @@
           "companyID": {
             "type": "integer",
             "format": "int32"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "currencyID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FC_LeaseLiabilityTable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseLiability_Date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "opening": {
+            "type": "number",
+            "format": "double"
+          },
+          "interest": {
+            "type": "number",
+            "format": "double"
+          },
+          "payment": {
+            "type": "number",
+            "format": "double"
+          },
+          "closing": {
+            "type": "number",
+            "format": "double"
+          },
+          "exchange_Gain_Loss": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -836,6 +1054,10 @@
           "companyID": {
             "type": "integer",
             "format": "int32"
+          },
+          "currencyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -875,7 +1097,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LeaseLiabilityTable"
+              "$ref": "#/components/schemas/FC_LeaseLiabilityTable"
             },
             "nullable": true
           },
@@ -916,6 +1138,24 @@
           "closing": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LeaseReportRequest": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "leaseIdList": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

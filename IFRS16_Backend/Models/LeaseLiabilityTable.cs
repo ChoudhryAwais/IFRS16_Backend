@@ -13,6 +13,19 @@ namespace IFRS16_Backend.Models
         public double Payment { get; set; }
         public double Closing { get; set; }
     }
+    public class FC_LeaseLiabilityTable
+    {
+        [Key]
+        public int ID { get; set; }
+        public int LeaseId { get; set; }
+        public DateTime LeaseLiability_Date { get; set; }
+        public double Opening { get; set; }
+        public double Interest { get; set; }
+        public double Payment { get; set; }
+        public double Closing { get; set; }
+        public double? Exchange_Gain_Loss { get; set; }
+
+    }
     public class LeaseLiabilityRequest
     {
         public double TotalNPV { get; set; }
@@ -22,7 +35,7 @@ namespace IFRS16_Backend.Models
     }
     public class LeaseLiabilityResult
     {
-        public IEnumerable<LeaseLiabilityTable> Data { get; set; }
+        public IEnumerable<FC_LeaseLiabilityTable> Data { get; set; }
         public int TotalRecords { get; set; }
 
     }

@@ -19,6 +19,7 @@ namespace IFRS16_Backend.Models
         public double? Increment { get; set; }
         public string? IncrementalFrequency { get; set; }
         public int CompanyID { get; set; }
+        public int CurrencyID { get; set; }
 
     }
     public class LeaseFormDataResult
@@ -43,5 +44,8 @@ namespace IFRS16_Backend.Models
         public double? GRV { get; set; }
         public double? Increment { get; set; }
         public int CompanyID { get; set; }
+        public string CurrencyCode { get; set; }
+        public int CurrencyID { get; set; }
+
     }
 }
