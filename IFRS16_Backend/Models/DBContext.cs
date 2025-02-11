@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace IFRS16_Backend.Models
 {
@@ -15,6 +14,7 @@ namespace IFRS16_Backend.Models
         public DbSet<FC_LeaseLiabilityTable> FC_LeaseLiability { get; set; }
         public DbSet<CompanyProfile> CompanyProfile { get; set; }
         public DbSet<JournalEntryTable> JournalEntries { get; set; }
+        public DbSet<FC_JournalEntryTable> FC_JournalEntries { get; set; }
         public DbSet<LeaseLiabilityAggregationTable> LeaseLiabilityAggregation { get; set; }
         public DbSet<ROUAggregationTable> ROUAggregation { get; set; }
         public DbSet<CurrenciesTable> Currencies { get; set; }
@@ -46,7 +46,7 @@ namespace IFRS16_Backend.Models
 
             return InitialRecognition;
         }
-        public async Task<IEnumerable<ROUScheduleTable>> GetROUSchedulePaginatedAsync(int pageNumber, int pageSize, int leaseId, int fc_lease=0)
+        public async Task<IEnumerable<ROUScheduleTable>> GetROUSchedulePaginatedAsync(int pageNumber, int pageSize, int leaseId, int fc_lease = 0)
         {
             var ROUSchedule = await this.ROUSchedule
                 .FromSqlRaw("EXEC GetROUSchedulePaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @FC_Lease = {3}", pageNumber, pageSize, leaseId, fc_lease)
@@ -62,15 +62,15 @@ namespace IFRS16_Backend.Models
 
             return LeaseLiability;
         }
-        public async Task<IEnumerable<JournalEntryTable>> GetJournalEntriesAsync(int pageNumber, int pageSize, int leaseId)
+        public async Task<IEnumerable<JournalEntryTable>> GetJournalEntriesAsync(int pageNumber, int pageSize, int leaseId, int fc_lease)
         {
             var JournalEntries = await this.JournalEntries
-                .FromSqlRaw("EXEC GetJournalEntriesPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
+                .FromSqlRaw("EXEC GetJournalEntriesPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @FC_Lease={3}", pageNumber, pageSize, leaseId, fc_lease)
                 .ToListAsync();
 
             return JournalEntries;
         }
-        public async Task<IEnumerable<LeaseLiabilityAggregationTable>> GetLeaseLiabilityAggregationTableAsync(DateTime startDate,DateTime endDate, string leaseIdList)
+        public async Task<IEnumerable<LeaseLiabilityAggregationTable>> GetLeaseLiabilityAggregationTableAsync(DateTime startDate, DateTime endDate, string leaseIdList)
         {
             var leaseLiabilityAggregation = await this.LeaseLiabilityAggregation
                 .FromSqlRaw("EXEC GetLeaseLiabilityAggregation @StartDate  = {0}, @EndDate = {1}, @LeaseIdList = {2}", startDate, endDate, leaseIdList)

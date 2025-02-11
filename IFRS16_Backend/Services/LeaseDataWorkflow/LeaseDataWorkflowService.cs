@@ -35,9 +35,9 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     LeaseData = leaseFormData
                 };
 
-                var rouSchedule = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
+                var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
 
-                var leaseLiability = await _leaseLiabilityService.PostLeaseLiability(
+                var (leaseLiability, fc_leaseLiability) = await _leaseLiabilityService.PostLeaseLiability(
                     request.TotalNPV,
                     initialRecognitionRes.CashFlow,
                     initialRecognitionRes.Dates,
@@ -45,6 +45,12 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                 );
 
                 var journalEntries = await _journalEntriesService.PostJEForLease(leaseFormData, leaseLiability, rouSchedule);
+                if(fc_rouSchedule.Count>0 && fc_leaseLiability.Count > 0)
+                {
+                    var fc_journalEntries = await _journalEntriesService.PostJEForLeaseforFC(leaseFormData, fc_leaseLiability, fc_rouSchedule);
+                }
+               
+
                 return true;
             }
             catch (Exception ex)
