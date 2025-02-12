@@ -27,11 +27,11 @@ namespace IFRS16_Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<LeaseLiabilityResult>> GetLeaseLiabilityForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0, [FromQuery] int fc_lease =0)
+        public async Task<ActionResult<LeaseLiabilityResult>> GetLeaseLiabilityForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0)
         {
             try
             {
-                var result = await _leaseLiabilityService.GetLeaseLiability(pageNumber, pageSize, leaseId, fc_lease);
+                var result = await _leaseLiabilityService.GetLeaseLiability(pageNumber, pageSize, leaseId);
                 return Ok(result);
             }
             catch (Exception ex)

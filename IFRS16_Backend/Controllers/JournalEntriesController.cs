@@ -12,11 +12,11 @@ namespace IFRS16_Backend.Controllers
     {
         private readonly IJournalEntriesService _journalEntriesService = journalEntriesService;
         [HttpGet]
-        public async Task<ActionResult<JournalEntryResult>> GetJournalEntriesForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0, [FromQuery] int fc_lease = 0)
+        public async Task<ActionResult<JournalEntryResult>> GetJournalEntriesForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0)
         {
             try
             {
-                var result = await _journalEntriesService.GetJEForLease(pageNumber, pageSize, leaseId, fc_lease);
+                var result = await _journalEntriesService.GetJEForLease(pageNumber, pageSize, leaseId);
                 return Ok(result);
             }
             catch (Exception ex)

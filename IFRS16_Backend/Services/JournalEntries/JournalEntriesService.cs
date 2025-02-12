@@ -75,6 +75,8 @@ namespace IFRS16_Backend.Services.JournalEntries
             {
                 LeaseLiabilityTable leaseliabilityData = leaseLiability[i];
                 ROUScheduleTable rouData = rouSchedule[i];
+                double threshold = 1e-7; // Adjust this based on precision requirements
+                double exhangeGainLossChecking = Math.Abs((double)leaseliabilityData?.Exchange_Gain_Loss) < threshold ? 0 : (double)leaseliabilityData?.Exchange_Gain_Loss;
 
                 // Create and push interest and lease interest journal entries
                 JEFinalTable.Add(new JournalEntryTable
@@ -94,6 +96,19 @@ namespace IFRS16_Backend.Services.JournalEntries
                     Credit = (decimal)leaseliabilityData.Interest,
                     LeaseId = leaseSpecificData.LeaseId
                 });
+
+                if (exhangeGainLossChecking != 0 && leaseliabilityData?.Exchange_Gain_Loss != null)
+                {
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = leaseliabilityData.LeaseLiability_Date,
+                        Particular = "Exchange Gain/Loss",
+                        Debit = (decimal)leaseliabilityData?.Exchange_Gain_Loss > 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
+                        Credit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                }
+
 
                 // Create and push amortization and ROU journal entries
                 JEFinalTable.Add(new JournalEntryTable
@@ -208,9 +223,6 @@ namespace IFRS16_Backend.Services.JournalEntries
             {
                 FC_LeaseLiabilityTable leaseliabilityData = fc_leaseLiability[i];
                 FC_ROUScheduleTable rouData = fc_rouSchedule[i];
-                double threshold = 1e-7; // Adjust this based on precision requirements
-                double exhangeGainLossChecking = Math.Abs((double)leaseliabilityData?.Exchange_Gain_Loss) < threshold ? 0 : (double)leaseliabilityData?.Exchange_Gain_Loss;
-
                 // Create and push interest and lease interest journal entries
                 JEFinalTable.Add(new FC_JournalEntryTable
                 {
@@ -229,20 +241,6 @@ namespace IFRS16_Backend.Services.JournalEntries
                     Credit = (decimal)leaseliabilityData.Interest,
                     LeaseId = leaseSpecificData.LeaseId
                 });
-
-
-                if (exhangeGainLossChecking != 0)
-                {
-                    JEFinalTable.Add(new FC_JournalEntryTable
-                    {
-                        JE_Date = leaseliabilityData.LeaseLiability_Date,
-                        Particular = "Exchange Gain/Loss",
-                        Debit = (decimal)leaseliabilityData?.Exchange_Gain_Loss > 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
-                        Credit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
-                        LeaseId = leaseSpecificData.LeaseId
-                    });
-                }
-
 
                 // Create and push amortization and ROU journal entries
                 JEFinalTable.Add(new FC_JournalEntryTable
@@ -292,9 +290,9 @@ namespace IFRS16_Backend.Services.JournalEntries
             return JEFinalTable;
         }
 
-        public async Task<JournalEntryResult> GetJEForLease(int pageNumber, int pageSize, int leaseId, int fc_lease)
+        public async Task<JournalEntryResult> GetJEForLease(int pageNumber, int pageSize, int leaseId)
         {
-            IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId, fc_lease);
+            IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId);
             int totalRecord = await _context.JournalEntries.Where(r => r.LeaseId == leaseId).CountAsync();
 
             return new()

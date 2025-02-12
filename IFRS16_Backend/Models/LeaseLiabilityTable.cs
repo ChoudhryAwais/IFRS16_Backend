@@ -12,6 +12,7 @@ namespace IFRS16_Backend.Models
         public double Interest { get; set; }
         public double Payment { get; set; }
         public double Closing { get; set; }
+        public double? Exchange_Gain_Loss { get; set; }
     }
     public class FC_LeaseLiabilityTable
     {
@@ -23,7 +24,6 @@ namespace IFRS16_Backend.Models
         public double Interest { get; set; }
         public double Payment { get; set; }
         public double Closing { get; set; }
-        public double? Exchange_Gain_Loss { get; set; }
 
     }
     public class LeaseLiabilityRequest
@@ -35,7 +35,7 @@ namespace IFRS16_Backend.Models
     }
     public class LeaseLiabilityResult
     {
-        public IEnumerable<FC_LeaseLiabilityTable> Data { get; set; }
+        public IEnumerable<LeaseLiabilityTable> Data { get; set; }
         public int TotalRecords { get; set; }
 
     }

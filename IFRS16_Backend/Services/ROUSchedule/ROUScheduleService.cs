@@ -15,13 +15,18 @@ namespace IFRS16_Backend.Services.ROUSchedule
             List<FC_ROUScheduleTable> fc_RouSchedule = [];
             List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData);
 
+            decimal exchangeRate=1;
             double amortization = ((totalNPV / TotalDays) + double.Epsilon) * 100 / 100;
             double opening = totalNPV + (leaseData.IDC ?? 0);
             double closing = ((totalNPV - amortization) + double.Epsilon) * 100 / 100;
 
             var rouSchedule = new List<ROUScheduleTable>();
             DateTime currentDate = leaseData.CommencementDate;
-            decimal exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
+            if (exchangeRatesList.Count > 0)
+            {
+                exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
+            }
+
             for (int i = 1; i <= TotalDays; i++)
             {
                 // Add the ROU schedule entry
@@ -29,9 +34,9 @@ namespace IFRS16_Backend.Services.ROUSchedule
                 {
                     LeaseId = leaseData.LeaseId,
                     ROU_Date = currentDate,
-                    Opening = opening,
-                    Amortization = amortization,
-                    Closing = closing
+                    Opening = opening * (double)exchangeRate,
+                    Amortization = amortization * (double)exchangeRate,
+                    Closing = closing * (double)exchangeRate,
                 });
                 if (exchangeRatesList.Count > 0)
                 {
@@ -40,9 +45,9 @@ namespace IFRS16_Backend.Services.ROUSchedule
                     {
                         LeaseId = leaseData.LeaseId,
                         ROU_Date = currentDate,
-                        Opening = opening * (double)exchangeRate,
-                        Amortization = amortization * (double)exchangeRate,
-                        Closing = closing * (double)exchangeRate
+                        Opening = opening,
+                        Amortization = amortization,
+                        Closing = closing
                     });
                 }
                 // Update values for the next iteration
@@ -69,9 +74,9 @@ namespace IFRS16_Backend.Services.ROUSchedule
 
             return (rouSchedule, fc_RouSchedule);
         }
-        public async Task<ROUScheduleResult> GetROUSchedule(int pageNumber, int pageSize, int leaseId, int fc_lease)
+        public async Task<ROUScheduleResult> GetROUSchedule(int pageNumber, int pageSize, int leaseId)
         {
-            IEnumerable<ROUScheduleTable> rouSchedule = await _context.GetROUSchedulePaginatedAsync(pageNumber, pageSize, leaseId, fc_lease);
+            IEnumerable<ROUScheduleTable> rouSchedule = await _context.GetROUSchedulePaginatedAsync(pageNumber, pageSize, leaseId);
             int totalRecord = await _context.ROUSchedule.Where(r => r.LeaseId == leaseId).CountAsync();
 
             return new()

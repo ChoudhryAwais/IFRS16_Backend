@@ -103,11 +103,6 @@
         "Name": "leaseId",
         "Type": "System.Int32",
         "IsRequired": false
-      },
-      {
-        "Name": "fc_lease",
-        "Type": "System.Int32",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -238,11 +233,6 @@
         "Name": "leaseId",
         "Type": "System.Int32",
         "IsRequired": false
-      },
-      {
-        "Name": "fc_lease",
-        "Type": "System.Int32",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -361,11 +351,6 @@
       },
       {
         "Name": "leaseId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "fc_lease",
         "Type": "System.Int32",
         "IsRequired": false
       }

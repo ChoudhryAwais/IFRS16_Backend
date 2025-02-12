@@ -46,26 +46,26 @@ namespace IFRS16_Backend.Models
 
             return InitialRecognition;
         }
-        public async Task<IEnumerable<ROUScheduleTable>> GetROUSchedulePaginatedAsync(int pageNumber, int pageSize, int leaseId, int fc_lease = 0)
+        public async Task<IEnumerable<ROUScheduleTable>> GetROUSchedulePaginatedAsync(int pageNumber, int pageSize, int leaseId)
         {
             var ROUSchedule = await this.ROUSchedule
-                .FromSqlRaw("EXEC GetROUSchedulePaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @FC_Lease = {3}", pageNumber, pageSize, leaseId, fc_lease)
+                .FromSqlRaw("EXEC GetROUSchedulePaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
                 .ToListAsync();
 
             return ROUSchedule;
         }
-        public async Task<IEnumerable<FC_LeaseLiabilityTable>> GetLeaseLiabilityPaginatedAsync(int pageNumber, int pageSize, int leaseId, int fc_lease)
+        public async Task<IEnumerable<LeaseLiabilityTable>> GetLeaseLiabilityPaginatedAsync(int pageNumber, int pageSize, int leaseId)
         {
-            var LeaseLiability = await this.FC_LeaseLiability
-                .FromSqlRaw("EXEC GetLeaseLiabilityPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @FC_Lease = {3}", pageNumber, pageSize, leaseId, fc_lease)
+            var LeaseLiability = await this.LeaseLiability
+                .FromSqlRaw("EXEC GetLeaseLiabilityPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
                 .ToListAsync();
 
             return LeaseLiability;
         }
-        public async Task<IEnumerable<JournalEntryTable>> GetJournalEntriesAsync(int pageNumber, int pageSize, int leaseId, int fc_lease)
+        public async Task<IEnumerable<JournalEntryTable>> GetJournalEntriesAsync(int pageNumber, int pageSize, int leaseId)
         {
             var JournalEntries = await this.JournalEntries
-                .FromSqlRaw("EXEC GetJournalEntriesPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @FC_Lease={3}", pageNumber, pageSize, leaseId, fc_lease)
+                .FromSqlRaw("EXEC GetJournalEntriesPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
                 .ToListAsync();
 
             return JournalEntries;

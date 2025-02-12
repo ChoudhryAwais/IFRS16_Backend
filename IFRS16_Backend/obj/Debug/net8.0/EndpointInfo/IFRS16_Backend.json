@@ -181,15 +181,6 @@
               "format": "int32",
               "default": 0
             }
-          },
-          {
-            "name": "fc_lease",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
           }
         ],
         "responses": {
@@ -483,15 +474,6 @@
               "format": "int32",
               "default": 0
             }
-          },
-          {
-            "name": "fc_lease",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
           }
         ],
         "responses": {
@@ -708,15 +690,6 @@
               "format": "int32",
               "default": 0
             }
-          },
-          {
-            "name": "fc_lease",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
           }
         ],
         "responses": {
@@ -845,45 +818,6 @@
           "currencyID": {
             "type": "integer",
             "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FC_LeaseLiabilityTable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "leaseId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "leaseLiability_Date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "opening": {
-            "type": "number",
-            "format": "double"
-          },
-          "interest": {
-            "type": "number",
-            "format": "double"
-          },
-          "payment": {
-            "type": "number",
-            "format": "double"
-          },
-          "closing": {
-            "type": "number",
-            "format": "double"
-          },
-          "exchange_Gain_Loss": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1106,7 +1040,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FC_LeaseLiabilityTable"
+              "$ref": "#/components/schemas/LeaseLiabilityTable"
             },
             "nullable": true
           },
@@ -1147,6 +1081,11 @@
           "closing": {
             "type": "number",
             "format": "double"
+          },
+          "exchange_Gain_Loss": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
