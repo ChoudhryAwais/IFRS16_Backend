@@ -28,7 +28,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
 
             if (exchangeRatesList.Count > 0)
             {
-                decimal exchangeRateForOpening = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? 1; ;
+                decimal exchangeRateForOpening = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
                 fc_opening = opening * (double)exchangeRateForOpening;
             }
             double interest;
@@ -72,7 +72,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
 
                 if (exchangeRatesList.Count > 0)
                 {
-                    decimal exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == currentDate)?.ExchangeRate ?? 1;
+                    decimal exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == currentDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
                     // Create a new table entry
                     fc_interest = interest * (double)exchangeRate;
                     fc_closing = closing * (double)exchangeRate;

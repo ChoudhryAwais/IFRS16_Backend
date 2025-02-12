@@ -21,7 +21,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
 
             var rouSchedule = new List<ROUScheduleTable>();
             DateTime currentDate = leaseData.CommencementDate;
-            decimal exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? 1;
+            decimal exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
             for (int i = 1; i <= TotalDays; i++)
             {
                 // Add the ROU schedule entry
