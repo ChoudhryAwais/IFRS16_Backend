@@ -4,6 +4,7 @@ namespace IFRS16_Backend.Services.LeaseLiabilityAggregation
 {
     public interface ILeaseReportService
     {
-        Task<LeaseReportTable> GetLeaseReport(DateTime startDate, DateTime endDate, string leaseIdList);
+        Task<IEnumerable<AllLeasesReportTable>> GetAllLeaseReport(DateTime fromDate, DateTime endDate);
+        Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string? leaseIdList);
     }
 }

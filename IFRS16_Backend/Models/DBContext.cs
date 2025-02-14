@@ -15,18 +15,19 @@ namespace IFRS16_Backend.Models
         public DbSet<CompanyProfile> CompanyProfile { get; set; }
         public DbSet<JournalEntryTable> JournalEntries { get; set; }
         public DbSet<FC_JournalEntryTable> FC_JournalEntries { get; set; }
-        public DbSet<LeaseLiabilityAggregationTable> LeaseLiabilityAggregation { get; set; }
-        public DbSet<ROUAggregationTable> ROUAggregation { get; set; }
         public DbSet<CurrenciesTable> Currencies { get; set; }
         public DbSet<ExchangeRateTable> ExchangeRates { get; set; }
+        public DbSet<AllLeasesReportTable> AllLeasesReport { get; set; }
+        public DbSet<LeaseReportSummaryTable> LeasesReportSummary { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ExtendedLeaseDataSP>()
                 .HasKey(e => e.LeaseId); // Set LeaseId as the primary key
-            modelBuilder.Entity<LeaseLiabilityAggregationTable>().HasNoKey();
-            modelBuilder.Entity<ROUAggregationTable>().HasNoKey();
-
+            modelBuilder.Entity<AllLeasesReportTable>().HasNoKey();
+            modelBuilder.Entity<LeaseReportSummaryTable>().HasNoKey();
             base.OnModelCreating(modelBuilder);
         }
 
@@ -70,21 +71,21 @@ namespace IFRS16_Backend.Models
 
             return JournalEntries;
         }
-        public async Task<IEnumerable<LeaseLiabilityAggregationTable>> GetLeaseLiabilityAggregationTableAsync(DateTime startDate, DateTime endDate, string leaseIdList)
+        public async Task<IEnumerable<AllLeasesReportTable>> GetAllLeaseReport(DateTime startDate, DateTime endDate)
         {
-            var leaseLiabilityAggregation = await this.LeaseLiabilityAggregation
-                .FromSqlRaw("EXEC GetLeaseLiabilityAggregation @StartDate  = {0}, @EndDate = {1}, @LeaseIdList = {2}", startDate, endDate, leaseIdList)
+            var allLeaseReport = await this.AllLeasesReport
+                .FromSqlRaw("EXEC GetAllLeasesReport @FromDate  = {0}, @EndDate = {1}", startDate, endDate)
                 .ToListAsync();
 
-            return leaseLiabilityAggregation;
+            return allLeaseReport;
         }
-        public async Task<IEnumerable<ROUAggregationTable>> GetROUAggregationTableAsync(DateTime startDate, DateTime endDate, string leaseIdList)
+        public async Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string leaseIdList)
         {
-            var rouAggregation = await this.ROUAggregation
-                .FromSqlRaw("EXEC GetROUAggregation @StartDate  = {0}, @EndDate = {1}, @LeaseIdList = {2}", startDate, endDate, leaseIdList)
+            var leaseReportSummary = await this.LeasesReportSummary
+                .FromSqlRaw("EXEC GetSummarizeLeasesReport @FromDate  = {0}, @EndDate = {1}, @LeaseIdList = {2}", startDate, endDate, leaseIdList)
                 .ToListAsync();
 
-            return rouAggregation;
+            return leaseReportSummary;
         }
     }
 }

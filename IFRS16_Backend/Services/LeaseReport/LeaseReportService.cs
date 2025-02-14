@@ -6,17 +6,19 @@ namespace IFRS16_Backend.Services.LeaseLiabilityAggregation
     public class LeaseReportService(ApplicationDbContext context) : ILeaseReportService
     {
         private readonly ApplicationDbContext _context = context;
-        public async Task<LeaseReportTable> GetLeaseReport(DateTime startDate, DateTime endDate, string leaseIdList)
+        public async Task<IEnumerable<AllLeasesReportTable>> GetAllLeaseReport(DateTime fromDate, DateTime endDate)
         {
-            IEnumerable<LeaseLiabilityAggregationTable> llAggregationTable = await _context.GetLeaseLiabilityAggregationTableAsync(startDate, endDate, leaseIdList);
-            IEnumerable<ROUAggregationTable> rouAggregationTable = await _context.GetROUAggregationTableAsync(startDate, endDate, leaseIdList);
+            IEnumerable<AllLeasesReportTable> leasesReport = await _context.GetAllLeaseReport(fromDate, endDate);
 
-            return new()
-            {
-                LeaseLiabilityAggregation = llAggregationTable,
-                ROUAggregation = rouAggregationTable
-
-            };
+            return leasesReport;
         }
+
+        public async Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string? leaseIdList)
+        {
+            IEnumerable<LeaseReportSummaryTable> leasesReportSummary = await _context.GetLeaseReportSummary(startDate, endDate, leaseIdList);
+
+            return leasesReportSummary;
+        }
+
     }
 }

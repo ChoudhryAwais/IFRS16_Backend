@@ -275,8 +275,8 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseReportController",
-    "Method": "GetLeaseLiabilityForLease",
-    "RelativePath": "api/LeaseReport",
+    "Method": "GetLeasesReport",
+    "RelativePath": "api/LeaseReport/AllLeaseReport",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -289,7 +289,33 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "IFRS16_Backend.Models.LeaseLiabilityResult",
+        "Type": "IFRS16_Backend.Models.AllLeasesReportTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseReportController",
+    "Method": "GetLeasesReportSummary",
+    "RelativePath": "api/LeaseReport/LeaseReportSummary",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.AllLeasesReportTable",
         "MediaTypes": [
           "text/plain",
           "application/json",

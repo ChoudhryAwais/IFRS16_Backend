@@ -500,7 +500,7 @@
         }
       }
     },
-    "/api/LeaseReport": {
+    "/api/LeaseReport/AllLeaseReport": {
       "post": {
         "tags": [
           "LeaseReport"
@@ -530,17 +530,65 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeaseLiabilityResult"
+                  "$ref": "#/components/schemas/AllLeasesReportTable"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeaseLiabilityResult"
+                  "$ref": "#/components/schemas/AllLeasesReportTable"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeaseLiabilityResult"
+                  "$ref": "#/components/schemas/AllLeasesReportTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LeaseReport/LeaseReportSummary": {
+      "post": {
+        "tags": [
+          "LeaseReport"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllLeasesReportTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllLeasesReportTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllLeasesReportTable"
                 }
               }
             }
@@ -731,6 +779,71 @@
   },
   "components": {
     "schemas": {
+      "AllLeasesReportTable": {
+        "type": "object",
+        "properties": {
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "rental": {
+            "type": "number",
+            "format": "double"
+          },
+          "frequency": {
+            "type": "string",
+            "nullable": true
+          },
+          "commencementDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "openingLL": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "interest": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "payment": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "closingLL": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "openingROU": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "amortization": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "closingROU": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CurrenciesTable": {
         "type": "object",
         "properties": {

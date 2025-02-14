@@ -9,14 +9,27 @@ namespace IFRS16_Backend.Controllers
     [ApiController]
     public class LeaseReportController(ILeaseReportService leaseReportService) : ControllerBase
     {
-        ILeaseReportService _leaseReportService = leaseReportService;
-
-        [HttpPost]
-        public async Task<ActionResult<LeaseLiabilityResult>> GetLeaseLiabilityForLease([FromBody] LeaseReportRequest request)
+        private readonly ILeaseReportService _leaseReportService = leaseReportService;
+        [HttpPost("AllLeaseReport")]
+        public async Task<ActionResult<AllLeasesReportTable>> GetLeasesReport([FromBody] LeaseReportRequest request)
         {
             try
             {
-                var result = await _leaseReportService.GetLeaseReport(request.StartDate, request.EndDate, request.LeaseIdList);
+                var result = await _leaseReportService.GetAllLeaseReport(request.StartDate, request.EndDate);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpPost("LeaseReportSummary")]
+        public async Task<ActionResult<AllLeasesReportTable>> GetLeasesReportSummary([FromBody] LeaseReportRequest request)
+        {
+            try
+            {
+                var result = await _leaseReportService.GetLeaseReportSummary(request.StartDate, request.EndDate, request.LeaseIdList);
                 return Ok(result);
             }
             catch (Exception ex)
