@@ -14,10 +14,9 @@ namespace IFRS16_Backend.Services.ROUSchedule
             var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             List<FC_ROUScheduleTable> fc_RouSchedule = [];
             List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData);
-
-            decimal exchangeRate=1;
+            decimal exchangeRate = 1;
             double amortization = ((totalNPV / TotalDays) + double.Epsilon) * 100 / 100;
-            double opening = totalNPV + (leaseData.IDC ?? 0);
+            double opening = (leaseData?.RouOpening != null ? leaseData.RouOpening : totalNPV) + (leaseData.IDC ?? 0);
             double closing = ((totalNPV - amortization) + double.Epsilon) * 100 / 100;
 
             var rouSchedule = new List<ROUScheduleTable>();

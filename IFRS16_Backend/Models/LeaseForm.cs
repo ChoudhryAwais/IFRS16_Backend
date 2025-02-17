@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IFRS16_Backend.Models
 {
@@ -20,7 +21,8 @@ namespace IFRS16_Backend.Models
         public string? IncrementalFrequency { get; set; }
         public int CompanyID { get; set; }
         public int CurrencyID { get; set; }
-
+        [NotMapped]
+        public double RouOpening { get; set; }
     }
     public class LeaseFormDataResult
     {

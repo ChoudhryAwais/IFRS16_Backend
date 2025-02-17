@@ -14,9 +14,14 @@ namespace IFRS16_Backend.Services.LeaseData
             {
                 return false;
             }
-
-            _context.LeaseData.Add(leaseFormData);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.LeaseData.Add(leaseFormData);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex) { 
+                 Console.WriteLine(ex.ToString());
+            }
             return true;
         }
 

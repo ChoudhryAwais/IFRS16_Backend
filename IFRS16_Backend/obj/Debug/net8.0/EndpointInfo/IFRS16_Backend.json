@@ -1114,6 +1114,10 @@
           "currencyID": {
             "type": "integer",
             "format": "int32"
+          },
+          "rouOpening": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
