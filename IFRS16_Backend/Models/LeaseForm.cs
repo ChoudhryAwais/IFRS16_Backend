@@ -22,7 +22,7 @@ namespace IFRS16_Backend.Models
         public int CompanyID { get; set; }
         public int CurrencyID { get; set; }
         [NotMapped]
-        public double RouOpening { get; set; }
+        public double? RouOpening { get; set; }
     }
     public class LeaseFormDataResult
     {
