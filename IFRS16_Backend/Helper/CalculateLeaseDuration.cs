@@ -21,8 +21,8 @@
 
             // Calculate the difference in years
             int frequecnyFactor = 12/CalFrequencyFactor.FrequencyFactor(frequency);
-            int TotalInitialDuration = totalDays / 365;
-            TotalInitialDuration = TotalInitialDuration * frequecnyFactor;
+            decimal totalYears = (decimal)totalDays / 365;
+            int TotalInitialDuration = (int)Math.Round(totalYears * frequecnyFactor);
 
             return (TotalInitialDuration, totalDays);
         }
