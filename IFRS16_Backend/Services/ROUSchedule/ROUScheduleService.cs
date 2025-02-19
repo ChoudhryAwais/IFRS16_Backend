@@ -17,7 +17,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
             decimal exchangeRate = 1;
             double opening = (double)((leaseData?.RouOpening != null ? leaseData.RouOpening : totalNPV) + (leaseData.IDC ?? 0));
             double amortization = ((opening / TotalDays) + double.Epsilon) * 100 / 100;
-            double closing = ((totalNPV - amortization) + double.Epsilon) * 100 / 100;
+            double closing = ((opening - amortization) + double.Epsilon) * 100 / 100;
 
             var rouSchedule = new List<ROUScheduleTable>();
             DateTime currentDate = leaseData.CommencementDate;
