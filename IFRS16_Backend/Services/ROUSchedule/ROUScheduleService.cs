@@ -16,7 +16,8 @@ namespace IFRS16_Backend.Services.ROUSchedule
             List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData);
             decimal exchangeRate = 1;
             double opening = (double)((leaseData?.RouOpening != null ? leaseData.RouOpening : totalNPV) + (leaseData.IDC ?? 0));
-            double amortization = ((opening / TotalDays) + double.Epsilon) * 100 / 100;
+            double GRV = leaseData.GRV ?? 0;
+            double amortization = (((opening - GRV) / TotalDays) + double.Epsilon) * 100 / 100;
             double closing = ((opening - amortization) + double.Epsilon) * 100 / 100;
 
             var rouSchedule = new List<ROUScheduleTable>();
