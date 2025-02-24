@@ -151,6 +151,22 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "DeleteLeaseData",
+    "RelativePath": "api/LeaseFormData/Delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "deleteReq",
+        "Type": "IFRS16_Backend.Models.DeleteLeaseData",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
     "Method": "GetAllLeases",
     "RelativePath": "api/LeaseFormData/GetAllLeases",
     "HttpMethod": "GET",

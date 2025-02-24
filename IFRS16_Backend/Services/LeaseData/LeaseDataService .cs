@@ -44,5 +44,20 @@ namespace IFRS16_Backend.Services.LeaseData
             List<LeaseFormData> leaseData = await _context.LeaseData.Where(item => item.CompanyID==companyId).ToListAsync();
             return leaseData;
         }
+
+        public async Task<bool> DeleteLeases(string leaseIds)
+        {
+            try
+            {
+                await _context.DeleteLeaseDataAsync(leaseIds);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return true;
+            }   
+        
+        }
     }
 }

@@ -394,6 +394,37 @@
         }
       }
     },
+    "/api/LeaseFormData/Delete": {
+      "post": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteLeaseData"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteLeaseData"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteLeaseData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/LeaseLiability/Add": {
       "post": {
         "tags": [
@@ -856,6 +887,16 @@
             "nullable": true
           },
           "currencyName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeleteLeaseData": {
+        "type": "object",
+        "properties": {
+          "leaseIds": {
             "type": "string",
             "nullable": true
           }

@@ -7,5 +7,6 @@ namespace IFRS16_Backend.Services.LeaseData
         Task<bool> AddLeaseFormDataAsync(LeaseFormData leaseFormData);
         Task<LeaseFormDataResult> GetAllLeases(int pageNumber, int pageSize, int companyID);
         Task<List<LeaseFormData>> GetAllLeasesForCompany(int companyID);
+        Task<bool> DeleteLeases(string leaseIds);
     }
 }

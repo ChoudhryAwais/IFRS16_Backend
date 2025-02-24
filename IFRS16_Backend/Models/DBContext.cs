@@ -20,8 +20,6 @@ namespace IFRS16_Backend.Models
         public DbSet<AllLeasesReportTable> AllLeasesReport { get; set; }
         public DbSet<LeaseReportSummaryTable> LeasesReportSummary { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ExtendedLeaseDataSP>()
@@ -86,6 +84,10 @@ namespace IFRS16_Backend.Models
                 .ToListAsync();
 
             return leaseReportSummary;
+        }
+        public async Task DeleteLeaseDataAsync(string leaseIds)
+        {
+            await this.Database.ExecuteSqlRawAsync("EXEC DeleteLeaseWithDependencies @leaseIds = {0}", leaseIds);
         }
     }
 }

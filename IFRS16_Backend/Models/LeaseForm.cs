@@ -50,4 +50,9 @@ namespace IFRS16_Backend.Models
         public int CurrencyID { get; set; }
 
     }
+
+    public class DeleteLeaseData
+    {
+        public string LeaseIds { get; set; }
+    }
 }

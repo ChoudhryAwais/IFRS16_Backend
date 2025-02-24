@@ -7,6 +7,7 @@ using IFRS16_Backend.Services.LeaseLiability;
 using IFRS16_Backend.Services.ROUSchedule;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Controllers
 {
@@ -50,7 +51,6 @@ namespace IFRS16_Backend.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<IActionResult> PostLeaseFormData([FromBody] LeaseFormData leaseFormData)
         {
@@ -75,6 +75,20 @@ namespace IFRS16_Backend.Controllers
                 }
 
                 return CreatedAtAction(nameof(PostLeaseFormData), new { count = leaseFormData.Count }, leaseFormData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+       
+        [HttpPost("Delete")]
+        public async Task<IActionResult> DeleteLeaseData([FromBody] DeleteLeaseData deleteReq)
+        {
+            try
+            {
+                await _leaseFormDataService.DeleteLeases(deleteReq.LeaseIds);
+                return Ok(new { status = 200 }); // 200 OK with a message
             }
             catch (Exception ex)
             {
