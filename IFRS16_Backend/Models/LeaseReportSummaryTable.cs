@@ -2,12 +2,12 @@
 {
     public class LeaseReportSummaryTable
     {
-        public decimal? OpeningLL { get; set; }
-        public decimal? Interest { get; set; }
-        public decimal? Payment { get; set; }
-        public decimal? ClosingLL { get; set; }
-        public decimal? OpeningROU { get; set; }
-        public decimal? Amortization { get; set; }
-        public decimal? ClosingROU { get; set; }
+        public double? OpeningLL { get; set; }
+        public double? Interest { get; set; }
+        public double? Payment { get; set; }
+        public double? ClosingLL { get; set; }
+        public double? OpeningROU { get; set; }
+        public double? Amortization { get; set; }
+        public double? ClosingROU { get; set; }
     }
 }
