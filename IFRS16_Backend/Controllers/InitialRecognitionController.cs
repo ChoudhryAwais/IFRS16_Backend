@@ -25,12 +25,12 @@ namespace IFRS16_Backend.Controllers
 
         }
 
-        [HttpGet]
-        public async Task<ActionResult<InitialRecognitionResult>> GetInitialRecognitionForLease([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int leaseId = 0)
+        [HttpPost("Get")]
+        public async Task<ActionResult<InitialRecognitionResult>> GetInitialRecognitionForLease([FromBody] GetLeaseDetails requestModal)
         {
             try
             {
-                var result = await _intialRecognitionService.GetInitialRecognitionForLease(pageNumber, pageSize, leaseId);
+                var result = await _intialRecognitionService.GetInitialRecognitionForLease(requestModal.PageNumber, requestModal.PageSize, requestModal.LeaseId, requestModal.StartDate, requestModal.EndDate);
                 return Ok(result);
             }
             catch (Exception ex)

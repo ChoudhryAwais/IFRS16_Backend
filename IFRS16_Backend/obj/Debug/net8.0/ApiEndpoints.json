@@ -21,42 +21,6 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
-    "Method": "GetInitialRecognitionForLease",
-    "RelativePath": "api/InitialRecognition",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "pageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "pageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "leaseId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "IFRS16_Backend.Models.InitialRecognitionResult",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "PostInitialRecognitionForLease",
     "RelativePath": "api/InitialRecognition/Add",
     "HttpMethod": "POST",
@@ -82,27 +46,43 @@
     ]
   },
   {
-    "ContainingType": "IFRS16_Backend.Controllers.JournalEntriesController",
-    "Method": "GetJournalEntriesForLease",
-    "RelativePath": "api/JournalEntries",
-    "HttpMethod": "GET",
+    "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
+    "Method": "GetInitialRecognitionForLease",
+    "RelativePath": "api/InitialRecognition/Get",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "pageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
+        "Name": "requestModal",
+        "Type": "IFRS16_Backend.Models.GetLeaseDetails",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
       {
-        "Name": "pageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
+        "Type": "IFRS16_Backend.Models.InitialRecognitionResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.JournalEntriesController",
+    "Method": "GetJournalEntriesForLease",
+    "RelativePath": "api/JournalEntries/Get",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
-        "Name": "leaseId",
-        "Type": "System.Int32",
-        "IsRequired": false
+        "Name": "requestModal",
+        "Type": "IFRS16_Backend.Models.GetLeaseDetails",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [
@@ -229,42 +209,6 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
-    "Method": "GetLeaseLiabilityForLease",
-    "RelativePath": "api/LeaseLiability",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "pageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "pageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "leaseId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "IFRS16_Backend.Models.LeaseLiabilityResult",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
     "Method": "PostLeaseLiability",
     "RelativePath": "api/LeaseLiability/Add",
     "HttpMethod": "POST",
@@ -280,6 +224,32 @@
     "ReturnTypes": [
       {
         "Type": "IFRS16_Backend.Models.LeaseLiabilityTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",
+    "Method": "GetLeaseLiabilityForLease",
+    "RelativePath": "api/LeaseLiability/Get",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestModal",
+        "Type": "IFRS16_Backend.Models.GetLeaseDetails",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.LeaseLiabilityResult",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -375,42 +345,6 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",
-    "Method": "GetROUScheduleForLease",
-    "RelativePath": "api/ROUSchedule",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "pageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "pageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "leaseId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "IFRS16_Backend.Models.ROUScheduleResult",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",
     "Method": "PostROUScheduleForLease",
     "RelativePath": "api/ROUSchedule/Add",
     "HttpMethod": "POST",
@@ -426,6 +360,32 @@
     "ReturnTypes": [
       {
         "Type": "IFRS16_Backend.Models.ROUScheduleTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",
+    "Method": "GetROUScheduleForLease",
+    "RelativePath": "api/ROUSchedule/Get",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestModal",
+        "Type": "IFRS16_Backend.Models.GetLeaseDetails",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.ROUScheduleResult",
         "MediaTypes": [
           "text/plain",
           "application/json",

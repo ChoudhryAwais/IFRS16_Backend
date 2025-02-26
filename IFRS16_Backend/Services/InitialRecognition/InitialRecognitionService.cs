@@ -20,7 +20,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             endTable = (leaseSpecificData.GRV != null & leaseSpecificData.GRV != 0) ? endTable + 1 : endTable;
             decimal rental = (decimal)leaseSpecificData.Rental;
             int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
-            int incrementalFrequecnyFactor=1;
+            int incrementalFrequecnyFactor = 1;
             double IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
             decimal totalNPV = 0;
             decimal discountFactor = (1 + ((decimal)IBR / 100m));
@@ -79,11 +79,11 @@ namespace IFRS16_Backend.Services.InitialRecognition
             };
         }
 
-        public async Task<InitialRecognitionResult> GetInitialRecognitionForLease(int pageNumber, int pageSize, int leaseId)
+        public async Task<InitialRecognitionResult> GetInitialRecognitionForLease(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
             LeaseFormData? leaseSpecificData = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseId) ?? throw new InvalidOperationException("No lease data found for the given LeaseId.");
-            IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber, pageSize, leaseId);
-            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId).ToListAsync();
+            IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber, pageSize, leaseId, startDate, endDate);
+            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && (startDate==null || endDate ==null || (item.PaymentDate>=startDate && item.PaymentDate <= endDate))).ToListAsync();
             decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
             List<DateTime> dates = fullInitialRecognitionTable.Select(item => item.PaymentDate).ToList();
 
@@ -95,7 +95,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                 TotalNPV = totalNPV,
                 InitialRecognition = initialRecognitionTable,
                 TotalRecords = totalRecord,
-                Dates=dates
+                Dates = dates
             };
         }
 

@@ -298,10 +298,10 @@ namespace IFRS16_Backend.Services.JournalEntries
             return JEFinalTable;
         }
 
-        public async Task<JournalEntryResult> GetJEForLease(int pageNumber, int pageSize, int leaseId)
+        public async Task<JournalEntryResult> GetJEForLease(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
-            IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId);
-            int totalRecord = await _context.JournalEntries.Where(r => r.LeaseId == leaseId).CountAsync();
+            IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId, startDate, endDate);
+            int totalRecord = await _context.JournalEntries.Where(r => r.LeaseId == leaseId && (startDate == null || endDate == null || (r.JE_Date >= startDate && r.JE_Date <= endDate))).CountAsync();
 
             return new()
             {

@@ -6,6 +6,6 @@ namespace IFRS16_Backend.Services.LeaseLiability
     {
         Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData);
 
-        Task<LeaseLiabilityResult> GetLeaseLiability(int pageNumber, int pageSize, int leaseId);
+        Task<LeaseLiabilityResult> GetLeaseLiability(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate);
     }
 }

@@ -122,10 +122,10 @@ namespace IFRS16_Backend.Services.LeaseLiability
 
             return (leaseLiability, fc_leaseLiability);
         }
-        public async Task<LeaseLiabilityResult> GetLeaseLiability(int pageNumber, int pageSize, int leaseId)
+        public async Task<LeaseLiabilityResult> GetLeaseLiability(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
-            IEnumerable<LeaseLiabilityTable> leaseLiability = await _context.GetLeaseLiabilityPaginatedAsync(pageNumber, pageSize, leaseId);
-            int totalRecord = await _context.LeaseLiability.Where(r => r.LeaseId == leaseId).CountAsync();
+            IEnumerable<LeaseLiabilityTable> leaseLiability = await _context.GetLeaseLiabilityPaginatedAsync(pageNumber, pageSize, leaseId, startDate, endDate);
+            int totalRecord = await _context.LeaseLiability.Where(r => r.LeaseId == leaseId && (startDate == null || endDate == null || (r.LeaseLiability_Date >= startDate && r.LeaseLiability_Date <= endDate))).CountAsync();
             return new()
             {
                 Data = leaseLiability,

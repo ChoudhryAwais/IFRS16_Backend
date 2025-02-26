@@ -74,10 +74,10 @@ namespace IFRS16_Backend.Services.ROUSchedule
 
             return (rouSchedule, fc_RouSchedule);
         }
-        public async Task<ROUScheduleResult> GetROUSchedule(int pageNumber, int pageSize, int leaseId)
+        public async Task<ROUScheduleResult> GetROUSchedule(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
-            IEnumerable<ROUScheduleTable> rouSchedule = await _context.GetROUSchedulePaginatedAsync(pageNumber, pageSize, leaseId);
-            int totalRecord = await _context.ROUSchedule.Where(r => r.LeaseId == leaseId).CountAsync();
+            IEnumerable<ROUScheduleTable> rouSchedule = await _context.GetROUSchedulePaginatedAsync(pageNumber, pageSize, leaseId, startDate, endDate);
+            int totalRecord = await _context.ROUSchedule.Where(r => r.LeaseId == leaseId && (startDate == null || endDate == null || (r.ROU_Date >= startDate && r.ROU_Date <= endDate))).CountAsync();
 
             return new()
             {

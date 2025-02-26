@@ -37,34 +37,34 @@ namespace IFRS16_Backend.Models
 
             return leaseData;
         }
-        public async Task<IEnumerable<InitialRecognitionTable>> GetInitialRecognitionPaginatedAsync(int pageNumber, int pageSize, int leaseId)
+        public async Task<IEnumerable<InitialRecognitionTable>> GetInitialRecognitionPaginatedAsync(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
             var InitialRecognition = await this.InitialRecognition
-                .FromSqlRaw("EXEC GetInitialRecognitionPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
+                .FromSqlRaw("EXEC GetInitialRecognitionPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @StartDate = {3}, @EndDate = {4}", pageNumber, pageSize, leaseId, startDate, endDate)
                 .ToListAsync();
 
             return InitialRecognition;
         }
-        public async Task<IEnumerable<ROUScheduleTable>> GetROUSchedulePaginatedAsync(int pageNumber, int pageSize, int leaseId)
+        public async Task<IEnumerable<ROUScheduleTable>> GetROUSchedulePaginatedAsync(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
             var ROUSchedule = await this.ROUSchedule
-                .FromSqlRaw("EXEC GetROUSchedulePaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
+                .FromSqlRaw("EXEC GetROUSchedulePaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @StartDate = {3}, @EndDate = {4}", pageNumber, pageSize, leaseId, startDate, endDate)
                 .ToListAsync();
 
             return ROUSchedule;
         }
-        public async Task<IEnumerable<LeaseLiabilityTable>> GetLeaseLiabilityPaginatedAsync(int pageNumber, int pageSize, int leaseId)
+        public async Task<IEnumerable<LeaseLiabilityTable>> GetLeaseLiabilityPaginatedAsync(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
             var LeaseLiability = await this.LeaseLiability
-                .FromSqlRaw("EXEC GetLeaseLiabilityPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
+                .FromSqlRaw("EXEC GetLeaseLiabilityPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @StartDate = {3}, @EndDate = {4}", pageNumber, pageSize, leaseId, startDate, endDate)
                 .ToListAsync();
 
             return LeaseLiability;
         }
-        public async Task<IEnumerable<JournalEntryTable>> GetJournalEntriesAsync(int pageNumber, int pageSize, int leaseId)
+        public async Task<IEnumerable<JournalEntryTable>> GetJournalEntriesAsync(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
             var JournalEntries = await this.JournalEntries
-                .FromSqlRaw("EXEC GetJournalEntriesPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}", pageNumber, pageSize, leaseId)
+                .FromSqlRaw("EXEC GetJournalEntriesPaginated @PageNumber = {0}, @PageSize = {1}, @LeaseId = {2}, @StartDate = {3}, @EndDate = {4}", pageNumber, pageSize, leaseId, startDate, endDate)
                 .ToListAsync();
 
             return JournalEntries;
