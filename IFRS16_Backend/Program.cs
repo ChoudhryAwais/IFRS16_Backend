@@ -44,7 +44,7 @@ builder.Services.AddScoped<IROUScheduleService, ROUScheduleService>();
 builder.Services.AddScoped<ILeaseLiabilityService, LeaseLiabilityService>();
 builder.Services.AddScoped<ILeaseDataWorkflowService, LeaseDataWorkflowService>();
 builder.Services.AddScoped<IJournalEntriesService, JournalEntriesService>();
-builder.Services.AddScoped<ILeaseReportService, LeaseReportService>();
+builder.Services.AddScoped<IReportsService, ReportsService>();
 builder.Services.AddScoped<ICurrenciesService, CurrenciesService>();
 builder.Services.AddScoped<GetCurrecyRates>();
 

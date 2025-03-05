@@ -18,6 +18,7 @@ namespace IFRS16_Backend.Models
         public DbSet<CurrenciesTable> Currencies { get; set; }
         public DbSet<ExchangeRateTable> ExchangeRates { get; set; }
         public DbSet<AllLeasesReportTable> AllLeasesReport { get; set; }
+        public DbSet<JournalEntryReport> JournalEntryReport { get; set; }
         public DbSet<LeaseReportSummaryTable> LeasesReportSummary { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,6 +27,8 @@ namespace IFRS16_Backend.Models
                 .HasKey(e => e.LeaseId); // Set LeaseId as the primary key
             modelBuilder.Entity<AllLeasesReportTable>().HasNoKey();
             modelBuilder.Entity<LeaseReportSummaryTable>().HasNoKey();
+            modelBuilder.Entity<JournalEntryReport>().HasNoKey();
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -76,6 +79,14 @@ namespace IFRS16_Backend.Models
                 .ToListAsync();
 
             return allLeaseReport;
+        }
+        public async Task<IEnumerable<JournalEntryReport>> GetJEReport(DateTime startDate, DateTime endDate)
+        {
+            var jEReport = await this.JournalEntryReport
+                .FromSqlRaw("EXEC GetJournalEntryReport @FromDate  = {0}, @EndDate = {1}", startDate, endDate)
+                .ToListAsync();
+
+            return jEReport;
         }
         public async Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string leaseIdList)
         {

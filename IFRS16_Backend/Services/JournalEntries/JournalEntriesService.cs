@@ -302,6 +302,27 @@ namespace IFRS16_Backend.Services.JournalEntries
         {
             IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId, startDate, endDate);
             int totalRecord = await _context.JournalEntries.Where(r => r.LeaseId == leaseId && (startDate == null || endDate == null || (r.JE_Date >= startDate && r.JE_Date <= endDate))).CountAsync();
+            DateTime startDatet = new(2024, 3, 25);
+            DateTime endDatet = new(2024, 3, 25);
+
+            IEnumerable<JournalEntryTable> alljournalEntries = await _context.JournalEntries.Where(item => item.JE_Date >= startDatet && item.JE_Date <= endDatet).ToListAsync();
+
+            var rouAsset = alljournalEntries.Where(item => item.Particular == "ROU Asset").Sum(item => item.Debit);
+            var leaseLiability = alljournalEntries.Where(item => item.Particular == "Lease Liability").Sum(item => item.Credit);
+            var leaseLiabilityDebit = alljournalEntries.Where(item => item.Particular == "Lease Liability").Sum(item => item.Debit);
+            var bank = alljournalEntries.Where(item => item.Particular == "Bank").Sum(item => item.Credit);
+            var interestExpense = alljournalEntries.Where(item => item.Particular == "Interest Expense").Sum(item => item.Debit);
+            var amortizationExpense = alljournalEntries.Where(item => item.Particular == "Amortization Expense").Sum(item => item.Debit);
+            var exchangeGainLoss = alljournalEntries.Where(item => item.Particular == "Exchange Gain/Loss").Sum(item => item.Debit);
+            var exchangeGainLossCredit = alljournalEntries.Where(item => item.Particular == "Exchange Gain/Loss").Sum(item => item.Credit);
+
+            IEnumerable<JournalEntryTable> acumilatedJE = alljournalEntries.GroupBy(item => item.Particular).Select(item => new JournalEntryTable
+            {
+                Particular = item.Key,
+                Debit = item.Sum(item => item.Debit),
+                Credit = item.Sum(item => item.Credit)
+            });
+
 
             return new()
             {

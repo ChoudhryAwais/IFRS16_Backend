@@ -7,9 +7,9 @@ namespace IFRS16_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LeaseReportController(ILeaseReportService leaseReportService) : ControllerBase
+    public class ReportsController(IReportsService leaseReportService) : ControllerBase
     {
-        private readonly ILeaseReportService _leaseReportService = leaseReportService;
+        private readonly IReportsService _leaseReportService = leaseReportService;
         [HttpPost("AllLeaseReport")]
         public async Task<ActionResult<AllLeasesReportTable>> GetLeasesReport([FromBody] LeaseReportRequest request)
         {
@@ -30,6 +30,20 @@ namespace IFRS16_Backend.Controllers
             try
             {
                 var result = await _leaseReportService.GetLeaseReportSummary(request.StartDate, request.EndDate, request.LeaseIdList);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpPost("JournalEntryReport")]
+        public async Task<ActionResult<JournalEntryReport>> GetJEReport([FromBody] LeaseReportRequest request)
+        {
+            try
+            {
+                var result = await _leaseReportService.GetJEReport(request.StartDate, request.EndDate);
                 return Ok(result);
             }
             catch (Exception ex)

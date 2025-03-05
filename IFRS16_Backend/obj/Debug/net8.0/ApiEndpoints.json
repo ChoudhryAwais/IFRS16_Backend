@@ -260,58 +260,6 @@
     ]
   },
   {
-    "ContainingType": "IFRS16_Backend.Controllers.LeaseReportController",
-    "Method": "GetLeasesReport",
-    "RelativePath": "api/LeaseReport/AllLeaseReport",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "IFRS16_Backend.Models.AllLeasesReportTable",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.LeaseReportController",
-    "Method": "GetLeasesReportSummary",
-    "RelativePath": "api/LeaseReport/LeaseReportSummary",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "IFRS16_Backend.Models.AllLeasesReportTable",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "IFRS16_Backend.Controllers.LoginController",
     "Method": "Login",
     "RelativePath": "api/Login",
@@ -342,6 +290,84 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.ReportsController",
+    "Method": "GetLeasesReport",
+    "RelativePath": "api/Reports/AllLeaseReport",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.AllLeasesReportTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.ReportsController",
+    "Method": "GetJEReport",
+    "RelativePath": "api/Reports/JournalEntryReport",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.JournalEntryReport",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.ReportsController",
+    "Method": "GetLeasesReportSummary",
+    "RelativePath": "api/Reports/LeaseReportSummary",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.AllLeasesReportTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.ROUScheduleController",

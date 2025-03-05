@@ -83,7 +83,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
         {
             LeaseFormData? leaseSpecificData = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseId) ?? throw new InvalidOperationException("No lease data found for the given LeaseId.");
             IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber, pageSize, leaseId, startDate, endDate);
-            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && (startDate==null || endDate ==null || (item.PaymentDate>=startDate && item.PaymentDate <= endDate))).ToListAsync();
+            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && (startDate==null || endDate ==null || (item.PaymentDate>=startDate && item.PaymentDate <= endDate))  ).ToListAsync();
             decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
             List<DateTime> dates = fullInitialRecognitionTable.Select(item => item.PaymentDate).ToList();
 
