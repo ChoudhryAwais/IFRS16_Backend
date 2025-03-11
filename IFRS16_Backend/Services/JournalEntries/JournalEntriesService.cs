@@ -12,7 +12,7 @@ namespace IFRS16_Backend.Services.JournalEntries
 
         public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule)
         {
-            int startTableDates = leaseSpecificData.Annuity == "advance" ? 1 : 0;
+            int startTableDates =0;
             LeaseLiabilityTable leaseMustField = leaseLiability[0];
             ROUScheduleTable respectiveROU = rouSchedule[0];
             List<JournalEntryTable> JEFinalTable =
