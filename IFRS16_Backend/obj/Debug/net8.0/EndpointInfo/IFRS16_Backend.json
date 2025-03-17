@@ -884,6 +884,15 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "currencyID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

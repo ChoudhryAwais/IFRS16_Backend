@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IFRS16_Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b1053bf2e37b008530ebbaaf4259467d354d522a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7326169501e34cf474d1bbb58fca73cf52df60ff")]
 [assembly: System.Reflection.AssemblyProductAttribute("IFRS16_Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IFRS16_Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
