@@ -23,6 +23,9 @@ namespace IFRS16_Backend.Models
         public int CurrencyID { get; set; }
         [NotMapped]
         public double? RouOpening { get; set; }
+        [NotMapped]
+        public decimal? RouExRate { get; set; }
+
     }
     public class LeaseFormDataResult
     {

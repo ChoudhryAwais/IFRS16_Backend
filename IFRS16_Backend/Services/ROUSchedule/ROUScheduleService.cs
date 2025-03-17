@@ -24,7 +24,14 @@ namespace IFRS16_Backend.Services.ROUSchedule
             DateTime currentDate = leaseData.CommencementDate;
             if (exchangeRatesList.Count > 0)
             {
-                exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
+                if (leaseData.RouExRate != null)
+                {
+                    exchangeRate = (decimal)leaseData.RouExRate;
+                }
+                else
+                {
+                    exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
+                }
             }
 
             for (int i = 1; i <= TotalDays; i++)

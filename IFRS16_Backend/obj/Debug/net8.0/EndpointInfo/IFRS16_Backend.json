@@ -1230,6 +1230,11 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "rouExRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
