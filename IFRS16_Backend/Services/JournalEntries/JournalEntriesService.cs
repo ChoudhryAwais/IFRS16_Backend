@@ -103,7 +103,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     {
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
                         Particular = "Exchange Gain/Loss",
-                        Debit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
+                        Debit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? Math.Abs((decimal)leaseliabilityData.Exchange_Gain_Loss) : 0,
                         Credit = (decimal)leaseliabilityData?.Exchange_Gain_Loss > 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
                         LeaseId = leaseSpecificData.LeaseId
                     });
@@ -112,7 +112,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
                         Particular = "Lease Liability",
                         Debit = (decimal)leaseliabilityData?.Exchange_Gain_Loss > 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
-                        Credit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
+                        Credit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? Math.Abs((decimal)leaseliabilityData.Exchange_Gain_Loss) : 0,
                         LeaseId = leaseSpecificData.LeaseId
                     });
                 }
