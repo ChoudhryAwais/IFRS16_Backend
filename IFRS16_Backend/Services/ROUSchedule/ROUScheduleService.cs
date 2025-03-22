@@ -11,7 +11,7 @@ namespace IFRS16_Backend.Services.ROUSchedule
         public async Task<(List<ROUScheduleTable>, List<FC_ROUScheduleTable>)> PostROUSchedule(double totalNPV, LeaseFormData leaseData)
         {
             // Calculate amortization
-            var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
+            var (_, TotalDays, _) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             List<FC_ROUScheduleTable> fc_RouSchedule = [];
             List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData);
             decimal exchangeRate = 1;

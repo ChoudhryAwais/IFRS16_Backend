@@ -11,7 +11,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
         private readonly ApplicationDbContext _context = context;
         public async Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData)
         {
-            var (_, TotalDays) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
+            var (_, TotalDays,_) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             double xirr = XIRR.XIRRCalculation(cashFlow, dates);
             double xirrDaily = Math.Pow(1 + xirr, 1.0 / 365.0) - 1;
             List<LeaseLiabilityTable> leaseLiability = [];

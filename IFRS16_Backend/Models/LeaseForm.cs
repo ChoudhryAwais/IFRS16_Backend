@@ -27,6 +27,32 @@ namespace IFRS16_Backend.Models
         public decimal? RouExRate { get; set; }
 
     }
+
+    public class LeaseFormModification
+    {
+        [Key]
+        public int LeaseId { get; set; }
+        public int UserID { get; set; }
+        public string LeaseName { get; set; }
+        public double Rental { get; set; }
+        public DateTime ModificationDate { get; set; }
+        public DateTime CommencementDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Annuity { get; set; }
+        public double IBR { get; set; }
+        public string Frequency { get; set; }
+        public double? IDC { get; set; }
+        public double? GRV { get; set; }
+        public double? Increment { get; set; }
+        public string? IncrementalFrequency { get; set; }
+        public int CompanyID { get; set; }
+        public int CurrencyID { get; set; }
+        [NotMapped]
+        public double? RouOpening { get; set; }
+        [NotMapped]
+        public decimal? RouExRate { get; set; }
+
+    }
     public class LeaseFormDataResult
     {
         public IEnumerable<ExtendedLeaseDataSP> Data { get; set; }
@@ -64,5 +90,13 @@ namespace IFRS16_Backend.Models
         public int LeaseId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+    }
+
+    public class TerminateLease
+    {
+        public DateTime TerminateDate { get; set; }
+        public decimal? Penalty { get; set; }
+        public int LeaseId { get; set; }
+
     }
 }

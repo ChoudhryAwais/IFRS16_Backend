@@ -2,7 +2,7 @@
 {
     public class CalculateLeaseDuration
     {
-        public static (double TotalYears, int TotalDays) GetLeaseDuration(DateTime commencementDate, DateTime endDate,string frequency="annual")
+        public static (double TotalYears, int TotalDays, decimal TotalInitialDurationWithDecimal) GetLeaseDuration(DateTime commencementDate, DateTime endDate,string frequency="annual")
         {
             // Validate the dates
             if (commencementDate == default || endDate == default)
@@ -23,8 +23,10 @@
             int frequecnyFactor = 12/CalFrequencyFactor.FrequencyFactor(frequency);
             decimal totalYears = (decimal)totalDays / 365;
             int TotalInitialDuration = (int)Math.Round(totalYears * frequecnyFactor);
+            decimal TotalInitialDurationWithDecimal = totalYears * frequecnyFactor;
 
-            return (TotalInitialDuration, totalDays);
+
+            return (TotalInitialDuration, totalDays, TotalInitialDurationWithDecimal);
         }
 
     }

@@ -91,6 +91,54 @@
         }
       }
     },
+    "/api/InitialRecognition/Modify": {
+      "post": {
+        "tags": [
+          "InitialRecognition"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormModification"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormModification"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormModification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/InitialRecognition/Get": {
       "post": {
         "tags": [
@@ -303,6 +351,46 @@
         }
       }
     },
+    "/api/LeaseFormData/GetLeaseById/{leaseId}": {
+      "get": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseFormData"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseFormData"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseFormData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/LeaseFormData": {
       "post": {
         "tags": [
@@ -394,6 +482,37 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/DeleteLeaseData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/LeaseFormData/TerminateLease": {
+      "post": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminateLease"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminateLease"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminateLease"
               }
             }
           }
@@ -1239,6 +1358,89 @@
         },
         "additionalProperties": false
       },
+      "LeaseFormModification": {
+        "type": "object",
+        "properties": {
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leaseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "rental": {
+            "type": "number",
+            "format": "double"
+          },
+          "modificationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "commencementDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "annuity": {
+            "type": "string",
+            "nullable": true
+          },
+          "ibr": {
+            "type": "number",
+            "format": "double"
+          },
+          "frequency": {
+            "type": "string",
+            "nullable": true
+          },
+          "idc": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "grv": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "increment": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "incrementalFrequency": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currencyID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rouOpening": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rouExRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LeaseLiabilityRequest": {
         "type": "object",
         "properties": {
@@ -1412,6 +1614,25 @@
           "closing": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TerminateLease": {
+        "type": "object",
+        "properties": {
+          "terminateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "penalty": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "leaseId": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

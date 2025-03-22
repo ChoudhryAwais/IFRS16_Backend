@@ -12,7 +12,7 @@ namespace IFRS16_Backend.Services.JournalEntries
 
         public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule)
         {
-            int startTableDates =0;
+            int startTableDates = 0;
             LeaseLiabilityTable leaseMustField = leaseLiability[0];
             ROUScheduleTable respectiveROU = rouSchedule[0];
             List<JournalEntryTable> JEFinalTable =
@@ -297,7 +297,6 @@ namespace IFRS16_Backend.Services.JournalEntries
 
             return JEFinalTable;
         }
-
         public async Task<JournalEntryResult> GetJEForLease(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
             IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId, startDate, endDate);
@@ -319,6 +318,51 @@ namespace IFRS16_Backend.Services.JournalEntries
                 Data = journalEntries,
                 TotalRecords = totalRecord,
             };
+        }
+
+        public async Task<IEnumerable<JournalEntryTable>> EnterJEOnTermination(decimal LLClosing, decimal ROUClosing, decimal? Penalty, DateTime terminationDate, int leaseId)
+        {
+            List<JournalEntryTable> JEFinalTable =
+            [
+                    new JournalEntryTable
+                    {
+                        JE_Date = terminationDate,
+                        Particular = "Right of Use Asset",
+                        Debit = 0,
+                        Credit = ROUClosing,
+                        LeaseId = leaseId
+                    },
+                    new JournalEntryTable
+                    {
+                        JE_Date = terminationDate,
+                        Particular = "Lease Liability",
+                        Debit = LLClosing,
+                        Credit = 0,
+                        LeaseId = leaseId
+                    },
+                    new JournalEntryTable
+                    {
+                        JE_Date = terminationDate,
+                        Particular = "Penalty Payable",
+                        Debit = 0,
+                        Credit = Penalty??0,
+                        LeaseId = leaseId
+                    }
+            ];
+            decimal terminationGainLoss = LLClosing - (ROUClosing + Penalty??0);
+            //terminationGainLoss if + ve then credit and - ve then debit
+            JEFinalTable.Add(new JournalEntryTable
+            {
+                JE_Date = terminationDate,
+                Particular = "Termination Gain/Loss",
+                Debit = terminationGainLoss < 0 ? Math.Abs(terminationGainLoss) : 0,
+                Credit = terminationGainLoss > 0 ? terminationGainLoss : 0,
+                LeaseId = leaseId
+            });
+            _context.JournalEntries.AddRange(JEFinalTable);
+            await _context.SaveChangesAsync();
+
+            return JEFinalTable;
         }
     }
 }

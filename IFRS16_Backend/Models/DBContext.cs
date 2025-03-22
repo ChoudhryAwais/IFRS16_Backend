@@ -100,5 +100,9 @@ namespace IFRS16_Backend.Models
         {
             await this.Database.ExecuteSqlRawAsync("EXEC DeleteLeaseWithDependencies @leaseIds = {0}", leaseIds);
         }
+        public async Task TerminateLeaseAsync(DateTime terminateDate, int leaseId)
+        {
+            await this.Database.ExecuteSqlRawAsync("EXEC TerminateLease @TerminateDate = {0}, @LeaseId = {1}", terminateDate, leaseId);
+        }
     }
 }

@@ -72,6 +72,32 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
+    "Method": "ModifyInitialRecognitionForLease",
+    "RelativePath": "api/InitialRecognition/Modify",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseData",
+        "Type": "IFRS16_Backend.Models.LeaseFormModification",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.InitialRecognitionResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.JournalEntriesController",
     "Method": "GetJournalEntriesForLease",
     "RelativePath": "api/JournalEntries/Get",
@@ -206,6 +232,48 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "GetLeaseyId",
+    "RelativePath": "api/LeaseFormData/GetLeaseById/{leaseId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.LeaseFormData",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "TerminateLeaseData",
+    "RelativePath": "api/LeaseFormData/TerminateLease",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseTerminate",
+        "Type": "IFRS16_Backend.Models.TerminateLease",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseLiabilityController",

@@ -24,6 +24,20 @@ namespace IFRS16_Backend.Controllers
             }
 
         }
+        [HttpPost("Modify")]
+        public async Task<ActionResult<InitialRecognitionResult>> ModifyInitialRecognitionForLease([FromBody] LeaseFormModification leaseData)
+        {
+            try
+            {
+                var result = await _intialRecognitionService.ModifyInitialRecognitionForLease(leaseData);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
 
         [HttpPost("Get")]
         public async Task<ActionResult<InitialRecognitionResult>> GetInitialRecognitionForLease([FromBody] GetLeaseDetails requestModal)

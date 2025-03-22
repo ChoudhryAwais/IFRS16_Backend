@@ -22,7 +22,7 @@ namespace IFRS16_Backend.Helper
 
         public static (int startTable, double endTable, int frequecnyFactor) DurationOfIRhelper(LeaseFormData leaseSpecificData)
         {
-            var (TotalInitialRecoDuration, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate, leaseSpecificData.IncrementalFrequency);
+            var (TotalInitialRecoDuration, _, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.EndDate, leaseSpecificData.IncrementalFrequency);
             var startTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1;
             var endTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? TotalInitialRecoDuration - 1 : TotalInitialRecoDuration;
             int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.IncrementalFrequency);

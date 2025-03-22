@@ -1,13 +1,8 @@
 ﻿using Azure.Core;
 using IFRS16_Backend.Models;
-using IFRS16_Backend.Services.InitialRecognition;
 using IFRS16_Backend.Services.LeaseData;
 using IFRS16_Backend.Services.LeaseDataWorkflow;
-using IFRS16_Backend.Services.LeaseLiability;
-using IFRS16_Backend.Services.ROUSchedule;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Controllers
 {
@@ -51,6 +46,20 @@ namespace IFRS16_Backend.Controllers
             }
         }
 
+        [HttpGet("GetLeaseById/{leaseId}")]
+        public async Task<ActionResult<LeaseFormData>> GetLeaseyId(int leaseId)
+        {
+            try
+            {
+                var leases = await _leaseFormDataService.GetLeaseById(leaseId);
+                return Ok(leases);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostLeaseFormData([FromBody] LeaseFormData leaseFormData)
         {
@@ -81,7 +90,7 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-       
+
         [HttpPost("Delete")]
         public async Task<IActionResult> DeleteLeaseData([FromBody] DeleteLeaseData deleteReq)
         {
@@ -94,6 +103,22 @@ namespace IFRS16_Backend.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("TerminateLease")]
+        public async Task<IActionResult> TerminateLeaseData([FromBody] TerminateLease leaseTerminate)
+        {
+
+            var result = await _leaseFormDataService.TerminateLease(leaseTerminate);
+            if (result==true)
+            {
+                return Ok(new { status = 200 }); // 200 OK with a message
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
     }
 }
