@@ -13,6 +13,14 @@ namespace IFRS16_Backend.Models
         public decimal NPV { get; set; }
     }
 
+    public class CustomInitialRecognitionTable
+    {
+        [Key]
+        public int SerialNo { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public decimal Rental { get; set; }
+    }
+
     public class InitialRecognitionResult
     {
         public decimal TotalNPV { get; set; }

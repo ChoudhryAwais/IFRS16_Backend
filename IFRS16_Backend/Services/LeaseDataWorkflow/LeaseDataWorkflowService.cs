@@ -26,14 +26,21 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
             try
             {
                 bool result = await _leaseFormDataService.AddLeaseFormDataAsync(leaseFormData);
-
-                var initialRecognitionRes = await _initialRecognitionService.PostInitialRecognitionForLease(leaseFormData);
+                var initialRecognitionRes = new InitialRecognitionResult();
+                if (leaseFormData.CustomIRTable!=null)
+                {
+                    initialRecognitionRes = await _initialRecognitionService.PostCustomInitialRecognitionForLease(leaseFormData);
+                }
+                else
+                {
+                    initialRecognitionRes = await _initialRecognitionService.PostInitialRecognitionForLease(leaseFormData);
+                }
 
                 ROUScheduleRequest request = new()
-                {
-                    TotalNPV = (double)initialRecognitionRes.TotalNPV,
-                    LeaseData = leaseFormData
-                };
+                    {
+                        TotalNPV = (double)initialRecognitionRes.TotalNPV,
+                        LeaseData = leaseFormData
+                    };
 
                 var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
 

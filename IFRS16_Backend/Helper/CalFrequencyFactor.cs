@@ -6,7 +6,7 @@ namespace IFRS16_Backend.Helper
     {
         public static int FrequencyFactor(string frequency)
         {
-            int factor = 0;
+            int factor = 1;
             if (frequency == "annual")
             {
                 factor = (int)Frequencies.Annual;

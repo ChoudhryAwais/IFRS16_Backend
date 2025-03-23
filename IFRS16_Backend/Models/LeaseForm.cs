@@ -25,8 +25,10 @@ namespace IFRS16_Backend.Models
         public double? RouOpening { get; set; }
         [NotMapped]
         public decimal? RouExRate { get; set; }
+        [NotMapped]
+        public List<CustomInitialRecognitionTable>? CustomIRTable { get; set; }
 
-    }
+}
 
     public class LeaseFormModification
     {

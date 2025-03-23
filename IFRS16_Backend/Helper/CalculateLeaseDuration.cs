@@ -4,6 +4,10 @@
     {
         public static (double TotalYears, int TotalDays, decimal TotalInitialDurationWithDecimal) GetLeaseDuration(DateTime commencementDate, DateTime endDate,string frequency="annual")
         {
+            if(frequency == "irregular")
+            {
+                frequency = "annual";
+            }
             // Validate the dates
             if (commencementDate == default || endDate == default)
             {

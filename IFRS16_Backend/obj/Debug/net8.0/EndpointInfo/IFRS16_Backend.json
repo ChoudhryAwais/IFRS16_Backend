@@ -1034,6 +1034,24 @@
         },
         "additionalProperties": false
       },
+      "CustomInitialRecognitionTable": {
+        "type": "object",
+        "properties": {
+          "serialNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rental": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "DeleteLeaseData": {
         "type": "object",
         "properties": {
@@ -1353,6 +1371,13 @@
           "rouExRate": {
             "type": "number",
             "format": "double",
+            "nullable": true
+          },
+          "customIRTable": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomInitialRecognitionTable"
+            },
             "nullable": true
           }
         },

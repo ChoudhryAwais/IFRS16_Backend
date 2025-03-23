@@ -68,17 +68,79 @@ namespace IFRS16_Backend.Services.InitialRecognition
             }
             cashFlow.Insert(0, (double)-totalNPV);
             dates.Insert(0, leaseSpecificData.CommencementDate);
-            _context.InitialRecognition.AddRange(initialRecognition);
-            await _context.SaveChangesAsync();
-
-            return new InitialRecognitionResult
+            try
             {
-                TotalNPV = totalNPV,
-                InitialRecognition = initialRecognition,
-                CashFlow = cashFlow,
-                Dates = dates
-            };
+                _context.InitialRecognition.AddRange(initialRecognition);
+                await _context.SaveChangesAsync();
+
+                return new InitialRecognitionResult
+                {
+                    TotalNPV = totalNPV,
+                    InitialRecognition = initialRecognition,
+                    CashFlow = cashFlow,
+                    Dates = dates
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log and handle exceptions appropriately
+                Console.WriteLine(ex);
+                throw;
+            }
+           
         }
+        public async Task<InitialRecognitionResult> PostCustomInitialRecognitionForLease(LeaseFormData leaseSpecificData)
+        {
+            decimal rental = (decimal)leaseSpecificData.Rental;
+            int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
+            double IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
+            decimal totalNPV = 0;
+            decimal discountFactor = (1 + ((decimal)IBR / 100m));
+            List<double> cashFlow = [];
+            List<DateTime> dates = [];
+            List<InitialRecognitionTable> initialRecognition = [];
+            for (int i = 0; i < leaseSpecificData.CustomIRTable.Count; i++)
+            {
+                var (PowerFactor, _, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.CustomIRTable[i].PaymentDate, leaseSpecificData.Frequency);
+                decimal NPV = rental / (decimal)Math.Pow((double)discountFactor, (double)PowerFactor);
+                totalNPV += NPV;
+
+                InitialRecognitionTable tableObj = new()
+                {
+                    LeaseId = leaseSpecificData.LeaseId,
+                    SerialNo = leaseSpecificData.CustomIRTable[i].SerialNo,
+                    PaymentDate = leaseSpecificData.CustomIRTable[i].PaymentDate,
+                    Rental = leaseSpecificData.CustomIRTable[i].Rental,
+                    NPV = NPV
+                };
+                cashFlow.Add((double)rental);
+                dates.Add(leaseSpecificData.CustomIRTable[i].PaymentDate);
+                initialRecognition.Add(tableObj);
+            }
+            cashFlow.Insert(0, (double)-totalNPV);
+            dates.Insert(0, leaseSpecificData.CommencementDate);
+            try
+            {
+                _context.InitialRecognition.AddRange(initialRecognition);
+                await _context.SaveChangesAsync();
+
+                return new InitialRecognitionResult
+                {
+                    TotalNPV = totalNPV,
+                    InitialRecognition = initialRecognition,
+                    CashFlow = cashFlow,
+                    Dates = dates
+                };
+            }
+             catch (Exception ex)
+            {
+                // Log and handle exceptions appropriately
+                Console.WriteLine(ex);
+                throw;
+            }
+            
+        }
+
         public async Task<InitialRecognitionResult> ModifyInitialRecognitionForLease(LeaseFormModification leaseSpecificData)
         {
 
@@ -89,7 +151,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                 commencementDate = commencementDate.AddMonths(-1 * frequecnyFactor);
             }
             var (TotalInitialRecoDuration, _, _) = CalculateLeaseDuration.GetLeaseDuration(commencementDate, leaseSpecificData.EndDate, leaseSpecificData.Frequency);
-           
+
             var startTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1;
             var endTable = (leaseSpecificData.Annuity == AnnuityType.Advance) ? TotalInitialRecoDuration - 1 : TotalInitialRecoDuration;
             endTable = (leaseSpecificData.GRV != null & leaseSpecificData.GRV != 0) ? endTable + 1 : endTable;
