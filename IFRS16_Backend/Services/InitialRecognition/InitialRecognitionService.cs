@@ -21,7 +21,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             decimal rental = (decimal)leaseSpecificData.Rental;
             int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
             int incrementalFrequecnyFactor = 1;
-            double IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
+            double IBR = leaseSpecificData.IBR; /// (12 / frequecnyFactor); // Now IBR is always as is. (24/3/2025)
             decimal totalNPV = 0;
             decimal discountFactor = (1 + ((decimal)IBR / 100m));
             List<double> cashFlow = [];
@@ -37,7 +37,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             for (int i = startTable, incremetPeriod = incrementalFrequecnyFactor + ((leaseSpecificData.Annuity == AnnuityType.Advance) ? 0 : 1); i <= endTable; i++)
             {
                 DateTime newDate = leaseSpecificData.CommencementDate.AddMonths(i * frequecnyFactor);
-                var (PowerFactor, _, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, newDate, leaseSpecificData.Frequency);
+                var (_, _, PowerFactor) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, newDate, leaseSpecificData.Frequency, true);
                 //if (leaseSpecificData.Annuity == AnnuityType.Arrears)
                 //    newDate = newDate.AddDays(-1);
                 if (i == incremetPeriod && leaseSpecificData.Increment != null && leaseSpecificData.Increment != 0)
@@ -51,7 +51,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                     newDate = leaseSpecificData.EndDate;
                 }
 
-                decimal NPV = rental / DecimalPower.DecimalPowerCal(discountFactor, (int)PowerFactor);
+                decimal NPV = rental / (decimal)Math.Pow((double)discountFactor, (double)PowerFactor);
                 totalNPV += NPV;
 
                 InitialRecognitionTable tableObj = new()
@@ -87,7 +87,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                 Console.WriteLine(ex);
                 throw;
             }
-           
+
         }
         public async Task<InitialRecognitionResult> PostCustomInitialRecognitionForLease(LeaseFormData leaseSpecificData)
         {
@@ -132,13 +132,13 @@ namespace IFRS16_Backend.Services.InitialRecognition
                     Dates = dates
                 };
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 // Log and handle exceptions appropriately
                 Console.WriteLine(ex);
                 throw;
             }
-            
+
         }
 
         public async Task<InitialRecognitionResult> ModifyInitialRecognitionForLease(LeaseFormModification leaseSpecificData)
@@ -223,7 +223,9 @@ namespace IFRS16_Backend.Services.InitialRecognition
             List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && (startDate == null || endDate == null || (item.PaymentDate >= startDate && item.PaymentDate <= endDate))).ToListAsync();
             decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
             List<DateTime> dates = [.. fullInitialRecognitionTable.Select(item => item.PaymentDate)];
-
+            DateTime commencementDate = leaseSpecificData.CommencementDate;
+            DateTime endDated = leaseSpecificData.EndDate;
+            int totalDays = (endDated - commencementDate).Days + 1;
             int totalRecord = fullInitialRecognitionTable.Count;
             //DateTime specificDate = new DateTime(2020, 06, 30); // 30 June 2020
             //DateTime endDates = new DateTime(2021, 12, 31); // 31 Dec 2020
