@@ -93,7 +93,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
         {
             decimal rental = (decimal)leaseSpecificData.Rental;
             int frequecnyFactor = CalFrequencyFactor.FrequencyFactor(leaseSpecificData.Frequency);
-            double IBR = leaseSpecificData.IBR / (12 / frequecnyFactor);
+            double IBR = leaseSpecificData.IBR; // / (12 / frequecnyFactor);
             decimal totalNPV = 0;
             decimal discountFactor = (1 + ((decimal)IBR / 100m));
             List<double> cashFlow = [];
@@ -101,7 +101,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             List<InitialRecognitionTable> initialRecognition = [];
             for (int i = 0; i < leaseSpecificData.CustomIRTable.Count; i++)
             {
-                var (PowerFactor, _, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.CustomIRTable[i].PaymentDate, leaseSpecificData.Frequency);
+                var (_, _, PowerFactor) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.CustomIRTable[i].PaymentDate, leaseSpecificData.Frequency, true);
                 decimal NPV = rental / (decimal)Math.Pow((double)discountFactor, (double)PowerFactor);
                 totalNPV += NPV;
 
@@ -223,21 +223,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && (startDate == null || endDate == null || (item.PaymentDate >= startDate && item.PaymentDate <= endDate))).ToListAsync();
             decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
             List<DateTime> dates = [.. fullInitialRecognitionTable.Select(item => item.PaymentDate)];
-            DateTime commencementDate = leaseSpecificData.CommencementDate;
-            DateTime endDated = leaseSpecificData.EndDate;
-            int totalDays = (endDated - commencementDate).Days + 1;
             int totalRecord = fullInitialRecognitionTable.Count;
-            //DateTime specificDate = new DateTime(2020, 06, 30); // 30 June 2020
-            //DateTime endDates = new DateTime(2021, 12, 31); // 31 Dec 2020
-            //var (_, _, TotalInitialDurationWithDecimal) = CalculateLeaseDuration.GetLeaseDuration(specificDate, endDates, leaseSpecificData.Frequency);
-
-            //for (int i = 0; i <= fullInitialRecognitionTable.Count; i++)
-            //{
-
-            //    var (TotalInitialRecoDuration, _, _) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, fullInitialRecognitionTable[i].PaymentDate, leaseSpecificData.Frequency);
-            //    var abc = TotalInitialRecoDuration;
-            //}
-
 
             return new InitialRecognitionResult
             {

@@ -1131,6 +1131,9 @@
           "currencyID": {
             "type": "integer",
             "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -1358,6 +1361,9 @@
           "companyID": {
             "type": "integer",
             "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
           },
           "currencyID": {
             "type": "integer",
