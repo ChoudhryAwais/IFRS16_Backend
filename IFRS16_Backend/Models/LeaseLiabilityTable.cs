@@ -13,6 +13,7 @@ namespace IFRS16_Backend.Models
         public double Payment { get; set; }
         public double Closing { get; set; }
         public double? Exchange_Gain_Loss { get; set; }
+        public double? ModificationAdjustment { get; set; }
     }
     public class FC_LeaseLiabilityTable
     {

@@ -10,31 +10,52 @@ namespace IFRS16_Backend.Services.JournalEntries
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule)
+        public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule, double modificationAdjustment = 0)
         {
             int startTableDates = 0;
             LeaseLiabilityTable leaseMustField = leaseLiability[0];
             ROUScheduleTable respectiveROU = rouSchedule[0];
-            List<JournalEntryTable> JEFinalTable =
-            [
-                    new JournalEntryTable
-                    {
-                        JE_Date = respectiveROU.ROU_Date,
-                        Particular = "Right of Use Asset",
-                        Debit = (decimal)(respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)),
-                        Credit = 0,
-                        LeaseId = leaseSpecificData.LeaseId
-                    },
-                    new JournalEntryTable
-                    {
-                        JE_Date = leaseMustField.LeaseLiability_Date,
-                        Particular = "Lease Liability",
-                        Debit = 0,
-                        Credit = (decimal)(leaseMustField.Opening - leaseMustField.Payment),
-                        LeaseId = leaseSpecificData.LeaseId
-                    }
-,
-            ];
+            List<JournalEntryTable> JEFinalTable = [];
+
+            if (modificationAdjustment == 0)
+            {
+                JEFinalTable.Add(new JournalEntryTable
+                {
+                    JE_Date = leaseMustField.LeaseLiability_Date,
+                    Particular = "Lease Liability",
+                    Debit = 0,
+                    Credit = (decimal)(leaseMustField.Opening - leaseMustField.Payment),
+                    LeaseId = leaseSpecificData.LeaseId
+                });
+                JEFinalTable.Add(new JournalEntryTable
+                {
+                    JE_Date = respectiveROU.ROU_Date,
+                    Particular = "Right of Use Asset",
+                    Debit = (decimal)(respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)),
+                    Credit = 0,
+                    LeaseId = leaseSpecificData.LeaseId
+                });
+
+            }
+            if (modificationAdjustment != 0)
+            {
+                JEFinalTable.Add(new JournalEntryTable
+                {
+                    JE_Date = leaseMustField.LeaseLiability_Date,
+                    Particular = "Lease Liability",
+                    Debit = modificationAdjustment < 0 ? (decimal)modificationAdjustment : 0,
+                    Credit = modificationAdjustment > 0 ? (decimal)modificationAdjustment : 0,
+                    LeaseId = leaseSpecificData.LeaseId
+                });
+                JEFinalTable.Add(new JournalEntryTable
+                {
+                    JE_Date = respectiveROU.ROU_Date,
+                    Particular = "Right of Use Asset",
+                    Debit = modificationAdjustment > 0 ? (decimal)modificationAdjustment : 0,
+                    Credit = modificationAdjustment < 0 ? (decimal)modificationAdjustment : 0,
+                    LeaseId = leaseSpecificData.LeaseId
+                });
+            }
 
             // Handle payment
             if (leaseMustField.Payment > 0)
@@ -49,27 +70,32 @@ namespace IFRS16_Backend.Services.JournalEntries
                 });
             }
 
-            // Handle IDC
-            if (leaseSpecificData.IDC.HasValue && leaseSpecificData.IDC != 0)
+            if (modificationAdjustment == 0)
             {
-                JEFinalTable.Add(new JournalEntryTable
+                // Handle IDC
+                if (leaseSpecificData.IDC.HasValue && leaseSpecificData.IDC != 0)
                 {
-                    JE_Date = respectiveROU.ROU_Date,
-                    Particular = "Right of Use Asset",
-                    Debit = (decimal)leaseSpecificData.IDC,
-                    Credit = 0,
-                    LeaseId = leaseSpecificData.LeaseId
-                });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = respectiveROU.ROU_Date,
+                        Particular = "Right of Use Asset",
+                        Debit = (decimal)leaseSpecificData.IDC,
+                        Credit = 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
 
-                JEFinalTable.Add(new JournalEntryTable
-                {
-                    JE_Date = respectiveROU.ROU_Date,
-                    Particular = "Payable (Initial Direct Cost)",
-                    Debit = 0,
-                    Credit = (decimal)leaseSpecificData.IDC,
-                    LeaseId = leaseSpecificData.LeaseId
-                });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = respectiveROU.ROU_Date,
+                        Particular = "Payable (Initial Direct Cost)",
+                        Debit = 0,
+                        Credit = (decimal)leaseSpecificData.IDC,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                }
+
             }
+
 
             for (int i = startTableDates; i < leaseLiability.Count; i++)
             {
@@ -116,7 +142,6 @@ namespace IFRS16_Backend.Services.JournalEntries
                         LeaseId = leaseSpecificData.LeaseId
                     });
                 }
-
 
                 // Create and push amortization and ROU journal entries
                 JEFinalTable.Add(new JournalEntryTable
@@ -171,26 +196,24 @@ namespace IFRS16_Backend.Services.JournalEntries
             int startTableDates = leaseSpecificData.Annuity == "advance" ? 1 : 0;
             FC_LeaseLiabilityTable leaseMustField = fc_leaseLiability[0];
             FC_ROUScheduleTable respectiveROU = fc_rouSchedule[0];
-            List<FC_JournalEntryTable> JEFinalTable =
-            [
-                    new FC_JournalEntryTable
-                    {
-                        JE_Date = respectiveROU.ROU_Date,
-                        Particular = "Right of Use Asset",
-                        Debit = (decimal)(respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)),
-                        Credit = 0,
-                        LeaseId = leaseSpecificData.LeaseId
-                    },
-                    new FC_JournalEntryTable
-                    {
-                        JE_Date = leaseMustField.LeaseLiability_Date,
-                        Particular = "Lease Liability",
-                        Debit = 0,
-                        Credit = (decimal)(leaseMustField.Opening - leaseMustField.Payment),
-                        LeaseId = leaseSpecificData.LeaseId
-                    }
-,
-            ];
+            List<FC_JournalEntryTable> JEFinalTable = new List<FC_JournalEntryTable>();
+
+            JEFinalTable.Add(new FC_JournalEntryTable
+            {
+                JE_Date = respectiveROU.ROU_Date,
+                Particular = "Right of Use Asset",
+                Debit = (decimal)(respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)),
+                Credit = 0,
+                LeaseId = leaseSpecificData.LeaseId
+            });
+            JEFinalTable.Add(new FC_JournalEntryTable
+            {
+                JE_Date = leaseMustField.LeaseLiability_Date,
+                Particular = "Lease Liability",
+                Debit = 0,
+                Credit = (decimal)(leaseMustField.Opening - leaseMustField.Payment),
+                LeaseId = leaseSpecificData.LeaseId
+            });
 
             // Handle payment
             if (leaseMustField.Payment > 0)
@@ -297,6 +320,7 @@ namespace IFRS16_Backend.Services.JournalEntries
 
             return JEFinalTable;
         }
+
         public async Task<JournalEntryResult> GetJEForLease(int pageNumber, int pageSize, int leaseId, DateTime? startDate, DateTime? endDate)
         {
             IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId, startDate, endDate);
@@ -312,7 +336,6 @@ namespace IFRS16_Backend.Services.JournalEntries
                 Credit = item.Sum(item => item.Credit)
             });
 
-
             return new()
             {
                 Data = journalEntries,
@@ -322,34 +345,34 @@ namespace IFRS16_Backend.Services.JournalEntries
 
         public async Task<IEnumerable<JournalEntryTable>> EnterJEOnTermination(decimal LLClosing, decimal ROUClosing, decimal? Penalty, DateTime terminationDate, int leaseId)
         {
-            List<JournalEntryTable> JEFinalTable =
-            [
-                    new JournalEntryTable
-                    {
-                        JE_Date = terminationDate,
-                        Particular = "Right of Use Asset",
-                        Debit = 0,
-                        Credit = ROUClosing,
-                        LeaseId = leaseId
-                    },
-                    new JournalEntryTable
-                    {
-                        JE_Date = terminationDate,
-                        Particular = "Lease Liability",
-                        Debit = LLClosing,
-                        Credit = 0,
-                        LeaseId = leaseId
-                    },
-                    new JournalEntryTable
-                    {
-                        JE_Date = terminationDate,
-                        Particular = "Penalty Payable",
-                        Debit = 0,
-                        Credit = Penalty??0,
-                        LeaseId = leaseId
-                    }
-            ];
-            decimal terminationGainLoss = LLClosing - (ROUClosing + Penalty??0);
+            List<JournalEntryTable> JEFinalTable = new List<JournalEntryTable>();
+
+            JEFinalTable.Add(new JournalEntryTable
+            {
+                JE_Date = terminationDate,
+                Particular = "Right of Use Asset",
+                Debit = 0,
+                Credit = ROUClosing,
+                LeaseId = leaseId
+            });
+            JEFinalTable.Add(new JournalEntryTable
+            {
+                JE_Date = terminationDate,
+                Particular = "Lease Liability",
+                Debit = LLClosing,
+                Credit = 0,
+                LeaseId = leaseId
+            });
+            JEFinalTable.Add(new JournalEntryTable
+            {
+                JE_Date = terminationDate,
+                Particular = "Penalty Payable",
+                Debit = 0,
+                Credit = Penalty ?? 0,
+                LeaseId = leaseId
+            });
+
+            decimal terminationGainLoss = LLClosing - (ROUClosing + Penalty ?? 0);
             //terminationGainLoss if + ve then credit and - ve then debit
             JEFinalTable.Add(new JournalEntryTable
             {
@@ -359,6 +382,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 Credit = terminationGainLoss > 0 ? terminationGainLoss : 0,
                 LeaseId = leaseId
             });
+
             _context.JournalEntries.AddRange(JEFinalTable);
             await _context.SaveChangesAsync();
 

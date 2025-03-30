@@ -104,6 +104,10 @@ namespace IFRS16_Backend.Models
         {
             await this.Database.ExecuteSqlRawAsync("EXEC TerminateLease @TerminateDate = {0}, @LeaseId = {1}", terminateDate, leaseId);
         }
+        public async Task ModifyLeaseAsync(DateTime? LastModifiedDate, int leaseId)
+        {
+            await this.Database.ExecuteSqlRawAsync("EXEC ModifyLease @ModificationDate = {0}, @LeaseId = {1}", LastModifiedDate, leaseId);
+        }
     }
 }
    

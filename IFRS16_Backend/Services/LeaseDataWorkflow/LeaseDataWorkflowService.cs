@@ -1,9 +1,11 @@
-﻿using IFRS16_Backend.Models;
+﻿using Azure.Core;
+using IFRS16_Backend.Models;
 using IFRS16_Backend.Services.InitialRecognition;
 using IFRS16_Backend.Services.JournalEntries;
 using IFRS16_Backend.Services.LeaseData;
 using IFRS16_Backend.Services.LeaseLiability;
 using IFRS16_Backend.Services.ROUSchedule;
+using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Services.LeaseDataWorkflow
 {
@@ -12,9 +14,11 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
         IInitialRecognitionService initialRecognitionService,
         IROUScheduleService rouScheduleService,
         ILeaseLiabilityService leaseLiabilityService,
-        IJournalEntriesService journalEntriesService
+        IJournalEntriesService journalEntriesService,
+        ApplicationDbContext context
         ) : ILeaseDataWorkflowService
     {
+        private readonly ApplicationDbContext _context = context;
         private readonly ILeaseDataService _leaseFormDataService = leaseFormDataService;
         private readonly IInitialRecognitionService _initialRecognitionService = initialRecognitionService;
         private readonly IROUScheduleService _rouScheduleService = rouScheduleService;
@@ -27,7 +31,7 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
             {
                 bool result = await _leaseFormDataService.AddLeaseFormDataAsync(leaseFormData);
                 var initialRecognitionRes = new InitialRecognitionResult();
-                if (leaseFormData.CustomIRTable!=null)
+                if (leaseFormData.CustomIRTable != null)
                 {
                     initialRecognitionRes = await _initialRecognitionService.PostCustomInitialRecognitionForLease(leaseFormData);
                 }
@@ -37,10 +41,10 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                 }
 
                 ROUScheduleRequest request = new()
-                    {
-                        TotalNPV = (double)initialRecognitionRes.TotalNPV,
-                        LeaseData = leaseFormData
-                    };
+                {
+                    TotalNPV = (double)initialRecognitionRes.TotalNPV,
+                    LeaseData = leaseFormData
+                };
 
                 var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
 
@@ -52,11 +56,11 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                 );
 
                 var journalEntries = await _journalEntriesService.PostJEForLease(leaseFormData, leaseLiability, rouSchedule);
-                if(fc_rouSchedule.Count>0 && fc_leaseLiability.Count > 0)
+                if (fc_rouSchedule.Count > 0 && fc_leaseLiability.Count > 0)
                 {
                     var fc_journalEntries = await _journalEntriesService.PostJEForLeaseforFC(leaseFormData, fc_leaseLiability, fc_rouSchedule);
                 }
-               
+
 
                 return true;
             }
@@ -65,6 +69,76 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                 // Log and handle exceptions appropriately
                 Console.WriteLine(ex);
                 throw;
+            }
+        }
+        public async Task<bool> ModificationLeaseFormDataAsync(LeaseFormData leaseModificationData)
+        {
+            try
+            {
+                LeaseLiabilityTable? leaseLiabilityObj = _context.LeaseLiability
+                    .Where(item => item.LeaseId == leaseModificationData.LeaseId && item.LeaseLiability_Date < leaseModificationData.LastModifiedDate)
+                    .OrderByDescending(item => item.LeaseLiability_Date)
+                    .FirstOrDefault();
+
+                ROUScheduleTable? rouObj = _context.ROUSchedule
+                    .FirstOrDefault(item => item.LeaseId == leaseModificationData.LeaseId && item.ROU_Date == leaseModificationData.LastModifiedDate);
+
+                await _context.ModifyLeaseAsync(leaseModificationData?.LastModifiedDate, leaseModificationData.LeaseId);
+
+                InitialRecognitionResult IRResult = await _initialRecognitionService.PostCustomInitialRecognitionForLease(leaseModificationData);
+
+                if (leaseLiabilityObj != null)
+                {
+                    leaseLiabilityObj.ModificationAdjustment = ((double)IRResult.TotalNPV - leaseLiabilityObj.Closing);
+                    _context.LeaseLiability.Update(leaseLiabilityObj);
+                    await _context.SaveChangesAsync();
+                }
+
+                leaseModificationData.RouOpening = leaseLiabilityObj.ModificationAdjustment + rouObj.Opening;
+
+                // Update the corresponding lease
+                LeaseFormData? existingLease = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseModificationData.LeaseId);
+                if (existingLease != null)
+                {
+                    existingLease.UserID = leaseModificationData.UserID;
+                    existingLease.LeaseName = leaseModificationData.LeaseName;
+                    existingLease.Rental = leaseModificationData.Rental;
+                    existingLease.EndDate = leaseModificationData.EndDate;
+                    existingLease.Annuity = leaseModificationData.Annuity;
+                    existingLease.IBR = leaseModificationData.IBR;
+                    existingLease.Frequency = leaseModificationData.Frequency;
+                    existingLease.IDC = leaseModificationData.IDC;
+                    existingLease.GRV = leaseModificationData.GRV;
+                    existingLease.Increment = leaseModificationData.Increment;
+                    existingLease.IncrementalFrequency = leaseModificationData.IncrementalFrequency;
+                    existingLease.LastModifiedDate = leaseModificationData.LastModifiedDate;
+                    existingLease.CurrencyID = leaseModificationData.CurrencyID;
+
+                    _context.LeaseData.Update(existingLease);
+                    await _context.SaveChangesAsync();
+                }
+
+                ROUScheduleRequest request = new()
+                {
+                    TotalNPV = (double)IRResult.TotalNPV,
+                    LeaseData = leaseModificationData
+                };
+
+                var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
+                var (leaseLiability, fc_leaseLiability) = await _leaseLiabilityService.PostLeaseLiability(
+                    request.TotalNPV,
+                    IRResult.CashFlow,
+                    IRResult.Dates,
+                    leaseModificationData
+                );
+                var journalEntries = await _journalEntriesService.PostJEForLease(leaseModificationData, leaseLiability, rouSchedule, leaseLiabilityObj.ModificationAdjustment ?? 0);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return true;
             }
         }
     }

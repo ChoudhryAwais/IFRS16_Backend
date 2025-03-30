@@ -261,6 +261,22 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "ModifyLeaseData",
+    "RelativePath": "api/LeaseFormData/ModifyLease",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseModification",
+        "Type": "IFRS16_Backend.Models.LeaseFormData",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
     "Method": "TerminateLeaseData",
     "RelativePath": "api/LeaseFormData/TerminateLease",
     "HttpMethod": "POST",

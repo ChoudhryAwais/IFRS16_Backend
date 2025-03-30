@@ -11,6 +11,7 @@ namespace IFRS16_Backend.Models
         public DateTime PaymentDate { get; set; }
         public decimal Rental { get; set; }
         public decimal NPV { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public class CustomInitialRecognitionTable

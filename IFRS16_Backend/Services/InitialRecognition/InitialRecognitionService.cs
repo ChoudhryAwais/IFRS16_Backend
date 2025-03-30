@@ -60,7 +60,8 @@ namespace IFRS16_Backend.Services.InitialRecognition
                     SerialNo = startTable == 0 ? i + 1 : i,
                     PaymentDate = newDate,
                     Rental = rental,
-                    NPV = NPV
+                    NPV = NPV,
+                    IsActive = true
                 };
                 cashFlow.Add((double)rental);
                 dates.Add(newDate);
@@ -111,7 +112,8 @@ namespace IFRS16_Backend.Services.InitialRecognition
                     SerialNo = leaseSpecificData.CustomIRTable[i].SerialNo,
                     PaymentDate = leaseSpecificData.CustomIRTable[i].PaymentDate,
                     Rental = leaseSpecificData.CustomIRTable[i].Rental,
-                    NPV = NPV
+                    NPV = NPV,
+                    IsActive = true
                 };
                 cashFlow.Add((double)rental);
                 dates.Add(leaseSpecificData.CustomIRTable[i].PaymentDate);

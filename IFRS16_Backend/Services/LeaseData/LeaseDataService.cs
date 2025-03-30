@@ -1,14 +1,17 @@
 ﻿using System.Threading.Tasks;
 using IFRS16_Backend.Models;
+using IFRS16_Backend.Services.InitialRecognition;
 using IFRS16_Backend.Services.JournalEntries;
 using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Services.LeaseData
 {
-    public class LeaseDataService(ApplicationDbContext context, IJournalEntriesService journalEntriesService) : ILeaseDataService
+    public class LeaseDataService(ApplicationDbContext context, IJournalEntriesService journalEntriesService, IInitialRecognitionService initialRecognitionService) : ILeaseDataService
     {
         private readonly ApplicationDbContext _context = context;
         private readonly IJournalEntriesService _journalEntriesService = journalEntriesService;
+        private readonly IInitialRecognitionService _initialRecognitionService = initialRecognitionService;
+
         public async Task<bool> AddLeaseFormDataAsync(LeaseFormData leaseFormData)
         {
             if (leaseFormData == null)
@@ -81,7 +84,7 @@ namespace IFRS16_Backend.Services.LeaseData
 
                 await _context.TerminateLeaseAsync(termination.TerminateDate, termination.LeaseId);
                 var result = await _journalEntriesService.EnterJEOnTermination((decimal)leaseLiability.Closing, (decimal)rouSchedule.Closing, termination.Penalty, termination.TerminateDate, termination.LeaseId);
-                
+
                 return true;
             }
             catch (Exception ex)

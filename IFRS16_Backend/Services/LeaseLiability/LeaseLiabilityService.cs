@@ -9,9 +9,9 @@ namespace IFRS16_Backend.Services.LeaseLiability
     {
         private readonly GetCurrecyRates _getCurrencyRates = getCurrencyRates;
         private readonly ApplicationDbContext _context = context;
-        public async Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData)
+        public async Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData, double customOpening = 0)
         {
-            var (_, TotalDays,_) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
+            var (_, TotalDays, _) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             double xirr = XIRR.XIRRCalculation(cashFlow, dates);
             double xirrDaily = Math.Pow(1 + xirr, 1.0 / 365.0) - 1;
             List<LeaseLiabilityTable> leaseLiability = [];
@@ -19,8 +19,8 @@ namespace IFRS16_Backend.Services.LeaseLiability
 
             decimal exchangeRate = 1;
             // Initialize variables
-            double base_opening = totalNPV;
-            double fc_opening = totalNPV;
+            double base_opening = customOpening == 0 ? totalNPV : customOpening;
+            double fc_opening = customOpening == 0 ? totalNPV : customOpening;
             //Foreign currency exchange
             double interest;
             double payment;
@@ -49,7 +49,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
                 double rental = 0;
                 if (dates.Contains(currentDate))
                 {
-                    if (i != TotalDays || leaseData.Annuity != AnnuityType.Advance)
+                    if (i != TotalDays || leaseData.Annuity != AnnuityType.Advance) //This condition is for GRV 
                     {
                         int indexOfDate = dates.FindIndex(date => FormatDate.FormatDateSimple(date) == formattedDateForXirr);
                         rental = cashFlow[indexOfDate];
@@ -94,7 +94,8 @@ namespace IFRS16_Backend.Services.LeaseLiability
                     Interest = interest,
                     Payment = payment,
                     Closing = closing,
-                    Exchange_Gain_Loss = fc_ex_gain_loss
+                    Exchange_Gain_Loss = fc_ex_gain_loss,
+                    ModificationAdjustment = 0
                 });
                 fc_opening = base_closing * (double)exchangeRate;
 

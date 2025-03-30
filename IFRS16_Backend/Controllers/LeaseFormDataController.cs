@@ -110,13 +110,28 @@ namespace IFRS16_Backend.Controllers
         {
 
             var result = await _leaseFormDataService.TerminateLease(leaseTerminate);
-            if (result==true)
+            if (result == true)
             {
                 return Ok(new { status = 200 }); // 200 OK with a message
             }
             else
             {
                 return BadRequest();
+            }
+
+        }
+
+        [HttpPost("ModifyLease")]
+        public async Task<IActionResult> ModifyLeaseData([FromBody] LeaseFormData leaseModification)
+        {
+            try
+            {
+                await _leaseDataWorkflowService.ModificationLeaseFormDataAsync(leaseModification);
+                return CreatedAtAction(nameof(PostLeaseFormData), new { id = leaseModification.LeaseId }, leaseModification);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
         }

@@ -524,6 +524,37 @@
         }
       }
     },
+    "/api/LeaseFormData/ModifyLease": {
+      "post": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/LeaseLiability/Add": {
       "post": {
         "tags": [
@@ -1134,6 +1165,11 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1229,6 +1265,9 @@
           "npv": {
             "type": "number",
             "format": "double"
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -1364,6 +1403,11 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           },
           "currencyID": {
             "type": "integer",
@@ -1550,6 +1594,11 @@
             "format": "double"
           },
           "exchange_Gain_Loss": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "modificationAdjustment": {
             "type": "number",
             "format": "double",
             "nullable": true
