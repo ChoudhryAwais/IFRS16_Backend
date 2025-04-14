@@ -2,6 +2,7 @@
 using IFRS16_Backend.Helper;
 using IFRS16_Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using EFCore.BulkExtensions;
 
 namespace IFRS16_Backend.Services.LeaseLiability
 {
@@ -108,13 +109,12 @@ namespace IFRS16_Backend.Services.LeaseLiability
             }
             try
             {
-                _context.LeaseLiability.AddRange(leaseLiability);
+                await _context.BulkInsertAsync(leaseLiability);
+
                 if (exchangeRatesList.Count > 0)
                 {
-                    _context.FC_LeaseLiability.AddRange(fc_leaseLiability);
+                    await _context.BulkInsertAsync(fc_leaseLiability);
                 }
-
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

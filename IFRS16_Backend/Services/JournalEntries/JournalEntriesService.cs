@@ -1,4 +1,5 @@
-﻿using IFRS16_Backend.enums;
+﻿using EFCore.BulkExtensions;
+using IFRS16_Backend.enums;
 using IFRS16_Backend.Helper;
 using IFRS16_Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,14 +11,14 @@ namespace IFRS16_Backend.Services.JournalEntries
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule, double modificationAdjustment = 0)
+        public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule, ModificationDetails? modificationDetails = null)
         {
             int startTableDates = 0;
             LeaseLiabilityTable leaseMustField = leaseLiability[0];
             ROUScheduleTable respectiveROU = rouSchedule[0];
             List<JournalEntryTable> JEFinalTable = [];
 
-            if (modificationAdjustment == 0)
+            if (modificationDetails == null)
             {
                 JEFinalTable.Add(new JournalEntryTable
                 {
@@ -37,24 +38,55 @@ namespace IFRS16_Backend.Services.JournalEntries
                 });
 
             }
-            if (modificationAdjustment != 0)
+            if (modificationDetails != null)
             {
-                JEFinalTable.Add(new JournalEntryTable
+                if (modificationDetails.LeaseLiability != 0 && modificationDetails.Rou != 0)
                 {
-                    JE_Date = leaseMustField.LeaseLiability_Date,
-                    Particular = "Lease Liability",
-                    Debit = modificationAdjustment < 0 ? (decimal)modificationAdjustment : 0,
-                    Credit = modificationAdjustment > 0 ? (decimal)modificationAdjustment : 0,
-                    LeaseId = leaseSpecificData.LeaseId
-                });
-                JEFinalTable.Add(new JournalEntryTable
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = leaseMustField.LeaseLiability_Date,
+                        Particular = "Lease Liability",
+                        Debit = (decimal)modificationDetails.LeaseLiability,
+                        Credit = 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = respectiveROU.ROU_Date,
+                        Particular = "Right of Use Asset",
+                        Debit = 0,
+                        Credit = (decimal)modificationDetails.Rou,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = respectiveROU.ROU_Date,
+                        Particular = "Modification loss",
+                        Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                }
+                else
                 {
-                    JE_Date = respectiveROU.ROU_Date,
-                    Particular = "Right of Use Asset",
-                    Debit = modificationAdjustment > 0 ? (decimal)modificationAdjustment : 0,
-                    Credit = modificationAdjustment < 0 ? (decimal)modificationAdjustment : 0,
-                    LeaseId = leaseSpecificData.LeaseId
-                });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = leaseMustField.LeaseLiability_Date,
+                        Particular = "Lease Liability",
+                        Debit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        Credit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = respectiveROU.ROU_Date,
+                        Particular = "Right of Use Asset",
+                        Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                }
+
             }
 
             // Handle payment
@@ -70,7 +102,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 });
             }
 
-            if (modificationAdjustment == 0)
+            if (modificationDetails == null)
             {
                 // Handle IDC
                 if (leaseSpecificData.IDC.HasValue && leaseSpecificData.IDC != 0)
@@ -184,9 +216,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     });
                 }
             }
-
-            _context.JournalEntries.AddRange(JEFinalTable);
-            await _context.SaveChangesAsync();
+            await _context.BulkInsertAsync(JEFinalTable);
 
             return JEFinalTable;
         }
@@ -315,8 +345,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 }
             }
 
-            _context.FC_JournalEntries.AddRange(JEFinalTable);
-            await _context.SaveChangesAsync();
+            await _context.BulkInsertAsync(JEFinalTable);
 
             return JEFinalTable;
         }

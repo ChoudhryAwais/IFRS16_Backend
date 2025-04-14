@@ -1429,6 +1429,9 @@
               "$ref": "#/components/schemas/CustomInitialRecognitionTable"
             },
             "nullable": true
+          },
+          "isChangeInScope": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

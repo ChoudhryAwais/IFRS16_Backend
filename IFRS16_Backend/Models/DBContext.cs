@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using EFCore.BulkExtensions;
 
 namespace IFRS16_Backend.Models
 {

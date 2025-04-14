@@ -1,4 +1,5 @@
-﻿using IFRS16_Backend.Helper;
+﻿using EFCore.BulkExtensions;
+using IFRS16_Backend.Helper;
 using IFRS16_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,12 +66,11 @@ namespace IFRS16_Backend.Services.ROUSchedule
 
             try
             {
-                _context.ROUSchedule.AddRange(rouSchedule);
+                await _context.BulkInsertAsync(rouSchedule);
                 if (exchangeRatesList.Count > 0)
                 {
-                    _context.FC_ROUSchedule.AddRange(fc_RouSchedule);
+                    await _context.BulkInsertAsync(fc_RouSchedule);
                 }
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

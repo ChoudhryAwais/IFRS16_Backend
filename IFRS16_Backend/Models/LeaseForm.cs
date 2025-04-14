@@ -29,6 +29,8 @@ namespace IFRS16_Backend.Models
         public decimal? RouExRate { get; set; }
         [NotMapped]
         public List<CustomInitialRecognitionTable>? CustomIRTable { get; set; }
+        [NotMapped]
+        public bool IsChangeInScope { get; set; }
 
     }
 

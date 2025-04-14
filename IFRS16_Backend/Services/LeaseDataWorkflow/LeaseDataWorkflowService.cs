@@ -80,6 +80,9 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     .OrderByDescending(item => item.LeaseLiability_Date)
                     .FirstOrDefault();
 
+                LeaseLiabilityTable? leaseLiabilityObjOnModificationDate = _context.LeaseLiability
+                   .FirstOrDefault(item => item.LeaseId == leaseModificationData.LeaseId && item.LeaseLiability_Date == leaseModificationData.LastModifiedDate);
+
                 ROUScheduleTable? rouObj = _context.ROUSchedule
                     .FirstOrDefault(item => item.LeaseId == leaseModificationData.LeaseId && item.ROU_Date == leaseModificationData.LastModifiedDate);
 
@@ -94,7 +97,7 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     await _context.SaveChangesAsync();
                 }
 
-                leaseModificationData.RouOpening = leaseLiabilityObj.ModificationAdjustment + rouObj.Opening;
+                leaseModificationData.RouOpening = leaseModificationData.RouOpening != null ? leaseModificationData.RouOpening : leaseLiabilityObj?.ModificationAdjustment + rouObj?.Opening;
 
                 // Update the corresponding lease
                 LeaseFormData? existingLease = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseModificationData.LeaseId);
@@ -131,7 +134,14 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     IRResult.Dates,
                     leaseModificationData
                 );
-                var journalEntries = await _journalEntriesService.PostJEForLease(leaseModificationData, leaseLiability, rouSchedule, leaseLiabilityObj.ModificationAdjustment ?? 0);
+
+                var modificationDetails = new ModificationDetails(
+                    (leaseModificationData.IsChangeInScope ? leaseLiabilityObjOnModificationDate?.Opening - request.TotalNPV : 0),
+                    (leaseModificationData.IsChangeInScope ? rouObj?.Opening - leaseModificationData.RouOpening : 0),
+                    (leaseModificationData.IsChangeInScope ? 0 : leaseLiabilityObj?.ModificationAdjustment ?? 0)
+                );
+
+                var journalEntries = await _journalEntriesService.PostJEForLease(leaseModificationData, leaseLiability, rouSchedule, modificationDetails);
 
                 return true;
             }

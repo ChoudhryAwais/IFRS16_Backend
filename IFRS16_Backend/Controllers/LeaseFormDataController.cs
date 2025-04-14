@@ -3,6 +3,7 @@ using IFRS16_Backend.Models;
 using IFRS16_Backend.Services.LeaseData;
 using IFRS16_Backend.Services.LeaseDataWorkflow;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Controllers
 {
@@ -10,11 +11,13 @@ namespace IFRS16_Backend.Controllers
     [ApiController]
     public class LeaseFormDataController(
         ILeaseDataService leaseFormDataService,
-        ILeaseDataWorkflowService leaseDataWorkflowService
+        ILeaseDataWorkflowService leaseDataWorkflowService,
+         ApplicationDbContext context
         ) : ControllerBase
     {
         private readonly ILeaseDataService _leaseFormDataService = leaseFormDataService;
         private readonly ILeaseDataWorkflowService _leaseDataWorkflowService = leaseDataWorkflowService;
+        private readonly ApplicationDbContext _context = context;
 
 
         [HttpGet("GetAllLeasesForCompany")]
@@ -76,17 +79,29 @@ namespace IFRS16_Backend.Controllers
         [HttpPost("BulkImport")]
         public async Task<IActionResult> PostBulkLeaseFormData([FromBody] List<LeaseFormData> leaseFormData)
         {
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 foreach (var lease in leaseFormData)
                 {
-                    await _leaseDataWorkflowService.ProcessLeaseFormDataAsync(lease);
+                    try
+                    {
+                        await _leaseDataWorkflowService.ProcessLeaseFormDataAsync(lease);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the error for the specific lease
+                        Console.WriteLine($"Error processing lease {lease.LeaseId}: {ex.Message}");
+                        throw; // Optionally stop further processing
+                    }
                 }
 
+                await transaction.CommitAsync();
                 return CreatedAtAction(nameof(PostLeaseFormData), new { count = leaseFormData.Count }, leaseFormData);
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 return BadRequest(ex.Message);
             }
         }

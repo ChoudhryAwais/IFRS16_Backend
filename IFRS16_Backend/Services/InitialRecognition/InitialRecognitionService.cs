@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
 using System.Linq;
+using EFCore.BulkExtensions;
 
 namespace IFRS16_Backend.Services.InitialRecognition
 {
@@ -71,8 +72,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             dates.Insert(0, leaseSpecificData.CommencementDate);
             try
             {
-                _context.InitialRecognition.AddRange(initialRecognition);
-                await _context.SaveChangesAsync();
+                await _context.BulkInsertAsync(initialRecognition);
 
                 return new InitialRecognitionResult
                 {
@@ -123,9 +123,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             dates.Insert(0, leaseSpecificData.CommencementDate);
             try
             {
-                _context.InitialRecognition.AddRange(initialRecognition);
-                await _context.SaveChangesAsync();
-
+                await _context.BulkInsertAsync(initialRecognition);
                 return new InitialRecognitionResult
                 {
                     TotalNPV = totalNPV,
@@ -222,7 +220,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
         {
             LeaseFormData? leaseSpecificData = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseId) ?? throw new InvalidOperationException("No lease data found for the given LeaseId.");
             IEnumerable<InitialRecognitionTable> initialRecognitionTable = await _context.GetInitialRecognitionPaginatedAsync(pageNumber, pageSize, leaseId, startDate, endDate);
-            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && (startDate == null || endDate == null || (item.PaymentDate >= startDate && item.PaymentDate <= endDate))).ToListAsync();
+            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && (item.IsActive == true) && (startDate == null || endDate == null || (item.PaymentDate >= startDate && item.PaymentDate <= endDate))).ToListAsync();
             decimal totalNPV = fullInitialRecognitionTable.Sum(item => item.NPV);
             List<DateTime> dates = [.. fullInitialRecognitionTable.Select(item => item.PaymentDate)];
             int totalRecord = fullInitialRecognitionTable.Count;
