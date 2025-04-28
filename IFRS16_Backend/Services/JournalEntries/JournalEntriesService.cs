@@ -36,6 +36,18 @@ namespace IFRS16_Backend.Services.JournalEntries
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
                 });
+                if(leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)) != 0) { }
+                {
+                    decimal PNL = (decimal)(leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)));
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = respectiveROU.ROU_Date,
+                        Particular = "PNL",
+                        Debit = PNL > 0 ? PNL : 0,
+                        Credit = PNL < 0? PNL : 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                }
 
             }
             if (modificationDetails != null)

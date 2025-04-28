@@ -39,8 +39,8 @@ namespace IFRS16_Backend.Services.InitialRecognition
             {
                 DateTime newDate = leaseSpecificData.CommencementDate.AddMonths(i * frequecnyFactor);
                 var (_, _, PowerFactor) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, newDate, leaseSpecificData.Frequency, true);
-                //if (leaseSpecificData.Annuity == AnnuityType.Arrears)
-                //    newDate = newDate.AddDays(-1);
+                if (leaseSpecificData.Annuity == AnnuityType.Arrears)
+                    newDate = newDate.AddDays(-1);
                 if (i == incremetPeriod && leaseSpecificData.Increment != null && leaseSpecificData.Increment != 0)
                 {
                     rental *= incremetPre;

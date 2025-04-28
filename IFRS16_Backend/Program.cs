@@ -57,7 +57,10 @@ builder.Services.AddSwaggerGen();
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.CommandTimeout(300) // Timeout in seconds (5 minutes)
+    ));
 
 // Allow all origins (for development)
 builder.Services.AddCors(options =>
