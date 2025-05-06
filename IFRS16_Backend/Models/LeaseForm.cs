@@ -22,6 +22,7 @@ namespace IFRS16_Backend.Models
         public int CompanyID { get; set; }
         public bool IsActive { get; set; }
         public DateTime? LastModifiedDate { get; set; }
+        public string AssetType { get; set; }
         public int CurrencyID { get; set; }
         [NotMapped]
         public double? RouOpening { get; set; }
@@ -87,6 +88,7 @@ namespace IFRS16_Backend.Models
         public int CurrencyID { get; set; }
         public bool IsActive { get; set; }
         public DateTime? LastModifiedDate { get; set; }
+        public string AssetType { get; set; }
 
     }
     public class DeleteLeaseData

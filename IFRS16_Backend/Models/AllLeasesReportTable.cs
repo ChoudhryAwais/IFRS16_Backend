@@ -18,6 +18,7 @@
         public double? Amortization { get; set; }
         public double? ClosingROU { get; set; }
         public double? Exchange_Gain_Loss { get; set; }
+        public double? ModificationAdjustment { get; set; }
         public int? CurrencyID { get; set; }
         public string? CurrencyCode { get; set; }
 

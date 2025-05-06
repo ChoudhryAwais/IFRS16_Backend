@@ -12,5 +12,6 @@ namespace IFRS16_Backend.Models
         public string ReportingCurrencyCode { get; set; } // Reporting currency (e.g., USD, EUR)
         public DateTime FinancialYearEnd { get; set; } // Financial year-end date
         public string? LeaseTypes { get; set; } // Lease types (e.g., operating, finance)
+        public string AssetType { get; set; }
     }
 }

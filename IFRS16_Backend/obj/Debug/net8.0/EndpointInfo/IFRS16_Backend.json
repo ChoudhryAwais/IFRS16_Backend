@@ -1195,6 +1195,11 @@
             "format": "double",
             "nullable": true
           },
+          "modificationAdjustment": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "currencyID": {
             "type": "integer",
             "format": "int32",
@@ -1329,6 +1334,10 @@
           "lastModifiedDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "assetType": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -1567,6 +1576,10 @@
           "lastModifiedDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "assetType": {
+            "type": "string",
             "nullable": true
           },
           "currencyID": {
