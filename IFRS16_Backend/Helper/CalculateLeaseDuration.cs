@@ -21,7 +21,7 @@
             }
 
             // Calculate the difference in days
-            int totalDays = (endDate - commencementDate).Days + (fromIR ? 1 : 1);
+            int totalDays = (endDate - commencementDate).Days + (fromIR ? 0 : 1);
 
             // Calculate the difference in years
             int frequecnyFactor = 12 / CalFrequencyFactor.FrequencyFactor(frequency);

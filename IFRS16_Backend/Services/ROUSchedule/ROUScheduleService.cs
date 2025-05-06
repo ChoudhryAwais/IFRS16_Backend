@@ -93,5 +93,11 @@ namespace IFRS16_Backend.Services.ROUSchedule
             };
 
         }
+        public async Task<List<ROUScheduleTable>> GetAllROUSchedule(int leaseId)
+        {
+            List<ROUScheduleTable> ROUSchedule = await _context.ROUSchedule.Where(r => r.LeaseId == leaseId).ToListAsync();
+            return ROUSchedule;
+
+        }
     }
 }

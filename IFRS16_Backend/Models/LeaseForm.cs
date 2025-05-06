@@ -26,6 +26,8 @@ namespace IFRS16_Backend.Models
         [NotMapped]
         public double? RouOpening { get; set; }
         [NotMapped]
+        public double? LLOpening { get; set; }
+        [NotMapped]
         public decimal? RouExRate { get; set; }
         [NotMapped]
         public List<CustomInitialRecognitionTable>? CustomIRTable { get; set; }

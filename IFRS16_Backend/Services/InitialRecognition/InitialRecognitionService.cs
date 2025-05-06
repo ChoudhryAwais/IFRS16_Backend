@@ -103,7 +103,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
             for (int i = 0; i < leaseSpecificData.CustomIRTable.Count; i++)
             {
                 var (_, _, PowerFactor) = CalculateLeaseDuration.GetLeaseDuration(leaseSpecificData.CommencementDate, leaseSpecificData.CustomIRTable[i].PaymentDate, leaseSpecificData.Frequency, true);
-                decimal NPV = rental / (decimal)Math.Pow((double)discountFactor, (double)PowerFactor);
+                decimal NPV = leaseSpecificData.CustomIRTable[i].Rental / (decimal)Math.Pow((double)discountFactor, (double)PowerFactor);
                 totalNPV += NPV;
 
                 InitialRecognitionTable tableObj = new()
@@ -234,5 +234,12 @@ namespace IFRS16_Backend.Services.InitialRecognition
             };
         }
 
+        public async Task<List<InitialRecognitionTable>> GetAllInitialRecognitionForLease(int leaseId)
+        {
+
+            List<InitialRecognitionTable> fullInitialRecognitionTable = await _context.InitialRecognition.Where(item => item.LeaseId == leaseId && item.IsActive == true).ToListAsync();
+
+            return fullInitialRecognitionTable;
+        }
     }
 }

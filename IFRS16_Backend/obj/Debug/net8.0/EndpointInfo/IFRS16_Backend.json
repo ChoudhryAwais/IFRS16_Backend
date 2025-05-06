@@ -187,6 +187,46 @@
         }
       }
     },
+    "/api/InitialRecognition/{leaseId}": {
+      "get": {
+        "tags": [
+          "InitialRecognition"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitialRecognitionTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/JournalEntries/Get": {
       "post": {
         "tags": [
@@ -228,6 +268,46 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JournalEntryResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/JournalEntries/{leaseId}": {
+      "get": {
+        "tags": [
+          "JournalEntries"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalEntryTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalEntryTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalEntryTable"
                 }
               }
             }
@@ -651,6 +731,46 @@
         }
       }
     },
+    "/api/LeaseLiability/{leaseId}": {
+      "get": {
+        "tags": [
+          "LeaseLiability"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaseLiabilityTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Login": {
       "post": {
         "tags": [
@@ -946,6 +1066,46 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ROUScheduleResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ROUSchedule/{leaseId}": {
+      "get": {
+        "tags": [
+          "ROUSchedule"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ROUScheduleTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ROUScheduleTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ROUScheduleTable"
                 }
               }
             }
@@ -1414,6 +1574,11 @@
             "format": "int32"
           },
           "rouOpening": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "llOpening": {
             "type": "number",
             "format": "double",
             "nullable": true

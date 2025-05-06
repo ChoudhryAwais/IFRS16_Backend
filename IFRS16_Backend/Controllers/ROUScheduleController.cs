@@ -38,5 +38,20 @@ namespace IFRS16_Backend.Controllers
             }
 
         }
+
+        [HttpGet("{leaseId}")]
+        public async Task<ActionResult<ROUScheduleTable>> GetROUScheduleForLease(int leaseId)
+        {
+            try
+            {
+                var result = await _rouScheduleService.GetAllROUSchedule(leaseId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }

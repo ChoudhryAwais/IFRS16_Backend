@@ -41,5 +41,20 @@ namespace IFRS16_Backend.Controllers
 
         }
 
+        [HttpGet("{leaseId}")]
+        public async Task<ActionResult<LeaseLiabilityTable>> GetAllLeaseLiabilityForLease(int leaseId)
+        {
+            try
+            {
+                var result = await _leaseLiabilityService.GetAllLeaseLiability(leaseId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
     }
 }

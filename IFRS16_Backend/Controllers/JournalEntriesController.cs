@@ -25,5 +25,22 @@ namespace IFRS16_Backend.Controllers
             }
 
         }
+
+        [HttpGet("{leaseId}")]
+        public async Task<ActionResult<JournalEntryTable>> GetAllJournalEntriesForLease(int leaseId)
+        {
+            try
+            {
+                var result = await _journalEntriesService.GetAllJEForLease(leaseId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
     }
 }

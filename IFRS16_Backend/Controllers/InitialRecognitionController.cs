@@ -53,6 +53,20 @@ namespace IFRS16_Backend.Controllers
             }
 
         }
+        [HttpGet("{leaseId}")]
+        public async Task<ActionResult<InitialRecognitionTable>> GetAllInitialRecognitionForLease(int leaseId)
+        {
+            try
+            {
+                var result = await _intialRecognitionService.GetAllInitialRecognitionForLease(leaseId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
 
     }
 }

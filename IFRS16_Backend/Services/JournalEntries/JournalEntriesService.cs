@@ -36,7 +36,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
                 });
-                if(leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)) != 0) { }
+                if (leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)) != 0)
                 {
                     decimal PNL = (decimal)(leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)));
                     JEFinalTable.Add(new JournalEntryTable
@@ -44,7 +44,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                         JE_Date = respectiveROU.ROU_Date,
                         Particular = "PNL",
                         Debit = PNL > 0 ? PNL : 0,
-                        Credit = PNL < 0? PNL : 0,
+                        Credit = PNL < 0 ? PNL : 0,
                         LeaseId = leaseSpecificData.LeaseId
                     });
                 }
@@ -52,7 +52,7 @@ namespace IFRS16_Backend.Services.JournalEntries
             }
             if (modificationDetails != null)
             {
-                if (modificationDetails.LeaseLiability != 0 && modificationDetails.Rou != 0)
+                if (modificationDetails.ModificationLoss != 0)
                 {
                     JEFinalTable.Add(new JournalEntryTable
                     {
@@ -74,30 +74,27 @@ namespace IFRS16_Backend.Services.JournalEntries
                     {
                         JE_Date = respectiveROU.ROU_Date,
                         Particular = "Modification loss",
-                        Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                        Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        Debit = modificationDetails.ModificationLoss > 0 ? (decimal)modificationDetails.ModificationLoss : 0,
+                        Credit = modificationDetails.ModificationLoss < 0 ? (decimal)modificationDetails.ModificationLoss : 0,
                         LeaseId = leaseSpecificData.LeaseId
                     });
                 }
-                else
+                JEFinalTable.Add(new JournalEntryTable
                 {
-                    JEFinalTable.Add(new JournalEntryTable
-                    {
-                        JE_Date = leaseMustField.LeaseLiability_Date,
-                        Particular = "Lease Liability",
-                        Debit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                        Credit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                        LeaseId = leaseSpecificData.LeaseId
-                    });
-                    JEFinalTable.Add(new JournalEntryTable
-                    {
-                        JE_Date = respectiveROU.ROU_Date,
-                        Particular = "Right of Use Asset",
-                        Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                        Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                        LeaseId = leaseSpecificData.LeaseId
-                    });
-                }
+                    JE_Date = leaseMustField.LeaseLiability_Date,
+                    Particular = "Lease Liability",
+                    Debit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                    Credit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                    LeaseId = leaseSpecificData.LeaseId
+                });
+                JEFinalTable.Add(new JournalEntryTable
+                {
+                    JE_Date = respectiveROU.ROU_Date,
+                    Particular = "Right of Use Asset",
+                    Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                    Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                    LeaseId = leaseSpecificData.LeaseId
+                });
 
             }
 
@@ -366,22 +363,16 @@ namespace IFRS16_Backend.Services.JournalEntries
         {
             IEnumerable<JournalEntryTable> journalEntries = await _context.GetJournalEntriesAsync(pageNumber, pageSize, leaseId, startDate, endDate);
             int totalRecord = await _context.JournalEntries.Where(r => r.LeaseId == leaseId && (startDate == null || endDate == null || (r.JE_Date >= startDate && r.JE_Date <= endDate))).CountAsync();
-            DateTime startDatet = new(2024, 3, 25);
-            DateTime endDatet = new(2024, 3, 25);
-
-            IEnumerable<JournalEntryTable> alljournalEntries = await _context.JournalEntries.Where(item => item.JE_Date >= startDatet && item.JE_Date <= endDatet).ToListAsync();
-            IEnumerable<JournalEntryTable> acumilatedJE = alljournalEntries.GroupBy(item => item.Particular).Select(item => new JournalEntryTable
-            {
-                Particular = item.Key,
-                Debit = item.Sum(item => item.Debit),
-                Credit = item.Sum(item => item.Credit)
-            });
-
             return new()
             {
                 Data = journalEntries,
                 TotalRecords = totalRecord,
             };
+        }
+        public async Task<List<JournalEntryTable>> GetAllJEForLease(int leaseId)
+        {
+            List<JournalEntryTable> journalEntries = await _context.JournalEntries.Where(r => r.LeaseId == leaseId).ToListAsync();
+            return journalEntries;
         }
 
         public async Task<IEnumerable<JournalEntryTable>> EnterJEOnTermination(decimal LLClosing, decimal ROUClosing, decimal? Penalty, DateTime terminationDate, int leaseId)

@@ -133,5 +133,10 @@ namespace IFRS16_Backend.Services.LeaseLiability
                 TotalRecords = totalRecord,
             };
         }
+        public async Task<List<LeaseLiabilityTable>> GetAllLeaseLiability(int leaseId)
+        {
+            List<LeaseLiabilityTable> leaseLiability = await _context.LeaseLiability.Where(r => r.LeaseId == leaseId).ToListAsync();
+            return leaseLiability;
+        }
     }
 }
