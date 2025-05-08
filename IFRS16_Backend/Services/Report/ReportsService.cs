@@ -26,5 +26,28 @@ namespace IFRS16_Backend.Services.LeaseLiabilityAggregation
             return journalEntryReport;
         }
 
+        public async Task<DisclosureTable> GetDisclosure(DateTime fromDate, DateTime endDate)
+        {
+            IEnumerable<AllLeasesReportTable> leasesReport = await _context.GetAllLeaseReport(fromDate, endDate);
+
+            // Map and sum values for DisclosureTable
+            DisclosureTable aggregatedDisclosure = new()
+            {
+                OpeningLL = leasesReport.Sum(x => x.OpeningLL ?? 0),
+                AdditionsDuringYearLL = leasesReport.Sum(x => x.AdditionsDuringYearLL ?? 0),
+                Interest = leasesReport.Sum(x => x.Interest ?? 0),
+                Payment = leasesReport.Sum(x => x.Payment ?? 0),
+                ClosingLL = leasesReport.Sum(x => x.ClosingLL ?? 0),
+                OpeningROU = leasesReport.Sum(x => x.OpeningROU ?? 0),
+                AdditionsDuringYearROU = leasesReport.Sum(x => x.AdditionsDuringYearROU ?? 0),
+                Amortization = leasesReport.Sum(x => x.Amortization ?? 0),
+                ClosingROU = leasesReport.Sum(x => x.ClosingROU ?? 0),
+                Exchange_Gain_Loss = leasesReport.Sum(x => x.Exchange_Gain_Loss ?? 0),
+                ModificationAdjustmentLL = leasesReport.Sum(x => x.ModificationAdjustmentLL ?? 0),
+                ModificationAdjustmentROU = leasesReport.Sum(x => x.ModificationAdjustmentROU ?? 0)
+            };
+
+            return aggregatedDisclosure;
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace IFRS16_Backend.Models
         public double Opening { get; set; }
         public double Amortization { get; set; }
         public double Closing { get; set; }
+        public double? ModificationAdjustment { get; set; }
     }
     public class FC_ROUScheduleTable
     {

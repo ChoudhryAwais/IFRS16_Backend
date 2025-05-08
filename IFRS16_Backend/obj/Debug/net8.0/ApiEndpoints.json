@@ -20,6 +20,32 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.DisclosureController",
+    "Method": "GetDisclosure",
+    "RelativePath": "api/Disclosure/Get",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.DisclosureTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetAllInitialRecognitionForLease",
     "RelativePath": "api/InitialRecognition/{leaseId}",

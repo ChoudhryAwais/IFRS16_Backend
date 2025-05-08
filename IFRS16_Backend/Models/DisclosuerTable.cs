@@ -1,13 +1,7 @@
 ﻿namespace IFRS16_Backend.Models
 {
-    public class AllLeasesReportTable
+    public class DisclosureTable
     {
-        public int LeaseId { get; set; }
-        public string LeaseName { get; set; }
-        public double Rental { get; set; }
-        public string Frequency { get; set; }
-        public DateTime CommencementDate { get; set; }
-        public DateTime EndDate { get; set; }
         public double? OpeningLL { get; set; }  // Nullable in case there's no record
         public double? Interest { get; set; }
         public double? Payment { get; set; }
@@ -17,15 +11,9 @@
         public double? ClosingROU { get; set; }
         public double? Exchange_Gain_Loss { get; set; }
         public double? ModificationAdjustmentLL { get; set; }
-        public int? CurrencyID { get; set; }
-        public string? CurrencyCode { get; set; }
+        public double? ModificationAdjustmentROU { get; set; }
         public double? AdditionsDuringYearLL { get; set; }
         public double? AdditionsDuringYearROU { get; set; }
-        public double? ModificationAdjustmentROU { get; set; }
-
-
-
-
 
     }
 }
