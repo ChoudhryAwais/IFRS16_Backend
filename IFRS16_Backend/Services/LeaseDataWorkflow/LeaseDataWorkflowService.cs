@@ -75,9 +75,14 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
         {
             try
             {
-                LeaseLiabilityTable? leaseLiabilityObj = _context.LeaseLiability
+                LeaseLiabilityTable? leaseLiabilityObjBackDate = _context.LeaseLiability
                     .Where(item => item.LeaseId == leaseModificationData.LeaseId && item.LeaseLiability_Date < leaseModificationData.LastModifiedDate)
                     .OrderByDescending(item => item.LeaseLiability_Date)
+                    .FirstOrDefault();
+
+                ROUScheduleTable? rouObjBackDate = _context.ROUSchedule
+                    .Where(item => item.LeaseId == leaseModificationData.LeaseId && item.ROU_Date < leaseModificationData.LastModifiedDate)
+                    .OrderByDescending(item => item.ROU_Date)
                     .FirstOrDefault();
 
                 LeaseLiabilityTable? leaseLiabilityObjOnModificationDate = _context.LeaseLiability
@@ -93,15 +98,20 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
 
                 InitialRecognitionResult IRResult = await _initialRecognitionService.PostCustomInitialRecognitionForLease(leaseModificationData);
 
-                if (leaseLiabilityObj != null)
+                if (leaseLiabilityObjBackDate != null)
                 {
-                    leaseLiabilityObj.ModificationAdjustment = ((double)IRResult.TotalNPV - leaseLiabilityObj.Closing);
-                    modificationAdjustmentForJE = ((double)IRResult.TotalNPV - (leaseModificationData?.LLOpening ?? leaseLiabilityObj.Closing));
-                    _context.LeaseLiability.Update(leaseLiabilityObj);
+                    leaseLiabilityObjBackDate.ModificationAdjustment = ((double)IRResult.TotalNPV - leaseLiabilityObjBackDate.Closing);
+                    modificationAdjustmentForJE = ((double)IRResult.TotalNPV - (leaseModificationData?.LLOpening ?? leaseLiabilityObjBackDate.Closing));
+                    _context.LeaseLiability.Update(leaseLiabilityObjBackDate);
                     await _context.SaveChangesAsync();
                 }
-
-                leaseModificationData.RouOpening = leaseModificationData.RouOpening != null ? leaseModificationData.RouOpening + leaseLiabilityObj?.ModificationAdjustment : leaseLiabilityObj?.ModificationAdjustment + rouObj?.Opening;
+                leaseModificationData.RouOpening = leaseModificationData.RouOpening != null ? leaseModificationData.RouOpening + leaseLiabilityObjBackDate?.ModificationAdjustment : leaseLiabilityObjBackDate?.ModificationAdjustment + rouObj?.Opening;
+                if (rouObjBackDate != null)
+                {
+                    rouObjBackDate.ModificationAdjustment = ((double)(leaseModificationData?.RouOpening ?? 0) - rouObjBackDate.Closing);                
+                    _context.ROUSchedule.Update(rouObjBackDate);
+                    await _context.SaveChangesAsync();
+                }
 
                 // Update the corresponding lease
                 LeaseFormData? existingLease = await _context.LeaseData.FirstOrDefaultAsync(item => item.LeaseId == leaseModificationData.LeaseId);
