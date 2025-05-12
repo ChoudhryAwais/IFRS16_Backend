@@ -103,12 +103,26 @@ namespace IFRS16_Backend.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
-
     public class TerminateLease
     {
         public DateTime TerminateDate { get; set; }
         public decimal? Penalty { get; set; }
         public int LeaseId { get; set; }
 
+    }
+    public class LeaseContract
+    {
+        [Key]
+        public int LeaseContractId { get; set; }
+        public int LeaseId { get; set; }
+        public byte[] ContractDoc { get; set; }
+        public string DocFileName { get; set; }
+        public string ContentType { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+    }
+    public class LeaseContractDto
+    {
+        public int LeaseId { get; set; }
+        public IFormFile ContractDoc { get; set; } // file from frontend
     }
 }

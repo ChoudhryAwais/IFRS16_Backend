@@ -33,8 +33,6 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
         [HttpGet("GetAllLeases")]
         public async Task<ActionResult<IEnumerable<ExtendedLeaseDataSP>>> GetAllLeases([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int companyID = 1)
         {
@@ -48,7 +46,6 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpGet("GetLeaseById/{leaseId}")]
         public async Task<ActionResult<LeaseFormData>> GetLeaseyId(int leaseId)
         {
@@ -62,7 +59,6 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpPost]
         public async Task<IActionResult> PostLeaseFormData([FromBody] LeaseFormData leaseFormData)
         {
@@ -105,7 +101,6 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpPost("Delete")]
         public async Task<IActionResult> DeleteLeaseData([FromBody] DeleteLeaseData deleteReq)
         {
@@ -119,7 +114,6 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpPost("TerminateLease")]
         public async Task<IActionResult> TerminateLeaseData([FromBody] TerminateLease leaseTerminate)
         {
@@ -135,7 +129,6 @@ namespace IFRS16_Backend.Controllers
             }
 
         }
-
         [HttpPost("ModifyLease")]
         public async Task<IActionResult> ModifyLeaseData([FromBody] LeaseFormData leaseModification)
         {
@@ -150,5 +143,37 @@ namespace IFRS16_Backend.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("UploadLeaseContract")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadLeaseContract([FromForm] LeaseContractDto dto)
+        {
+            try
+            {
+                await _leaseFormDataService.UploadLeaseContractAsync(dto.LeaseId, dto.ContractDoc);
+                return Ok(new { message = "Lease contract uploaded successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("GetLeaseContract/{leaseId}")]
+        public async Task<IActionResult> GetLeaseContract(int leaseId)
+        {
+            var leaseContract = await _leaseFormDataService.GetLeaseContractByLeaseIdAsync(leaseId);
+
+            if (leaseContract == null || leaseContract.ContractDoc == null)
+            {
+                return NotFound();
+            }
+
+            return File(leaseContract.ContractDoc, "application/pdf", $"LeaseContract_{leaseId}.pdf");
+        }
+
+
+
     }
 }

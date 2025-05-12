@@ -10,5 +10,7 @@ namespace IFRS16_Backend.Services.LeaseData
         Task<List<LeaseFormData>> GetAllLeasesForCompany(int companyID);
         Task<bool> DeleteLeases(string leaseIds);
         Task<bool> TerminateLease(TerminateLease termination);
+        Task UploadLeaseContractAsync(int leaseId, IFormFile contractDoc);
+        Task<LeaseContract> GetLeaseContractByLeaseIdAsync(int leaseId);
     }
 }

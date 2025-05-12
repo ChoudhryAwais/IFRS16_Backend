@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Services.LeaseData
 {
-    public class LeaseDataService(ApplicationDbContext context, IJournalEntriesService journalEntriesService, IInitialRecognitionService initialRecognitionService) : ILeaseDataService
+    public class LeaseDataService(ApplicationDbContext context, IJournalEntriesService journalEntriesService) : ILeaseDataService
     {
         private readonly ApplicationDbContext _context = context;
         private readonly IJournalEntriesService _journalEntriesService = journalEntriesService;
-        private readonly IInitialRecognitionService _initialRecognitionService = initialRecognitionService;
 
         public async Task<bool> AddLeaseFormDataAsync(LeaseFormData leaseFormData)
         {
@@ -92,6 +91,37 @@ namespace IFRS16_Backend.Services.LeaseData
                 Console.WriteLine(ex.ToString());
                 return true;
             }
+        }
+        public async Task UploadLeaseContractAsync(int leaseId, IFormFile contractDoc)
+        {
+            if (contractDoc == null || contractDoc.Length == 0)
+                throw new ArgumentException("Invalid contract document.");
+
+            byte[] fileData;
+            using (var memoryStream = new MemoryStream())
+            {
+                await contractDoc.CopyToAsync(memoryStream);
+                fileData = memoryStream.ToArray();
+            }
+
+            var leaseContract = new LeaseContract
+            {
+                LeaseId = leaseId,
+                ContractDoc = fileData,
+                DocFileName = contractDoc.FileName,
+                ContentType = contractDoc.ContentType,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            _context.LeaseDataContracts.Add(leaseContract);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<LeaseContract> GetLeaseContractByLeaseIdAsync(int leaseId)
+        {
+            var leaseContract = await _context.LeaseDataContracts
+                .FirstOrDefaultAsync(lc => lc.LeaseId == leaseId);
+
+            return leaseContract;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace IFRS16_Backend.Models
         public DbSet<AllLeasesReportTable> AllLeasesReport { get; set; }
         public DbSet<JournalEntryReport> JournalEntryReport { get; set; }
         public DbSet<LeaseReportSummaryTable> LeasesReportSummary { get; set; }
+        public DbSet<LeaseContract> LeaseDataContracts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -339,6 +339,22 @@
   },
   {
     "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "GetLeaseContract",
+    "RelativePath": "api/LeaseFormData/GetLeaseContract/{leaseId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
     "Method": "ModifyLeaseData",
     "RelativePath": "api/LeaseFormData/ModifyLease",
     "HttpMethod": "POST",
@@ -365,6 +381,27 @@
         "Name": "leaseTerminate",
         "Type": "IFRS16_Backend.Models.TerminateLease",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "UploadLeaseContract",
+    "RelativePath": "api/LeaseFormData/UploadLeaseContract",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LeaseId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContractDoc",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
