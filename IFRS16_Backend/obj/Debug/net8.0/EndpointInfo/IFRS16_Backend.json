@@ -1992,6 +1992,10 @@
           "leaseIdList": {
             "type": "string",
             "nullable": true
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

@@ -14,7 +14,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var result = await _leaseReportService.GetAllLeaseReport(request.StartDate, request.EndDate);
+                var result = await _leaseReportService.GetAllLeaseReport(request.StartDate, request.EndDate, request.CompanyId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -28,7 +28,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var result = await _leaseReportService.GetLeaseReportSummary(request.StartDate, request.EndDate, request.LeaseIdList);
+                var result = await _leaseReportService.GetLeaseReportSummary(request.StartDate, request.EndDate, request.LeaseIdList, request.CompanyId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var result = await _leaseReportService.GetJEReport(request.StartDate, request.EndDate);
+                var result = await _leaseReportService.GetJEReport(request.StartDate, request.EndDate, request.CompanyId);
                 return Ok(result);
             }
             catch (Exception ex)

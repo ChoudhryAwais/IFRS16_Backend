@@ -15,7 +15,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var result = await _leaseReportService.GetDisclosure(request.StartDate, request.EndDate);
+                var result = await _leaseReportService.GetDisclosure(request.StartDate, request.EndDate, request.CompanyId);
                 return Ok(result);
             }
             catch (Exception ex)

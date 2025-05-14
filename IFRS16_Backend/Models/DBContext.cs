@@ -74,26 +74,26 @@ namespace IFRS16_Backend.Models
 
             return JournalEntries;
         }
-        public async Task<IEnumerable<AllLeasesReportTable>> GetAllLeaseReport(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<AllLeasesReportTable>> GetAllLeaseReport(DateTime startDate, DateTime endDate, int companyId)
         {
             var allLeaseReport = await this.AllLeasesReport
-                .FromSqlRaw("EXEC GetAllLeasesReport @FromDate  = {0}, @EndDate = {1}", startDate, endDate)
+                .FromSqlRaw("EXEC GetAllLeasesReport @FromDate  = {0}, @EndDate = {1}, @CompanyID = {2}", startDate, endDate, companyId)
                 .ToListAsync();
 
             return allLeaseReport;
         }
-        public async Task<IEnumerable<JournalEntryReport>> GetJEReport(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<JournalEntryReport>> GetJEReport(DateTime startDate, DateTime endDate, int companyId)
         {
             var jEReport = await this.JournalEntryReport
-                .FromSqlRaw("EXEC GetJournalEntryReport @FromDate  = {0}, @EndDate = {1}", startDate, endDate)
+                .FromSqlRaw("EXEC GetJournalEntryReport @FromDate  = {0}, @EndDate = {1}, @CompanyID = {2}", startDate, endDate, companyId)
                 .ToListAsync();
 
             return jEReport;
         }
-        public async Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string leaseIdList)
+        public async Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string leaseIdList, int companyId)
         {
             var leaseReportSummary = await this.LeasesReportSummary
-                .FromSqlRaw("EXEC GetSummarizeLeasesReport @FromDate  = {0}, @EndDate = {1}, @LeaseIdList = {2}", startDate, endDate, leaseIdList)
+                .FromSqlRaw("EXEC GetSummarizeLeasesReport @FromDate  = {0}, @EndDate = {1}, @LeaseIdList = {2}, @CompanyID = {3}", startDate, endDate, leaseIdList, companyId)
                 .ToListAsync();
 
             return leaseReportSummary;
@@ -112,4 +112,3 @@ namespace IFRS16_Backend.Models
         }
     }
 }
-   

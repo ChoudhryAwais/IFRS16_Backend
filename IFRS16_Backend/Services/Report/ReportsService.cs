@@ -1,34 +1,35 @@
 ﻿using IFRS16_Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 
 namespace IFRS16_Backend.Services.LeaseLiabilityAggregation
 {
     public class ReportsService(ApplicationDbContext context) : IReportsService
     {
         private readonly ApplicationDbContext _context = context;
-        public async Task<IEnumerable<AllLeasesReportTable>> GetAllLeaseReport(DateTime fromDate, DateTime endDate)
+        public async Task<IEnumerable<AllLeasesReportTable>> GetAllLeaseReport(DateTime fromDate, DateTime endDate, int companyId)
         {
-            IEnumerable<AllLeasesReportTable> leasesReport = await _context.GetAllLeaseReport(fromDate, endDate);
+            IEnumerable<AllLeasesReportTable> leasesReport = await _context.GetAllLeaseReport(fromDate, endDate, companyId);
 
             return leasesReport;
         }
 
-        public async Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string? leaseIdList)
+        public async Task<IEnumerable<LeaseReportSummaryTable>> GetLeaseReportSummary(DateTime startDate, DateTime endDate, string? leaseIdList, int companyId)
         {
-            IEnumerable<LeaseReportSummaryTable> leasesReportSummary = await _context.GetLeaseReportSummary(startDate, endDate, leaseIdList);
+            IEnumerable<LeaseReportSummaryTable> leasesReportSummary = await _context.GetLeaseReportSummary(startDate, endDate, leaseIdList, companyId);
 
             return leasesReportSummary;
         }
-        public async Task<IEnumerable<JournalEntryReport>> GetJEReport(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<JournalEntryReport>> GetJEReport(DateTime startDate, DateTime endDate, int companyId)
         {
-            IEnumerable<JournalEntryReport> journalEntryReport = await _context.GetJEReport(startDate, endDate);
+            IEnumerable<JournalEntryReport> journalEntryReport = await _context.GetJEReport(startDate, endDate, companyId);
 
             return journalEntryReport;
         }
 
-        public async Task<DisclosureTable> GetDisclosure(DateTime fromDate, DateTime endDate)
+        public async Task<DisclosureTable> GetDisclosure(DateTime fromDate, DateTime endDate, int companyId)
         {
-            IEnumerable<AllLeasesReportTable> leasesReport = await _context.GetAllLeaseReport(fromDate, endDate);
+            IEnumerable<AllLeasesReportTable> leasesReport = await _context.GetAllLeaseReport(fromDate, endDate, companyId);
 
             // Map and sum values for DisclosureTable
             DisclosureTable aggregatedDisclosure = new()
