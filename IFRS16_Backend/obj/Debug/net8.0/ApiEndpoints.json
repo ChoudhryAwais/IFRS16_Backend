@@ -46,6 +46,32 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.DisclosureController",
+    "Method": "GetDisclouserMaturityAnalysis",
+    "RelativePath": "api/Disclosure/GetDisclouserMaturityAnalysis",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.LeaseReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "IFRS16_Backend.Models.DisclouserMaturityAnalysisTable",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetAllInitialRecognitionForLease",
     "RelativePath": "api/InitialRecognition/{leaseId}",
@@ -381,6 +407,53 @@
         "Name": "leaseTerminate",
         "Type": "IFRS16_Backend.Models.TerminateLease",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "UpdateLeaseFormData",
+    "RelativePath": "api/LeaseFormData/UpdateLease/{leaseId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "leaseFormData",
+        "Type": "IFRS16_Backend.Models.LeaseFormData",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
+    "Method": "UpdateLeaseContract",
+    "RelativePath": "api/LeaseFormData/UpdateLeaseContract/{leaseId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "LeaseId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContractDoc",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

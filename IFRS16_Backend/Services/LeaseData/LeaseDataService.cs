@@ -123,5 +123,105 @@ namespace IFRS16_Backend.Services.LeaseData
 
             return leaseContract;
         }
+
+        public async Task<bool> UpdateLeaseFormDataAsync(int leaseId, LeaseFormData updatedLease)
+        {
+            var existingLease = await _context.LeaseData.FirstOrDefaultAsync(l => l.LeaseId == leaseId);
+            if (existingLease == null)
+                return false;
+
+            // Update properties
+            existingLease.UserID = updatedLease.UserID;
+            existingLease.LeaseName = updatedLease.LeaseName;
+            existingLease.Rental = updatedLease.Rental;
+            existingLease.CommencementDate = updatedLease.CommencementDate;
+            existingLease.EndDate = updatedLease.EndDate;
+            existingLease.Annuity = updatedLease.Annuity;
+            existingLease.IBR = updatedLease.IBR;
+            existingLease.Frequency = updatedLease.Frequency;
+            existingLease.IDC = updatedLease.IDC;
+            existingLease.GRV = updatedLease.GRV;
+            existingLease.Increment = updatedLease.Increment;
+            existingLease.IncrementalFrequency = updatedLease.IncrementalFrequency;
+            existingLease.CompanyID = updatedLease.CompanyID;
+            existingLease.IsActive = updatedLease.IsActive;
+            existingLease.LastModifiedDate = updatedLease.LastModifiedDate;
+            existingLease.CurrencyID = updatedLease.CurrencyID;
+            // Add any additional fields as needed
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateLeaseContractAsync(int leaseId, IFormFile contractDoc)
+        {
+            if (contractDoc == null || contractDoc.Length == 0)
+                return false;
+
+            var leaseContract = await _context.LeaseDataContracts.FirstOrDefaultAsync(lc => lc.LeaseId == leaseId);
+            if (leaseContract == null)
+            {
+                byte[] fileData;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await contractDoc.CopyToAsync(memoryStream);
+                    fileData = memoryStream.ToArray();
+                }
+
+                leaseContract = new LeaseContract
+                {
+                    LeaseId = leaseId,
+                    ContractDoc = fileData,
+                    DocFileName = contractDoc.FileName,
+                    ContentType = contractDoc.ContentType,
+                    CreatedDate = DateTime.UtcNow
+                };
+
+                _context.LeaseDataContracts.Add(leaseContract);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return false;
+                }
+            }
+            else
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await contractDoc.CopyToAsync(memoryStream);
+                    leaseContract.ContractDoc = memoryStream.ToArray();
+                }
+                leaseContract.DocFileName = contractDoc.FileName;
+                leaseContract.ContentType = contractDoc.ContentType;
+                leaseContract.CreatedDate = DateTime.UtcNow;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return false;
+                }
+            }
+
+
+               
+        }
     }
 }

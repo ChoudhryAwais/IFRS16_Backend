@@ -1,5 +1,5 @@
 ﻿using IFRS16_Backend.Models;
-using IFRS16_Backend.Services.LeaseLiabilityAggregation;
+using IFRS16_Backend.Services.Report;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IFRS16_Backend.Controllers

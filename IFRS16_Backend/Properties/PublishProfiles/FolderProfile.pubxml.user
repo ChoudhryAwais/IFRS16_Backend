@@ -4,8 +4,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>D:\ProConsultant\IFRS16_Backend\IFRS16_Backend\bin\Release\net8.0\publish\</_PublishTargetUrl>
-    <History>True|2025-01-17T04:09:16.1298252Z||;</History>
+    <_PublishTargetUrl>D:\repos\IFRS16_Backend\IFRS16_Backend\bin\Release\net8.0\publish\</_PublishTargetUrl>
+    <History>True|2025-06-27T14:11:33.0486029Z||;True|2025-05-26T16:08:41.5026966+05:00||;True|2025-05-22T18:41:42.0022679+05:00||;True|2025-05-22T17:12:32.3098389+05:00||;True|2025-01-17T09:09:16.1298252+05:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

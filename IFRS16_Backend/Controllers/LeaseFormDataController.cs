@@ -159,6 +159,19 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+        [HttpPut("UpdateLeaseContract/{leaseId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateLeaseContract(int leaseId, [FromForm] LeaseContractDto contractDto)
+        {
+            if (leaseId != contractDto.LeaseId)
+                return BadRequest("LeaseId mismatch.");
+
+            var result = await _leaseFormDataService.UpdateLeaseContractAsync(leaseId, contractDto.ContractDoc);
+            if (!result)
+                return NotFound();
+
+            return Ok(new { message = "Lease contract uploaded successfully." });
+        }
 
         [HttpGet("GetLeaseContract/{leaseId}")]
         public async Task<IActionResult> GetLeaseContract(int leaseId)
@@ -173,7 +186,24 @@ namespace IFRS16_Backend.Controllers
             return File(leaseContract.ContractDoc, "application/pdf", $"LeaseContract_{leaseId}.pdf");
         }
 
+        [HttpPut("UpdateLease/{leaseId}")]
+        public async Task<IActionResult> UpdateLeaseFormData(int leaseId, [FromBody] LeaseFormData leaseFormData)
+        {
+            if (leaseId != leaseFormData.LeaseId)
+                return BadRequest(new { error = "LeaseId mismatch." });
 
+            try
+            {
+                var result = await _leaseFormDataService.UpdateLeaseFormDataAsync(leaseId, leaseFormData);
+                if (!result)
+                    return BadRequest(new { error = "Lease not found or update failed." });
 
+                return Ok(new { message = "Lease data updated successfully.", data = leaseFormData });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

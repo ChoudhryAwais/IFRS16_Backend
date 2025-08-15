@@ -12,6 +12,7 @@ using IFRS16_Backend.Services.JournalEntries;
 using IFRS16_Backend.Services.LeaseLiabilityAggregation;
 using IFRS16_Backend.Services.Currencies;
 using IFRS16_Backend.Helper;
+using IFRS16_Backend.Services.Report;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions => sqlOptions.CommandTimeout(300) // Timeout in seconds (5 minutes)
+
     ));
 
 // Allow all origins (for development)
@@ -75,16 +77,17 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseCors("AllowAllOrigins");
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI();
 //}
 app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.UseCors("AllowAllOrigins");
 
 app.Run();

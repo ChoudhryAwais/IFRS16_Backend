@@ -12,5 +12,7 @@ namespace IFRS16_Backend.Services.LeaseData
         Task<bool> TerminateLease(TerminateLease termination);
         Task UploadLeaseContractAsync(int leaseId, IFormFile contractDoc);
         Task<LeaseContract> GetLeaseContractByLeaseIdAsync(int leaseId);
+        Task<bool> UpdateLeaseFormDataAsync(int leaseId, LeaseFormData updatedLease);
+        Task<bool> UpdateLeaseContractAsync(int leaseId, IFormFile contractDoc);
     }
 }

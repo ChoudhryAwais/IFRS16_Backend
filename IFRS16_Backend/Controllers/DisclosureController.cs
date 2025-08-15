@@ -1,5 +1,5 @@
 ﻿using IFRS16_Backend.Models;
-using IFRS16_Backend.Services.LeaseLiabilityAggregation;
+using IFRS16_Backend.Services.Report;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +16,21 @@ namespace IFRS16_Backend.Controllers
             try
             {
                 var result = await _leaseReportService.GetDisclosure(request.StartDate, request.EndDate, request.CompanyId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost("GetDisclouserMaturityAnalysis")]
+        public async Task<ActionResult<DisclouserMaturityAnalysisTable>> GetDisclouserMaturityAnalysis([FromBody] LeaseReportRequest request)
+        {
+            try
+            {
+                var result = await _leaseReportService.GetDisclouserMaturityAnalysis(request.StartDate, request.EndDate, request.CompanyId);
                 return Ok(result);
             }
             catch (Exception ex)

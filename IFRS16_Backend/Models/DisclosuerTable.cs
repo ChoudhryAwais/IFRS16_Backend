@@ -16,4 +16,11 @@
         public double? AdditionsDuringYearROU { get; set; }
 
     }
+    public class DisclouserMaturityAnalysisTable
+    {
+        public decimal? LessThanOneYear { get; set; }
+        public decimal? BetweenOneAndFiveYears { get; set; }
+        public decimal? AfterFiveYears { get; set; }
+    }
+
 }

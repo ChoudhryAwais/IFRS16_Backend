@@ -91,6 +91,54 @@
         }
       }
     },
+    "/api/Disclosure/GetDisclouserMaturityAnalysis": {
+      "post": {
+        "tags": [
+          "Disclosure"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseReportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DisclouserMaturityAnalysisTable"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DisclouserMaturityAnalysisTable"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DisclouserMaturityAnalysisTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/InitialRecognition/Add": {
       "post": {
         "tags": [
@@ -722,6 +770,56 @@
         }
       }
     },
+    "/api/LeaseFormData/UpdateLeaseContract/{leaseId}": {
+      "put": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "LeaseId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ContractDoc": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "LeaseId": {
+                  "style": "form"
+                },
+                "ContractDoc": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/LeaseFormData/GetLeaseContract/{leaseId}": {
       "get": {
         "tags": [
@@ -738,6 +836,48 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/LeaseFormData/UpdateLease/{leaseId}": {
+      "put": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "parameters": [
+          {
+            "name": "leaseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1442,6 +1582,27 @@
             "nullable": true
           },
           "additionsDuringYearROU": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DisclouserMaturityAnalysisTable": {
+        "type": "object",
+        "properties": {
+          "lessThanOneYear": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "betweenOneAndFiveYears": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "afterFiveYears": {
             "type": "number",
             "format": "double",
             "nullable": true

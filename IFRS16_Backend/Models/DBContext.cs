@@ -22,6 +22,7 @@ namespace IFRS16_Backend.Models
         public DbSet<JournalEntryReport> JournalEntryReport { get; set; }
         public DbSet<LeaseReportSummaryTable> LeasesReportSummary { get; set; }
         public DbSet<LeaseContract> LeaseDataContracts { get; set; }
+        public DbSet<DisclouserMaturityAnalysisTable> DisclouserMaturityAnalysis { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,8 @@ namespace IFRS16_Backend.Models
             modelBuilder.Entity<AllLeasesReportTable>().HasNoKey();
             modelBuilder.Entity<LeaseReportSummaryTable>().HasNoKey();
             modelBuilder.Entity<JournalEntryReport>().HasNoKey();
+            modelBuilder.Entity<DisclouserMaturityAnalysisTable>().HasNoKey();
+
 
             base.OnModelCreating(modelBuilder);
         }
@@ -97,6 +100,14 @@ namespace IFRS16_Backend.Models
                 .ToListAsync();
 
             return leaseReportSummary;
+        }
+        public async Task<IEnumerable<DisclouserMaturityAnalysisTable>> GetDisclouserMaturityAnalysis(DateTime startDate, DateTime endDate, int companyId)
+        {
+            var disclouserMaturityAnalysisReport = await this.DisclouserMaturityAnalysis
+                .FromSqlRaw("EXEC GetDisclouserForMaturityAnaylsis @FromDate = {0}, @EndDate = {1}, @CompanyID = {2}", startDate, endDate, companyId)
+                .ToListAsync();
+
+            return disclouserMaturityAnalysisReport;
         }
         public async Task DeleteLeaseDataAsync(string leaseIds)
         {

@@ -42,7 +42,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = respectiveROU.ROU_Date,
-                        Particular = "PNL",
+                        Particular = "Profit and loss",
                         Debit = PNL > 0 ? PNL : 0,
                         Credit = PNL < 0 ? PNL : 0,
                         LeaseId = leaseSpecificData.LeaseId

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ProConsultant\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj": {}
+    "D:\\repos\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj": {}
   },
   "projects": {
-    "D:\\ProConsultant\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj": {
+    "D:\\repos\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ProConsultant\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj",
+        "projectUniqueName": "D:\\repos\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj",
         "projectName": "IFRS16_Backend",
-        "projectPath": "D:\\ProConsultant\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj",
+        "projectPath": "D:\\repos\\IFRS16_Backend\\IFRS16_Backend\\IFRS16_Backend.csproj",
         "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
-        "outputPath": "D:\\ProConsultant\\IFRS16_Backend\\IFRS16_Backend\\obj\\",
+        "outputPath": "D:\\repos\\IFRS16_Backend\\IFRS16_Backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,4 +1,5 @@
 ﻿using IFRS16_Backend.Models;
+using IFRS16_Backend.Services.Report;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.Design;
 
@@ -49,6 +50,12 @@ namespace IFRS16_Backend.Services.LeaseLiabilityAggregation
             };
 
             return aggregatedDisclosure;
+        }
+        public async Task<IEnumerable<DisclouserMaturityAnalysisTable>> GetDisclouserMaturityAnalysis(DateTime startDate, DateTime endDate, int companyId)
+        {
+            IEnumerable<DisclouserMaturityAnalysisTable> disclouserReport = await _context.GetDisclouserMaturityAnalysis(startDate, endDate, companyId);
+
+            return disclouserReport;
         }
     }
 }
