@@ -139,6 +139,60 @@
         }
       }
     },
+    "/api/ExchangeRate/all/{currencyId}": {
+      "get": {
+        "tags": [
+          "ExchangeRate"
+        ],
+        "parameters": [
+          {
+            "name": "currencyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ExchangeRate": {
+      "post": {
+        "tags": [
+          "ExchangeRate"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExchangeRateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExchangeRateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExchangeRateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/InitialRecognition/Add": {
       "post": {
         "tags": [
@@ -1378,6 +1432,24 @@
   },
   "components": {
     "schemas": {
+      "AddExchangeRateDto": {
+        "type": "object",
+        "properties": {
+          "currencyID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "exchangeRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "exchangeDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "AllLeasesReportTable": {
         "type": "object",
         "properties": {

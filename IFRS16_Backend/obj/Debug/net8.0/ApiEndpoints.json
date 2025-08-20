@@ -72,6 +72,38 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.ExchangeRateController",
+    "Method": "AddExchangeRate",
+    "RelativePath": "api/ExchangeRate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "IFRS16_Backend.Models.AddExchangeRateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.ExchangeRateController",
+    "Method": "GetAllExchangeRates",
+    "RelativePath": "api/ExchangeRate/all/{currencyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "currencyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetAllInitialRecognitionForLease",
     "RelativePath": "api/InitialRecognition/{leaseId}",

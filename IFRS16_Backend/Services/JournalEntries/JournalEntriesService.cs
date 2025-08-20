@@ -23,7 +23,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = leaseMustField.LeaseLiability_Date,
-                    Particular = "Lease Liability",
+                    Particular = "21025010 - Lease Liability",
                     Debit = 0,
                     Credit = (decimal)(leaseMustField.Opening - leaseMustField.Payment),
                     LeaseId = leaseSpecificData.LeaseId
@@ -31,7 +31,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = respectiveROU.ROU_Date,
-                    Particular = "Right of Use Asset",
+                    Particular = "11510060 - Right of Use Asset",
                     Debit = (decimal)(respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)),
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -57,7 +57,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = leaseMustField.LeaseLiability_Date,
-                        Particular = "Lease Liability",
+                        Particular = "21025010 - Lease Liability",
                         Debit = (decimal)modificationDetails.LeaseLiability,
                         Credit = 0,
                         LeaseId = leaseSpecificData.LeaseId
@@ -65,7 +65,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = respectiveROU.ROU_Date,
-                        Particular = "Right of Use Asset",
+                        Particular = "11510060 - Right of Use Asset",
                         Debit = 0,
                         Credit = (decimal)modificationDetails.Rou,
                         LeaseId = leaseSpecificData.LeaseId
@@ -82,7 +82,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = leaseMustField.LeaseLiability_Date,
-                    Particular = "Lease Liability",
+                    Particular = "21025010 - Lease Liability",
                     Debit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
                     Credit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -90,7 +90,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = respectiveROU.ROU_Date,
-                    Particular = "Right of Use Asset",
+                    Particular = "11510060 - Right of Use Asset",
                     Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
                     Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -104,7 +104,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = leaseMustField.LeaseLiability_Date,
-                    Particular = "Payable",
+                    Particular = "21010012 - Payable",
                     Debit = 0,
                     Credit = (decimal)leaseMustField.Payment,
                     LeaseId = leaseSpecificData.LeaseId
@@ -119,7 +119,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = respectiveROU.ROU_Date,
-                        Particular = "Right of Use Asset",
+                        Particular = "11510060 - Right of Use Asset",
                         Debit = (decimal)leaseSpecificData.IDC,
                         Credit = 0,
                         LeaseId = leaseSpecificData.LeaseId
@@ -149,7 +149,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = leaseliabilityData.LeaseLiability_Date,
-                    Particular = "Interest Expense",
+                    Particular = "71510005 - Interest Expense",
                     Debit = (decimal)leaseliabilityData.Interest,
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -158,7 +158,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = leaseliabilityData.LeaseLiability_Date,
-                    Particular = "Lease Liability",
+                    Particular = "21025010 - Lease Liability",
                     Debit = 0,
                     Credit = (decimal)leaseliabilityData.Interest,
                     LeaseId = leaseSpecificData.LeaseId
@@ -169,7 +169,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
-                        Particular = "Exchange Gain/Loss",
+                        Particular = "72010010 - Exchange Gain/Loss",
                         Debit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? Math.Abs((decimal)leaseliabilityData.Exchange_Gain_Loss) : 0,
                         Credit = (decimal)leaseliabilityData?.Exchange_Gain_Loss > 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
                         LeaseId = leaseSpecificData.LeaseId
@@ -177,7 +177,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
-                        Particular = "Lease Liability",
+                        Particular = "21025010 - Lease Liability",
                         Debit = (decimal)leaseliabilityData?.Exchange_Gain_Loss > 0 ? (decimal)leaseliabilityData.Exchange_Gain_Loss : 0,
                         Credit = (decimal)leaseliabilityData?.Exchange_Gain_Loss < 0 ? Math.Abs((decimal)leaseliabilityData.Exchange_Gain_Loss) : 0,
                         LeaseId = leaseSpecificData.LeaseId
@@ -188,7 +188,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = rouData.ROU_Date,
-                    Particular = "Amortization Expense",
+                    Particular = "71010010 - Amortization Expense",
                     Debit = (decimal)rouData.Amortization,
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -197,7 +197,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new JournalEntryTable
                 {
                     JE_Date = rouData.ROU_Date,
-                    Particular = "Right of Use Asset",
+                    Particular = "11510060 - Right of Use Asset",
                     Debit = 0,
                     Credit = (decimal)rouData.Amortization,
                     LeaseId = leaseSpecificData.LeaseId
@@ -209,7 +209,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
-                        Particular = "Lease Liability",
+                        Particular = "21025010 - Lease Liability",
                         Debit = (decimal)leaseliabilityData.Payment,
                         Credit = 0,
                         LeaseId = leaseSpecificData.LeaseId
@@ -218,7 +218,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new JournalEntryTable
                     {
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
-                        Particular = "Payable",
+                        Particular = "21010012 - Payable",
                         Debit = 0,
                         Credit = (decimal)leaseliabilityData.Payment,
                         LeaseId = leaseSpecificData.LeaseId
@@ -240,7 +240,7 @@ namespace IFRS16_Backend.Services.JournalEntries
             JEFinalTable.Add(new FC_JournalEntryTable
             {
                 JE_Date = respectiveROU.ROU_Date,
-                Particular = "Right of Use Asset",
+                Particular = "11510060 - Right of Use Asset",
                 Debit = (decimal)(respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)),
                 Credit = 0,
                 LeaseId = leaseSpecificData.LeaseId
@@ -248,7 +248,7 @@ namespace IFRS16_Backend.Services.JournalEntries
             JEFinalTable.Add(new FC_JournalEntryTable
             {
                 JE_Date = leaseMustField.LeaseLiability_Date,
-                Particular = "Lease Liability",
+                Particular = "21025010 - Lease Liability",
                 Debit = 0,
                 Credit = (decimal)(leaseMustField.Opening - leaseMustField.Payment),
                 LeaseId = leaseSpecificData.LeaseId
@@ -260,7 +260,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new FC_JournalEntryTable
                 {
                     JE_Date = leaseMustField.LeaseLiability_Date,
-                    Particular = "Payable",
+                    Particular = "21010012 - Payable",
                     Debit = 0,
                     Credit = (decimal)leaseMustField.Payment,
                     LeaseId = leaseSpecificData.LeaseId
@@ -273,7 +273,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new FC_JournalEntryTable
                 {
                     JE_Date = respectiveROU.ROU_Date,
-                    Particular = "Right of Use Asset",
+                    Particular = "11510060 - Right of Use Asset",
                     Debit = (decimal)leaseSpecificData.IDC,
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -297,7 +297,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new FC_JournalEntryTable
                 {
                     JE_Date = leaseliabilityData.LeaseLiability_Date,
-                    Particular = "Interest Expense",
+                    Particular = "71510005 - Interest Expense",
                     Debit = (decimal)leaseliabilityData.Interest,
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -306,7 +306,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new FC_JournalEntryTable
                 {
                     JE_Date = leaseliabilityData.LeaseLiability_Date,
-                    Particular = "Lease Liability",
+                    Particular = "21025010 - Lease Liability",
                     Debit = 0,
                     Credit = (decimal)leaseliabilityData.Interest,
                     LeaseId = leaseSpecificData.LeaseId
@@ -316,7 +316,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new FC_JournalEntryTable
                 {
                     JE_Date = rouData.ROU_Date,
-                    Particular = "Amortization Expense",
+                    Particular = "71010010 - Amortization Expense",
                     Debit = (decimal)rouData.Amortization,
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
@@ -325,7 +325,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                 JEFinalTable.Add(new FC_JournalEntryTable
                 {
                     JE_Date = rouData.ROU_Date,
-                    Particular = "Right of Use Asset",
+                    Particular = "11510060 - Right of Use Asset",
                     Debit = 0,
                     Credit = (decimal)rouData.Amortization,
                     LeaseId = leaseSpecificData.LeaseId
@@ -337,7 +337,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new FC_JournalEntryTable
                     {
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
-                        Particular = "Lease Liability",
+                        Particular = "21025010 - Lease Liability",
                         Debit = (decimal)leaseliabilityData.Payment,
                         Credit = 0,
                         LeaseId = leaseSpecificData.LeaseId
@@ -346,7 +346,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     JEFinalTable.Add(new FC_JournalEntryTable
                     {
                         JE_Date = leaseliabilityData.LeaseLiability_Date,
-                        Particular = "Payable",
+                        Particular = "21010012 - Payable",
                         Debit = 0,
                         Credit = (decimal)leaseliabilityData.Payment,
                         LeaseId = leaseSpecificData.LeaseId
@@ -382,7 +382,7 @@ namespace IFRS16_Backend.Services.JournalEntries
             JEFinalTable.Add(new JournalEntryTable
             {
                 JE_Date = terminationDate,
-                Particular = "Right of Use Asset",
+                Particular = "11510060 - Right of Use Asset",
                 Debit = 0,
                 Credit = ROUClosing,
                 LeaseId = leaseId
@@ -390,7 +390,7 @@ namespace IFRS16_Backend.Services.JournalEntries
             JEFinalTable.Add(new JournalEntryTable
             {
                 JE_Date = terminationDate,
-                Particular = "Lease Liability",
+                Particular = "21025010 - Lease Liability",
                 Debit = LLClosing,
                 Credit = 0,
                 LeaseId = leaseId

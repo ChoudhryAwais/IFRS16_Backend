@@ -61,13 +61,11 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     var fc_journalEntries = await _journalEntriesService.PostJEForLeaseforFC(leaseFormData, fc_leaseLiability, fc_rouSchedule);
                 }
 
-
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log and handle exceptions appropriately
-                Console.WriteLine(ex);
                 throw;
             }
         }
@@ -108,7 +106,7 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                 leaseModificationData.RouOpening = leaseModificationData.RouOpening != null ? leaseModificationData.RouOpening + leaseLiabilityObjBackDate?.ModificationAdjustment : leaseLiabilityObjBackDate?.ModificationAdjustment + rouObj?.Opening;
                 if (rouObjBackDate != null)
                 {
-                    rouObjBackDate.ModificationAdjustment = ((double)(leaseModificationData?.RouOpening ?? 0) - rouObjBackDate.Closing);                
+                    rouObjBackDate.ModificationAdjustment = ((double)(leaseModificationData?.RouOpening ?? 0) - rouObjBackDate.Closing);
                     _context.ROUSchedule.Update(rouObjBackDate);
                     await _context.SaveChangesAsync();
                 }
@@ -162,7 +160,7 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return true;
+                throw;
             }
         }
     }

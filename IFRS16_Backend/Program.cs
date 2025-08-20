@@ -13,9 +13,9 @@ using IFRS16_Backend.Services.LeaseLiabilityAggregation;
 using IFRS16_Backend.Services.Currencies;
 using IFRS16_Backend.Helper;
 using IFRS16_Backend.Services.Report;
+using IFRS16_Backend.Services.ExchangeRate;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // JWT configuration
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
@@ -48,7 +48,7 @@ builder.Services.AddScoped<IJournalEntriesService, JournalEntriesService>();
 builder.Services.AddScoped<IReportsService, ReportsService>();
 builder.Services.AddScoped<ICurrenciesService, CurrenciesService>();
 builder.Services.AddScoped<GetCurrecyRates>();
-
+builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
 
 
 
