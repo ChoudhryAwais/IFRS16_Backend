@@ -37,10 +37,10 @@ namespace IFRS16_Backend.Models
             base.OnModelCreating(modelBuilder);
         }
 
-        public async Task<IEnumerable<ExtendedLeaseDataSP>> GetLeaseDataPaginatedAsync(int pageNumber, int pageSize, int CompanyID)
+        public async Task<IEnumerable<ExtendedLeaseDataSP>> GetLeaseDataPaginatedAsync(int pageNumber, int pageSize, int CompanyID, string leaseID)
         {
             var leaseData = await this.LeaseDataSP
-                .FromSqlRaw("EXEC GetLeaseDataPaginated @PageNumber = {0}, @PageSize = {1}, @CompanyID= {2}", pageNumber, pageSize, CompanyID)
+                .FromSqlRaw("EXEC GetLeaseDataPaginated @PageNumber = {0}, @PageSize = {1}, @CompanyID= {2}, @LeaseID={3}", pageNumber, pageSize, CompanyID, leaseID)
                 .ToListAsync();
 
             return leaseData;

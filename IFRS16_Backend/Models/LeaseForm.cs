@@ -110,6 +110,13 @@ namespace IFRS16_Backend.Models
         public int LeaseId { get; set; }
 
     }
+    public class GetLeaseFormData
+    {
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int CompanyId { get; set; }
+        public string? LeaseName { get; set; }
+    }
     public class LeaseContract
     {
         [Key]

@@ -33,12 +33,15 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("GetAllLeases")]
-        public async Task<ActionResult<IEnumerable<ExtendedLeaseDataSP>>> GetAllLeases([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] int companyID = 1)
+        [HttpPost("GetAllLeases")]
+        public async Task<ActionResult<IEnumerable<ExtendedLeaseDataSP>>> GetAllLeases(GetLeaseFormData payload)
         {
             try
             {
-                var leases = await _leaseFormDataService.GetAllLeases(pageNumber, pageSize, companyID);
+                // Ensure payload.LeaseName is not null by providing a default value if it is null
+                string leaseName = payload.LeaseName ?? string.Empty;
+
+                LeaseFormDataResult leases = await _leaseFormDataService.GetAllLeases(payload.PageNumber, payload.PageSize, payload.CompanyId, leaseName);
                 return Ok(leases);
             }
             catch (Exception ex)

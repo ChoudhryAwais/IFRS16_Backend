@@ -311,24 +311,14 @@
     "ContainingType": "IFRS16_Backend.Controllers.LeaseFormDataController",
     "Method": "GetAllLeases",
     "RelativePath": "api/LeaseFormData/GetAllLeases",
-    "HttpMethod": "GET",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "pageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "pageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "companyID",
-        "Type": "System.Int32",
-        "IsRequired": false
+        "Name": "payload",
+        "Type": "IFRS16_Backend.Models.GetLeaseFormData",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [

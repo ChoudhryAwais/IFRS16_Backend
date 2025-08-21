@@ -5,7 +5,7 @@ namespace IFRS16_Backend.Services.LeaseData
     public interface ILeaseDataService
     {
         Task<bool> AddLeaseFormDataAsync(LeaseFormData leaseFormData);
-        Task<LeaseFormDataResult> GetAllLeases(int pageNumber, int pageSize, int companyID);
+        Task<LeaseFormDataResult> GetAllLeases(int pageNumber, int pageSize, int companyID, string leaseID);
         Task<LeaseFormData> GetLeaseById(int leaseId);
         Task<List<LeaseFormData>> GetAllLeasesForCompany(int companyID);
         Task<bool> DeleteLeases(string leaseIds);

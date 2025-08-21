@@ -29,16 +29,17 @@ namespace IFRS16_Backend.Services.LeaseData
             return true;
         }
 
-        public async Task<LeaseFormDataResult> GetAllLeases(int pageNumber, int pageSize, int companyID)
+        public async Task<LeaseFormDataResult> GetAllLeases(int pageNumber, int pageSize, int companyID, string leaseName)
         {
 
-            IEnumerable<ExtendedLeaseDataSP> leaseData = await _context.GetLeaseDataPaginatedAsync(pageNumber, pageSize, companyID);
+            IEnumerable<ExtendedLeaseDataSP> leaseData = await _context.GetLeaseDataPaginatedAsync(pageNumber, pageSize, companyID, leaseName);
             int totalRecord = await _context.LeaseData.CountAsync();
+            List<LeaseFormData> leaseDataFiltered = await _context.LeaseData.Where(item => item.CompanyID == companyID && (leaseName == null || leaseName == "" || (item.LeaseName == leaseName))).ToListAsync();
 
             return new()
             {
                 Data = leaseData,
-                TotalRecords = totalRecord,
+                TotalRecords = leaseDataFiltered.Count,
             };
         }
         public async Task<LeaseFormData> GetLeaseById(int leaseId)
