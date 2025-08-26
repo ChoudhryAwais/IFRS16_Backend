@@ -30,7 +30,20 @@ namespace IFRS16_Backend.Services.LeaseLiability
 
             if (exchangeRatesList.Count > 0)
             {
-                decimal exchangeRateForOpening = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
+                // Try to find exact match
+                var openingRate = exchangeRatesList
+                    .FirstOrDefault(item => item.ExchangeDate == leaseData.CommencementDate);
+
+                // If not found, get the rate with the highest ExchangeDate less than CommencementDate
+                openingRate ??= exchangeRatesList
+                        .Where(item => item.ExchangeDate < leaseData.CommencementDate)
+                        .OrderByDescending(item => item.ExchangeDate)
+                        .FirstOrDefault();
+
+                // If still not found, fallback to the earliest available rate
+                openingRate ??= exchangeRatesList.OrderBy(item => item.ExchangeDate).First();
+
+                decimal exchangeRateForOpening = openingRate.ExchangeRate;
                 fc_opening = base_opening * (double)exchangeRateForOpening;
             }
             double base_interest;
@@ -64,9 +77,21 @@ namespace IFRS16_Backend.Services.LeaseLiability
 
                 if (exchangeRatesList.Count > 0)
                 {
-                    exchangeRate = exchangeRatesList.FirstOrDefault(item => item.ExchangeDate == currentDate)?.ExchangeRate ?? exchangeRatesList[^1].ExchangeRate;
+                    // Try to find exact match for currentDate
+                    var rate = exchangeRatesList
+                        .FirstOrDefault(item => item.ExchangeDate == currentDate);
+
+                    // If not found, get the rate with the highest ExchangeDate less than currentDate
+                    rate ??= exchangeRatesList
+                        .Where(item => item.ExchangeDate < currentDate)
+                        .OrderByDescending(item => item.ExchangeDate)
+                        .FirstOrDefault();
+
+                    // If still not found, fallback to the earliest available rate
+                    rate ??= exchangeRatesList.OrderBy(item => item.ExchangeDate).First();
+
+                    exchangeRate = rate.ExchangeRate;
                     // Create a new table entry
-                    // Add the entry to the lease table
                     fc_leaseLiability.Add(new FC_LeaseLiabilityTable
                     {
                         LeaseId = leaseData.LeaseId,
