@@ -103,7 +103,10 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     _context.LeaseLiability.Update(leaseLiabilityObjBackDate);
                     await _context.SaveChangesAsync();
                 }
-                leaseModificationData.RouOpening = leaseModificationData.RouOpening != null ? leaseModificationData.RouOpening + leaseLiabilityObjBackDate?.ModificationAdjustment : leaseLiabilityObjBackDate?.ModificationAdjustment + rouObj?.Opening;
+                leaseModificationData.RouOpening = 
+                    leaseModificationData.RouOpening != null ? 
+                    leaseModificationData.RouOpening // + leaseLiabilityObjBackDate?.ModificationAdjustment Comment out as per requirement - 01/09/2025
+                    : leaseLiabilityObjBackDate?.ModificationAdjustment + rouObj?.Opening;
                 if (rouObjBackDate != null)
                 {
                     rouObjBackDate.ModificationAdjustment = ((double)(leaseModificationData?.RouOpening ?? 0) - rouObjBackDate.Closing);
