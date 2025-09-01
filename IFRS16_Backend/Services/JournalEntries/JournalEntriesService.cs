@@ -79,22 +79,26 @@ namespace IFRS16_Backend.Services.JournalEntries
                         LeaseId = leaseSpecificData.LeaseId
                     });
                 }
-                JEFinalTable.Add(new JournalEntryTable
+                if(modificationDetails.ModificationLoss == 0)
                 {
-                    JE_Date = leaseMustField.LeaseLiability_Date,
-                    Particular = "21025010 - Lease Liability",
-                    Debit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                    Credit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                    LeaseId = leaseSpecificData.LeaseId
-                });
-                JEFinalTable.Add(new JournalEntryTable
-                {
-                    JE_Date = respectiveROU.ROU_Date,
-                    Particular = "11510060 - Right of Use Asset",
-                    Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                    Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
-                    LeaseId = leaseSpecificData.LeaseId
-                });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = leaseMustField.LeaseLiability_Date,
+                        Particular = "21025010 - Lease Liability",
+                        Debit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        Credit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                    JEFinalTable.Add(new JournalEntryTable
+                    {
+                        JE_Date = respectiveROU.ROU_Date,
+                        Particular = "11510060 - Right of Use Asset",
+                        Debit = modificationDetails.ModificationAdjustment > 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        Credit = modificationDetails.ModificationAdjustment < 0 ? (decimal)modificationDetails.ModificationAdjustment : 0,
+                        LeaseId = leaseSpecificData.LeaseId
+                    });
+                }
+               
 
             }
 

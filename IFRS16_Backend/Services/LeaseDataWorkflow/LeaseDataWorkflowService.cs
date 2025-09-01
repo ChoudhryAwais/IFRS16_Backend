@@ -148,7 +148,7 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                 );
 
                 var modificationDetails = new ModificationDetails(
-                    (leaseModificationData.IsChangeInScope ? leaseLiabilityObjOnModificationDate?.Opening - (leaseModificationData?.LLOpening) : 0),
+                    (leaseModificationData.IsChangeInScope ? leaseLiabilityObjOnModificationDate?.Opening - (leaseModificationData?.LLOpening ?? (double)IRResult.TotalNPV) : 0), //?? (double)IRResult.TotalNPV)  31 August,2025 change due to exluding the leaseLiability opening from UI in case of change in scope
                     (leaseModificationData.IsChangeInScope ? rouObj.Opening - ROUWithOutAdjustment : 0),
                     (modificationAdjustmentForJE)
                 );
