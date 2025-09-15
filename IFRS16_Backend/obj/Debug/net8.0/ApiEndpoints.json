@@ -768,6 +768,38 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.UserController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/User/Update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "IFRS16_Backend.Models.UserUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.UserController",
+    "Method": "VerifyPassword",
+    "RelativePath": "api/User/VerifyPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "IFRS16_Backend.Models.UserPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.ValuesController",
     "Method": "GetDummyUsers",
     "RelativePath": "api/Values/getdummyusers",

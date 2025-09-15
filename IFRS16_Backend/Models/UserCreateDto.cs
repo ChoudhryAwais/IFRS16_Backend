@@ -1,23 +1,13 @@
-﻿namespace IFRS16_Backend.Models
+namespace IFRS16_Backend.Models
 {
-    public class User
+    public class UserCreateDto
     {
-        public int UserID { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
         public string UserAddress { get; set; }
         public string Email { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public bool IsActive { get; set; }
         public int CompanyID { get; set; }
         public string Role { get; set; }
-
-
-    }
-    public class UserPasswordDto
-    {
-        public int UserId { get; set; }
-        public string Password { get; set; }
     }
 }

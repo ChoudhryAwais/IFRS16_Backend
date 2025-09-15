@@ -17,25 +17,27 @@ namespace IFRS16_Backend.Controllers
         [HttpPost]
         public IActionResult Login([FromBody] Login loginRequest)
         {
-            User user = _context.Users.FirstOrDefault(u => u.Email == loginRequest.Email && u.IsActive==true);
-            CompanyProfile companyProfile = _context.CompanyProfile.FirstOrDefault(u => u.CompanyID == user.CompanyID);
+            User? user = _context.Users.FirstOrDefault(u => u.Email == loginRequest.Email && u.IsActive);
             if (user == null || user.PasswordHash != loginRequest.PasswordHash)
-                return Unauthorized("   ");
+                return Unauthorized("Invalid credentials.");
+
+            CompanyProfile? companyProfile = _context.CompanyProfile.FirstOrDefault(u => u.CompanyID == user.CompanyID);
 
             var token = GenerateJwtToken(user);
 
             return Ok(new
             {
                 Token = token,
-                User = (new
+                User = new
                 {
                     user.UserID,
                     user.Username,
                     user.Email,
                     user.PhoneNumber,
                     user.UserAddress,
-                    user.CompanyID
-                }),
+                    user.CompanyID,
+                    user.Role
+                },
                 CompanyProfile = companyProfile
             });
         }
