@@ -115,7 +115,7 @@ namespace IFRS16_Backend.Services.InitialRecognition
                     NPV = NPV,
                     IsActive = true
                 };
-                cashFlow.Add((double)rental);
+                cashFlow.Add((double)leaseSpecificData.CustomIRTable[i].Rental);
                 dates.Add(leaseSpecificData.CustomIRTable[i].PaymentDate);
                 initialRecognition.Add(tableObj);
             }
