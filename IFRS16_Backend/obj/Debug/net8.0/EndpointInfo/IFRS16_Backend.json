@@ -1127,6 +1127,37 @@
         }
       }
     },
+    "/api/RemeasureFCLeases": {
+      "post": {
+        "tags": [
+          "RemeasureFCLeases"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemeasureFCRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemeasureFCRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemeasureFCRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Reports/AllLeaseReport": {
       "post": {
         "tags": [
@@ -2382,6 +2413,20 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RemeasureFCRequest": {
+        "type": "object",
+        "properties": {
+          "currencyID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remeasurementDate": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

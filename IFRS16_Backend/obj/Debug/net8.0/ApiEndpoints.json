@@ -612,6 +612,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.RemeasureFCLeasesController",
+    "Method": "RemeasureFC",
+    "RelativePath": "api/RemeasureFCLeases",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "IFRS16_Backend.Models.RemeasureFCRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.ReportsController",
     "Method": "GetLeasesReport",
     "RelativePath": "api/Reports/AllLeaseReport",

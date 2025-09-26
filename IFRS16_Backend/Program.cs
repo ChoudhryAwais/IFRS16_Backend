@@ -15,6 +15,7 @@ using IFRS16_Backend.Helper;
 using IFRS16_Backend.Services.Report;
 using IFRS16_Backend.Services.ExchangeRate;
 using IFRS16_Backend.Services.UserCrud;
+using IFRS16_Backend.Services.RemeasurementFCL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,8 @@ builder.Services.AddScoped<ICurrenciesService, CurrenciesService>();
 builder.Services.AddScoped<GetCurrecyRates>();
 builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRemeasureFCLService, RemeasureFCLService>();
+
 
 
 
