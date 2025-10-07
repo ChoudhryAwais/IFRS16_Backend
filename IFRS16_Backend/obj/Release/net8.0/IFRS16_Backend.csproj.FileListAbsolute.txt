@@ -425,12 +425,6 @@ D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\scopedcss\bundle\IFRS1
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets.build.json
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets.development.json
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets.build.endpoints.json
-D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets\msbuild.IFRS16_Backend.Microsoft.AspNetCore.StaticWebAssets.props
-D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets\msbuild.IFRS16_Backend.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets\msbuild.build.IFRS16_Backend.props
-D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets\msbuild.buildMultiTargeting.IFRS16_Backend.props
-D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets\msbuild.buildTransitive.IFRS16_Backend.props
-D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets.pack.json
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets.upToDateCheck.txt
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\IFRS16_B.6386537D.Up2Date
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\IFRS16_Backend.dll
@@ -438,3 +432,8 @@ D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\refint\IFRS16_Backend.
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\IFRS16_Backend.pdb
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\IFRS16_Backend.genruntimeconfig.cache
 D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\ref\IFRS16_Backend.dll
+D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\rpswa.dswa.cache.json
+D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\rjimswa.dswa.cache.json
+D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\rjsmrazor.dswa.cache.json
+D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\rjsmcshtml.dswa.cache.json
+D:\repos\IFRS16_Backend\IFRS16_Backend\obj\Release\net8.0\staticwebassets.build.json.cache

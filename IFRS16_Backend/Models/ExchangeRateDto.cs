@@ -2,6 +2,7 @@ namespace IFRS16_Backend.Models
 {
     public class ExchangeRateDto
     {
+        public int ExchangeRateID { get; set; }
         public int CurrencyID { get; set; }
         public string CurrencyName { get; set; }
         public decimal ExchangeRate { get; set; }

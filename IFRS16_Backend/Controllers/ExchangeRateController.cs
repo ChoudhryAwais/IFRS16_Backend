@@ -30,5 +30,24 @@ namespace IFRS16_Backend.Controllers
 
             return Ok(new { message = "Exchange rate added successfully." });
         }
+
+        [HttpDelete("batch/{ids}")]
+        public async Task<IActionResult> DeleteExchangeRates(string ids)
+        {
+            var idList = ids.Split(',')
+                .Select(id => int.TryParse(id, out var val) ? val : (int?)null)
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .ToList();
+
+            if (idList.Count == 0)
+                return BadRequest(new { error = "No valid IDs provided." });
+
+            var result = await _exchangeRateService.DeleteExchangeRatesAsync(idList);
+            if (!result)
+                return NotFound(new { error = "No exchange rates found or could not be deleted." });
+
+            return Ok(new { message = "Exchange rates deleted successfully." });
+        }
     }
 }

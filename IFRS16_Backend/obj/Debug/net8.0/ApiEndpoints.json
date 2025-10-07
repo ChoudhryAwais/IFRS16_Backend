@@ -104,6 +104,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.ExchangeRateController",
+    "Method": "DeleteExchangeRates",
+    "RelativePath": "api/ExchangeRate/batch/{ids}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ids",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.InitialRecognitionController",
     "Method": "GetAllInitialRecognitionForLease",
     "RelativePath": "api/InitialRecognition/{leaseId}",

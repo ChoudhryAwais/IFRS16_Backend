@@ -11,14 +11,14 @@ namespace IFRS16_Backend.Services.JournalEntries
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule, ModificationDetails? modificationDetails = null)
+        public async Task<List<JournalEntryTable>> PostJEForLease(LeaseFormData leaseSpecificData, List<LeaseLiabilityTable> leaseLiability, List<ROUScheduleTable> rouSchedule, ModificationDetails? modificationDetails = null, bool fromRemeasure = false)
         {
             int startTableDates = 0;
             LeaseLiabilityTable leaseMustField = leaseLiability[0];
             ROUScheduleTable respectiveROU = rouSchedule[0];
             List<JournalEntryTable> JEFinalTable = [];
 
-            if (modificationDetails == null)
+            if (!fromRemeasure && modificationDetails == null)
             {
                 JEFinalTable.Add(new JournalEntryTable
                 {
@@ -36,7 +36,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                     Credit = 0,
                     LeaseId = leaseSpecificData.LeaseId
                 });
-                if (leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)) != 0)
+                if ((leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)) != 0))
                 {
                     decimal PNL = (decimal)(leaseMustField.Opening - (respectiveROU.Opening - (leaseSpecificData.IDC ?? 0)));
                     JEFinalTable.Add(new JournalEntryTable
@@ -79,7 +79,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                         LeaseId = leaseSpecificData.LeaseId
                     });
                 }
-                if(modificationDetails.ModificationLoss == 0)
+                if (modificationDetails.ModificationLoss == 0)
                 {
                     JEFinalTable.Add(new JournalEntryTable
                     {
@@ -98,7 +98,7 @@ namespace IFRS16_Backend.Services.JournalEntries
                         LeaseId = leaseSpecificData.LeaseId
                     });
                 }
-               
+
 
             }
 

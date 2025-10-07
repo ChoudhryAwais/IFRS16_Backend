@@ -10,7 +10,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
     {
         private readonly GetCurrecyRates _getCurrencyRates = getCurrencyRates;
         private readonly ApplicationDbContext _context = context;
-        public async Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData, double customOpening = 0)
+        public async Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData, double customOpening = 0, bool fromRemeasure = false)
         {
             var (_, TotalDays, _) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             double xirr = XIRR.XIRRCalculation(cashFlow, dates);
@@ -73,8 +73,6 @@ namespace IFRS16_Backend.Services.LeaseLiability
                 base_interest = ((base_opening - rental) * xirrDaily);
                 base_closing = (base_opening + base_interest) - rental;
 
-
-
                 if (exchangeRatesList.Count > 0)
                 {
                     // Try to find exact match for currentDate
@@ -91,16 +89,20 @@ namespace IFRS16_Backend.Services.LeaseLiability
                     rate ??= exchangeRatesList.OrderBy(item => item.ExchangeDate).First();
 
                     exchangeRate = rate.ExchangeRate;
-                    // Create a new table entry
-                    fc_leaseLiability.Add(new FC_LeaseLiabilityTable
+                    if (!fromRemeasure)
                     {
-                        LeaseId = leaseData.LeaseId,
-                        LeaseLiability_Date = currentDate,
-                        Opening = base_opening,
-                        Interest = base_interest,
-                        Payment = rental,
-                        Closing = base_closing
-                    });
+                        // Create a new table entry
+                        fc_leaseLiability.Add(new FC_LeaseLiabilityTable
+                        {
+                            LeaseId = leaseData.LeaseId,
+                            LeaseLiability_Date = currentDate,
+                            Opening = base_opening,
+                            Interest = base_interest,
+                            Payment = rental,
+                            Closing = base_closing
+                        });
+                    }
+                   
                 }
                 // Create a new table entry
                 interest = base_interest * (double)exchangeRate;
@@ -136,7 +138,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
             {
                 await _context.BulkInsertAsync(leaseLiability);
 
-                if (exchangeRatesList.Count > 0)
+                if (exchangeRatesList.Count > 0 && !fromRemeasure)
                 {
                     await _context.BulkInsertAsync(fc_leaseLiability);
                 }

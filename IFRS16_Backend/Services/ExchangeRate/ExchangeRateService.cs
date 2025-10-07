@@ -12,6 +12,7 @@ namespace IFRS16_Backend.Services.ExchangeRate
         {
             var exchangeRates = await _context.ExchangeRates
                 .Where(x => x.CurrencyID == currencyId)
+                .OrderByDescending(x => x.ExchangeDate)
                 .ToListAsync();
 
             if (exchangeRates == null || exchangeRates.Count == 0)
@@ -24,6 +25,7 @@ namespace IFRS16_Backend.Services.ExchangeRate
 
             return [.. exchangeRates.Select(er => new ExchangeRateDto
             {
+                ExchangeRateID = er.ExchangeRateID,
                 CurrencyID = er.CurrencyID,
                 CurrencyName = currencyName,
                 ExchangeRate = er.ExchangeRate,
@@ -51,6 +53,19 @@ namespace IFRS16_Backend.Services.ExchangeRate
                 Console.WriteLine(ex.ToString());
                 return false;
             }
+        }
+        public async Task<bool> DeleteExchangeRatesAsync(List<int> exchangeRateIds)
+        {
+            var entities = await _context.ExchangeRates
+                .Where(x => exchangeRateIds.Contains(x.ExchangeRateID))
+                .ToListAsync();
+
+            if (entities.Count == 0)
+                return false;
+
+            _context.ExchangeRates.RemoveRange(entities);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -193,6 +193,28 @@
         }
       }
     },
+    "/api/ExchangeRate/batch/{ids}": {
+      "delete": {
+        "tags": [
+          "ExchangeRate"
+        ],
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/InitialRecognition/Add": {
       "post": {
         "tags": [
