@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "IFRS16_Backend",
-    "version": "1.0"
+    "title": "IFRS16 API",
+    "version": "v1"
   },
   "paths": {
     "/api/Currency/GetAllCurrencies": {
@@ -1111,6 +1111,18 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Logout": {
+      "post": {
+        "tags": [
+          "Logout"
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2513,6 +2525,10 @@
           "role": {
             "type": "string",
             "nullable": true
+          },
+          "currentSessionToken": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2557,6 +2573,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Don't enter 'Bearer', only enter token in the text input below.\r\n\r\nExample: '12345abcdef'",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }

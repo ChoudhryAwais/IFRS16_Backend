@@ -612,6 +612,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.LogoutController",
+    "Method": "Logout",
+    "RelativePath": "api/Logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.RegistrationController",
     "Method": "Register",
     "RelativePath": "api/Registration",

@@ -1,4 +1,5 @@
 ﻿using IFRS16_Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IFRS16_Backend.Controllers
@@ -10,6 +11,7 @@ namespace IFRS16_Backend.Controllers
         private readonly ApplicationDbContext _context = context;
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Register(User user)
         {
             if (_context.Users.Any(u => u.Email == user.Email))

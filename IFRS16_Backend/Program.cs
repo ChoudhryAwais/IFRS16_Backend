@@ -16,6 +16,9 @@ using IFRS16_Backend.Services.Report;
 using IFRS16_Backend.Services.ExchangeRate;
 using IFRS16_Backend.Services.UserCrud;
 using IFRS16_Backend.Services.RemeasurementFCL;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi.Models;
+using IFRS16_Backend.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +41,15 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false
     };
 });
+
+// Require authentication by default for all endpoints. Use [AllowAnonymous] on login/register endpoints.
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -60,7 +72,34 @@ builder.Services.AddScoped<IRemeasureFCLService, RemeasureFCLService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "IFRS16 API", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Don't enter 'Bearer', only enter token in the text input below.\r\n\r\nExample: '12345abcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
+                Scheme = "bearer",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+            },
+            new List<string>()
+        }
+    });
+});
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -89,11 +128,12 @@ app.UseCors("AllowAllOrigins");
 //if (app.Environment.IsDevelopment())
 //{
 app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwaggerUI();
 //}
 app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseMiddleware<SingleSessionMiddleware>();
 app.MapControllers();
 
 app.Run();

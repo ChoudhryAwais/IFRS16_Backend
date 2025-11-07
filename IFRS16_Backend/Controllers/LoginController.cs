@@ -1,9 +1,11 @@
 ﻿using IFRS16_Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Controllers
 {
@@ -15,15 +17,30 @@ namespace IFRS16_Backend.Controllers
         private readonly IConfiguration _configuration = configuration;
 
         [HttpPost]
-        public IActionResult Login([FromBody] Login loginRequest)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] Login loginRequest)
         {
-            User? user = _context.Users.FirstOrDefault(u => u.Email == loginRequest.Email && u.IsActive);
+            if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Email) || string.IsNullOrEmpty(loginRequest.PasswordHash))
+                return BadRequest("Invalid login request.");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.IsActive);
             if (user == null || user.PasswordHash != loginRequest.PasswordHash)
                 return Unauthorized("Invalid credentials.");
 
-            CompanyProfile? companyProfile = _context.CompanyProfile.FirstOrDefault(u => u.CompanyID == user.CompanyID);
+            // ✅ Step 1: If user already logged in, invalidate old token
+            if (!string.IsNullOrEmpty(user.CurrentSessionToken))
+            {
+                user.CurrentSessionToken = string.Empty; // force logout previous session
+                await _context.SaveChangesAsync();
+            }
+
+            var companyProfile = await _context.CompanyProfile.FirstOrDefaultAsync(u => u.CompanyID == user.CompanyID);
 
             var token = GenerateJwtToken(user);
+
+            // ✅ Step 3: Save new session token
+            user.CurrentSessionToken = token;
+            await _context.SaveChangesAsync();
 
             return Ok(new
             {
@@ -46,12 +63,20 @@ namespace IFRS16_Backend.Controllers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Name, user.Username),
+                new(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+                // unique identifier for the token so each login produces a different token
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                // issued at time
+                new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+            };
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity([
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
-                ]),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

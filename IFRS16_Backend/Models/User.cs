@@ -12,6 +12,7 @@
         public bool IsActive { get; set; }
         public int CompanyID { get; set; }
         public string Role { get; set; }
+        public string? CurrentSessionToken { get; set; } // Make nullable to allow assignment of null
 
 
     }
