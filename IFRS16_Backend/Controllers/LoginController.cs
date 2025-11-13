@@ -1,20 +1,24 @@
 ﻿using IFRS16_Backend.Models;
+using IFRS16_Backend.Services.License;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 namespace IFRS16_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginController(ApplicationDbContext context, IConfiguration configuration) : ControllerBase
+    public class LoginController(ApplicationDbContext context, IConfiguration configuration, LicenseService licenseService) : ControllerBase
     {
         private readonly ApplicationDbContext _context = context;
         private readonly IConfiguration _configuration = configuration;
+        private readonly LicenseService _licenseService = licenseService;
 
         [HttpPost]
         [AllowAnonymous]
@@ -24,39 +28,55 @@ namespace IFRS16_Backend.Controllers
                 return BadRequest("Invalid login request.");
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.IsActive);
-            if (user == null || user.PasswordHash != loginRequest.PasswordHash)
-                return Unauthorized("Invalid credentials.");
+            if (user == null) return Unauthorized("Invalid credentials.");
+            var companyProfile = await _context.CompanyProfile.FirstOrDefaultAsync(c => c.CompanyID == user.CompanyID);
 
-            // ✅ Step 1: If user already logged in, invalidate old token
-            if (!string.IsNullOrEmpty(user.CurrentSessionToken))
+            dynamic result = _licenseService.ValidateLicense(companyProfile.LicenseKey, companyProfile.CompanyID);
+
+            if (result == null)
+                return BadRequest(new { message = "License validation failed." });
+
+            if (result.Valid)
             {
-                user.CurrentSessionToken = string.Empty; // force logout previous session
-                await _context.SaveChangesAsync();
-            }
+                if (user == null || user.PasswordHash != loginRequest.PasswordHash)
+                    return Unauthorized("Invalid credentials.");
 
-            var companyProfile = await _context.CompanyProfile.FirstOrDefaultAsync(u => u.CompanyID == user.CompanyID);
-
-            var token = GenerateJwtToken(user);
-
-            // ✅ Step 3: Save new session token
-            user.CurrentSessionToken = token;
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                Token = token,
-                User = new
+                // ✅ Step 1: If user already logged in, invalidate old token
+                if (!string.IsNullOrEmpty(user.CurrentSessionToken))
                 {
-                    user.UserID,
-                    user.Username,
-                    user.Email,
-                    user.PhoneNumber,
-                    user.UserAddress,
-                    user.CompanyID,
-                    user.Role
-                },
-                CompanyProfile = companyProfile
-            });
+                    user.CurrentSessionToken = string.Empty; // force logout previous session
+                    await _context.SaveChangesAsync();
+                }
+
+                var token = GenerateJwtToken(user);
+
+                // ✅ Step 3: Save new session token
+                user.CurrentSessionToken = token;
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    Token = token,
+                    User = new
+                    {
+                        user.UserID,
+                        user.Username,
+                        user.Email,
+                        user.PhoneNumber,
+                        user.UserAddress,
+                        user.CompanyID,
+                        user.Role
+                    },
+                    CompanyProfile = companyProfile
+                });
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    message = result.Message
+                });
+            }
         }
 
         private string GenerateJwtToken(User user)

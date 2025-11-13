@@ -1,24 +1,25 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using IFRS16_Backend.Models;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
-using IFRS16_Backend.Services.LeaseData;
-using IFRS16_Backend.Services.InitialRecognition;
-using IFRS16_Backend.Services.ROUSchedule;
-using IFRS16_Backend.Services.LeaseLiability;
-using IFRS16_Backend.Services.LeaseDataWorkflow;
-using IFRS16_Backend.Services.JournalEntries;
-using IFRS16_Backend.Services.LeaseLiabilityAggregation;
-using IFRS16_Backend.Services.Currencies;
 using IFRS16_Backend.Helper;
-using IFRS16_Backend.Services.Report;
-using IFRS16_Backend.Services.ExchangeRate;
-using IFRS16_Backend.Services.UserCrud;
-using IFRS16_Backend.Services.RemeasurementFCL;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.OpenApi.Models;
 using IFRS16_Backend.Middleware;
+using IFRS16_Backend.Models;
+using IFRS16_Backend.Services.Currencies;
+using IFRS16_Backend.Services.ExchangeRate;
+using IFRS16_Backend.Services.InitialRecognition;
+using IFRS16_Backend.Services.JournalEntries;
+using IFRS16_Backend.Services.LeaseData;
+using IFRS16_Backend.Services.LeaseDataWorkflow;
+using IFRS16_Backend.Services.LeaseLiability;
+using IFRS16_Backend.Services.LeaseLiabilityAggregation;
+using IFRS16_Backend.Services.License;
+using IFRS16_Backend.Services.RemeasurementFCL;
+using IFRS16_Backend.Services.Report;
+using IFRS16_Backend.Services.ROUSchedule;
+using IFRS16_Backend.Services.UserCrud;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,8 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
+var licenseSection = builder.Configuration.GetSection("LicenseSettings");
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -65,10 +68,13 @@ builder.Services.AddScoped<GetCurrecyRates>();
 builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRemeasureFCLService, RemeasureFCLService>();
-
-
-
-
+builder.Services.AddScoped<IEncryptionHelper>(_ =>
+{
+    var key = licenseSection.GetValue<string>("SecretKey");
+    if (string.IsNullOrEmpty(key)) throw new Exception("LicenseSettings:SecretKey missing!");
+    return new EncryptionHelper(key);
+});
+builder.Services.AddScoped<LicenseService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

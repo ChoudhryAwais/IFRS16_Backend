@@ -638,6 +638,43 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.RegistrationController",
+    "Method": "RegisterCompany",
+    "RelativePath": "api/Registration/company",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "company",
+        "Type": "IFRS16_Backend.Models.CompanyProfile",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "IFRS16_Backend.Controllers.RegistrationController",
+    "Method": "ValidateLicense",
+    "RelativePath": "api/Registration/validate-license/{companyId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "license",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.RemeasureFCLeasesController",
     "Method": "RemeasureFC",
     "RelativePath": "api/RemeasureFCLeases",

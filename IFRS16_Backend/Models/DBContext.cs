@@ -5,6 +5,7 @@ namespace IFRS16_Backend.Models
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
+        public DbSet<LicenseTokenTable> LicenseToken { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<LeaseFormData> LeaseData { get; set; }
         public DbSet<ExtendedLeaseDataSP> LeaseDataSP { get; set; }
