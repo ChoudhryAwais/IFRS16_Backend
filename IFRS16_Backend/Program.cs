@@ -14,6 +14,7 @@ using IFRS16_Backend.Services.RemeasurementFCL;
 using IFRS16_Backend.Services.Report;
 using IFRS16_Backend.Services.ROUSchedule;
 using IFRS16_Backend.Services.UserCrud;
+using IFRS16_Backend.Services.SessionToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,7 @@ builder.Services.AddScoped<IEncryptionHelper>(_ =>
     return new EncryptionHelper(key);
 });
 builder.Services.AddScoped<LicenseService>();
+builder.Services.AddScoped<ISessionTokenService, SessionTokenService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

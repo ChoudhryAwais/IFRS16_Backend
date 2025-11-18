@@ -1545,6 +1545,37 @@
         }
       }
     },
+    "/api/SessionToken/Upsert": {
+      "post": {
+        "tags": [
+          "SessionToken"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/User/Update": {
       "put": {
         "tags": [
@@ -2603,6 +2634,20 @@
           "leaseId": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpsertRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "token": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

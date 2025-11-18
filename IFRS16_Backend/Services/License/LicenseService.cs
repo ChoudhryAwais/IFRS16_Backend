@@ -1,5 +1,4 @@
 ﻿using IFRS16_Backend.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;

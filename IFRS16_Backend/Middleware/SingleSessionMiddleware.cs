@@ -24,7 +24,7 @@ namespace IFRS16_Backend.Middleware
 
             // Also skip for LoginController specifically
             var cad = endpoint?.Metadata?.GetMetadata<ControllerActionDescriptor>();
-            if (cad != null && string.Equals(cad.ControllerName, "Login", StringComparison.OrdinalIgnoreCase))
+            if (cad != null && (string.Equals(cad.ControllerName, "Login", StringComparison.OrdinalIgnoreCase) || string.Equals(cad.ControllerName, "SessionToken", StringComparison.OrdinalIgnoreCase)))
             {
                 await _next(context);
                 return;
@@ -60,9 +60,9 @@ namespace IFRS16_Backend.Middleware
                 if (userIdClaim != null)
                 {
                     var userId = int.Parse(userIdClaim.Value);
-                    var user = await db.Users.FirstOrDefaultAsync(u => u.UserID == userId);
+                    var user = await db.SessionToken.FirstOrDefaultAsync(u => u.UserId == userId);
 
-                    if (user == null || user.CurrentSessionToken != token)
+                    if (user == null || user.Token != token)
                     {
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         await context.Response.WriteAsync("Session invalid or logged out from another device.");
@@ -72,7 +72,7 @@ namespace IFRS16_Backend.Middleware
                 else
                 {
                     // Token lacks NameIdentifier claim. Try to find a user that has this token stored.
-                    var userByToken = await db.Users.FirstOrDefaultAsync(u => u.CurrentSessionToken == token);
+                    var userByToken = await db.SessionToken.FirstOrDefaultAsync(u => u.Token == token);
 
                     // If token not found in DB or token doesn't match any user's current token, reject as invalid session
                     if (userByToken == null)

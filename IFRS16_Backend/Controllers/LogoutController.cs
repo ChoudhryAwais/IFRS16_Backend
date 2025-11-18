@@ -13,18 +13,19 @@ namespace IFRS16_Backend.Controllers
         private readonly ApplicationDbContext _context = context;
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
                 return BadRequest(new { error = "Invalid user token." });
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId);
-            if (user == null)
-                return NotFound(new { error = "User not found." });
+          
+            var existinglogin = await _context.SessionToken.FirstOrDefaultAsync(s => s.UserId == userId);
 
-            user.CurrentSessionToken = null;
+            if (existinglogin != null)
+                existinglogin.Token = string.Empty; // Use empty string instead of null
+
+            
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Logged out successfully." });

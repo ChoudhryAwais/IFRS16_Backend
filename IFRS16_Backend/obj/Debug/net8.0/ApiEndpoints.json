@@ -847,6 +847,22 @@
     ]
   },
   {
+    "ContainingType": "IFRS16_Backend.Controllers.SessionTokenController",
+    "Method": "Upsert",
+    "RelativePath": "api/SessionToken/Upsert",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "IFRS16_Backend.Models.UpsertRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "IFRS16_Backend.Controllers.UserController",
     "Method": "UpdateUser",
     "RelativePath": "api/User/Update",

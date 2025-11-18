@@ -24,6 +24,7 @@ namespace IFRS16_Backend.Models
         public DbSet<LeaseReportSummaryTable> LeasesReportSummary { get; set; }
         public DbSet<LeaseContract> LeaseDataContracts { get; set; }
         public DbSet<DisclouserMaturityAnalysisTable> DisclouserMaturityAnalysis { get; set; }
+        public DbSet<SessionTokenTable> SessionToken { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
