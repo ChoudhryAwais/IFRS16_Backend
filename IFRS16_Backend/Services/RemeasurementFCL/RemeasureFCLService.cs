@@ -103,12 +103,13 @@ namespace IFRS16_Backend.Services.RemeasurementFCL
                     List<ROUScheduleTable> rouSchedulesFinal;
                     if (freshStart)
                     {
-                        var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule((double)totalNPV, lease);
+                        var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule((double)totalNPV, lease, request.ReportingCurrencyID);
                         var (leaseLiability, _) = await _leaseLiabilityService.PostLeaseLiability(
                             (double)totalNPV,
                             cashFlow,
                             dateArray,
                             lease,
+                            request.ReportingCurrencyID,
                             0,
                             true
                         );
@@ -129,8 +130,10 @@ namespace IFRS16_Backend.Services.RemeasurementFCL
                              dateArray,
                              lease,
                              request.RemeasurementDate,
+                             request.ReportingCurrencyID,
                              originalLastLiabilityBeforeRemeasure.Closing,
                              lastLiabilityBeforeRemeasure.Closing
+                            
                          );
 
                         if (leaseLiability == null || leaseLiability.Count == 0)

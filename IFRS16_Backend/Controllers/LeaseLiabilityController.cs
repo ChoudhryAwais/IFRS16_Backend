@@ -16,7 +16,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var leaseLiability = await _leaseLiabilityService.PostLeaseLiability(request.TotalNPV, request.CashFlow, request.Dates, request.LeaseData);
+                var leaseLiability = await _leaseLiabilityService.PostLeaseLiability(request.TotalNPV, request.CashFlow, request.Dates, request.LeaseData, request.ReportingCurrencyID);
                 return Ok(leaseLiability);
             }
             catch (Exception ex)

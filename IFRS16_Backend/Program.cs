@@ -9,11 +9,9 @@ using IFRS16_Backend.Services.LeaseData;
 using IFRS16_Backend.Services.LeaseDataWorkflow;
 using IFRS16_Backend.Services.LeaseLiability;
 using IFRS16_Backend.Services.LeaseLiabilityAggregation;
-using IFRS16_Backend.Services.License;
 using IFRS16_Backend.Services.RemeasurementFCL;
 using IFRS16_Backend.Services.Report;
 using IFRS16_Backend.Services.ROUSchedule;
-using IFRS16_Backend.Services.UserCrud;
 using IFRS16_Backend.Services.SessionToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -67,15 +65,7 @@ builder.Services.AddScoped<IReportsService, ReportsService>();
 builder.Services.AddScoped<ICurrenciesService, CurrenciesService>();
 builder.Services.AddScoped<GetCurrecyRates>();
 builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRemeasureFCLService, RemeasureFCLService>();
-builder.Services.AddScoped<IEncryptionHelper>(_ =>
-{
-    var key = licenseSection.GetValue<string>("SecretKey");
-    if (string.IsNullOrEmpty(key)) throw new Exception("LicenseSettings:SecretKey missing!");
-    return new EncryptionHelper(key);
-});
-builder.Services.AddScoped<LicenseService>();
 builder.Services.AddScoped<ISessionTokenService, SessionTokenService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

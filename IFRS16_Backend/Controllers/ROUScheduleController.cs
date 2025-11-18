@@ -15,7 +15,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var rouSchedule = await _rouScheduleService.PostROUSchedule(request.TotalNPV,request.LeaseData);
+                var rouSchedule = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData, request.ReportingCurrencyID);
                 return Ok(rouSchedule);
             }
             catch (Exception ex)
@@ -29,7 +29,7 @@ namespace IFRS16_Backend.Controllers
         {
             try
             {
-                var result =await _rouScheduleService.GetROUSchedule(requestModal.PageNumber, requestModal.PageSize, requestModal.LeaseId, requestModal.StartDate, requestModal.EndDate);
+                var result = await _rouScheduleService.GetROUSchedule(requestModal.PageNumber, requestModal.PageSize, requestModal.LeaseId, requestModal.StartDate, requestModal.EndDate);
                 return Ok(result);
             }
             catch (Exception ex)

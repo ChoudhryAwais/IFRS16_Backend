@@ -8,6 +8,7 @@ namespace IFRS16_Backend.Models
         [Key]
         public int LeaseId { get; set; }
         public int UserID { get; set; }
+        public string UserName { get; set; }
         public string LeaseName { get; set; }
         public double Rental { get; set; }
         public DateTime CommencementDate { get; set; }
@@ -34,6 +35,8 @@ namespace IFRS16_Backend.Models
         public List<CustomInitialRecognitionTable>? CustomIRTable { get; set; }
         [NotMapped]
         public bool IsChangeInScope { get; set; }
+        [NotMapped]
+        public int ReportingCurrencyID { get; set; }
 
     }
 
@@ -42,6 +45,7 @@ namespace IFRS16_Backend.Models
         [Key]
         public int LeaseId { get; set; }
         public int UserID { get; set; }
+        public string UserName { get; set; }
         public string LeaseName { get; set; }
         public double Rental { get; set; }
         public DateTime ModificationDate { get; set; }

@@ -19,7 +19,19 @@ namespace IFRS16_Backend.Controllers
         private readonly ILeaseDataWorkflowService _leaseDataWorkflowService = leaseDataWorkflowService;
         private readonly ApplicationDbContext _context = context;
 
-
+        [HttpPost]
+        public async Task<IActionResult> PostLeaseFormData([FromBody] LeaseFormData leaseFormData)
+        {
+            try
+            {
+                await _leaseDataWorkflowService.ProcessLeaseFormDataAsync(leaseFormData);
+                return CreatedAtAction(nameof(PostLeaseFormData), new { id = leaseFormData.LeaseId }, leaseFormData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("GetAllLeasesForCompany")]
         public async Task<ActionResult<List<LeaseFormData>>> GetAllLeasesForCompany([FromQuery] int companyId = 1)
         {
@@ -56,19 +68,6 @@ namespace IFRS16_Backend.Controllers
             {
                 var leases = await _leaseFormDataService.GetLeaseById(leaseId);
                 return Ok(leases);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> PostLeaseFormData([FromBody] LeaseFormData leaseFormData)
-        {
-            try
-            {
-                await _leaseDataWorkflowService.ProcessLeaseFormDataAsync(leaseFormData);
-                return CreatedAtAction(nameof(PostLeaseFormData), new { id = leaseFormData.LeaseId }, leaseFormData);
             }
             catch (Exception ex)
             {

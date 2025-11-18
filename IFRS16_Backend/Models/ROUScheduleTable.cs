@@ -27,6 +27,7 @@ namespace IFRS16_Backend.Models
     {
         public LeaseFormData LeaseData { get; set; }
         public double TotalNPV { get; set; }
+        public int ReportingCurrencyID { get; set; }
     }
 
     public class ROUScheduleResult

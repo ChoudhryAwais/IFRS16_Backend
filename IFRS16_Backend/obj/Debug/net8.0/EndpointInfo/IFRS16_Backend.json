@@ -487,6 +487,37 @@
         }
       }
     },
+    "/api/LeaseFormData": {
+      "post": {
+        "tags": [
+          "LeaseFormData"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaseFormData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/LeaseFormData/GetAllLeasesForCompany": {
       "get": {
         "tags": [
@@ -629,37 +660,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/api/LeaseFormData": {
-      "post": {
-        "tags": [
-          "LeaseFormData"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LeaseFormData"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LeaseFormData"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LeaseFormData"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -1087,146 +1087,11 @@
         }
       }
     },
-    "/api/Login": {
-      "post": {
-        "tags": [
-          "Login"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Login"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Login"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Login"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Logout": {
       "post": {
         "tags": [
           "Logout"
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Registration": {
-      "post": {
-        "tags": [
-          "Registration"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Registration/company": {
-      "post": {
-        "tags": [
-          "Registration"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CompanyProfile"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CompanyProfile"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CompanyProfile"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Registration/validate-license/{companyId}": {
-      "post": {
-        "tags": [
-          "Registration"
-        ],
-        "parameters": [
-          {
-            "name": "companyId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1575,80 +1440,6 @@
           }
         }
       }
-    },
-    "/api/User/Update": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdateDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdateDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/User/VerifyPassword": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserPasswordDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserPasswordDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserPasswordDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Values/getdummyusers": {
-      "get": {
-        "tags": [
-          "Values"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1766,56 +1557,6 @@
             "type": "number",
             "format": "double",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CompanyProfile": {
-        "type": "object",
-        "properties": {
-          "companyID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "registrationNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "reportingCurrencyId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "reportingCurrencyCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "financialYearEnd": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "leaseTypes": {
-            "type": "string",
-            "nullable": true
-          },
-          "assetType": {
-            "type": "string",
-            "nullable": true
-          },
-          "licenseKey": {
-            "type": "string",
-            "nullable": true
-          },
-          "licenseExpiry": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "allowedUsers": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2236,6 +1977,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
           "leaseName": {
             "type": "string",
             "nullable": true
@@ -2327,6 +2072,10 @@
           },
           "isChangeInScope": {
             "type": "boolean"
+          },
+          "reportingCurrencyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2341,6 +2090,10 @@
           "userID": {
             "type": "integer",
             "format": "int32"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
           },
           "leaseName": {
             "type": "string",
@@ -2439,6 +2192,10 @@
           },
           "leaseData": {
             "$ref": "#/components/schemas/LeaseFormData"
+          },
+          "reportingCurrencyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2526,20 +2283,6 @@
         },
         "additionalProperties": false
       },
-      "Login": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ROUScheduleRequest": {
         "type": "object",
         "properties": {
@@ -2549,6 +2292,10 @@
           "totalNPV": {
             "type": "number",
             "format": "double"
+          },
+          "reportingCurrencyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2615,6 +2362,10 @@
           "remeasurementDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "reportingCurrencyID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2646,95 +2397,6 @@
             "format": "int32"
           },
           "token": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "userID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "userAddress": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "companyID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "role": {
-            "type": "string",
-            "nullable": true
-          },
-          "currentSessionToken": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserPasswordDto": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "password": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserUpdateDto": {
-        "type": "object",
-        "properties": {
-          "userID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "userAddress": {
             "type": "string",
             "nullable": true
           }

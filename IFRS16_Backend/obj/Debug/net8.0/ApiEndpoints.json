@@ -596,22 +596,6 @@
     ]
   },
   {
-    "ContainingType": "IFRS16_Backend.Controllers.LoginController",
-    "Method": "Login",
-    "RelativePath": "api/Login",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "loginRequest",
-        "Type": "IFRS16_Backend.Models.Login",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "IFRS16_Backend.Controllers.LogoutController",
     "Method": "Logout",
     "RelativePath": "api/Logout",
@@ -619,59 +603,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.RegistrationController",
-    "Method": "Register",
-    "RelativePath": "api/Registration",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "user",
-        "Type": "IFRS16_Backend.Models.User",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.RegistrationController",
-    "Method": "RegisterCompany",
-    "RelativePath": "api/Registration/company",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "company",
-        "Type": "IFRS16_Backend.Models.CompanyProfile",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.RegistrationController",
-    "Method": "ValidateLicense",
-    "RelativePath": "api/Registration/validate-license/{companyId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "companyId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "license",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": []
   },
   {
@@ -860,48 +791,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.UserController",
-    "Method": "UpdateUser",
-    "RelativePath": "api/User/Update",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "dto",
-        "Type": "IFRS16_Backend.Models.UserUpdateDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.UserController",
-    "Method": "VerifyPassword",
-    "RelativePath": "api/User/VerifyPassword",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "dto",
-        "Type": "IFRS16_Backend.Models.UserPasswordDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "IFRS16_Backend.Controllers.ValuesController",
-    "Method": "GetDummyUsers",
-    "RelativePath": "api/Values/getdummyusers",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   }
 ]

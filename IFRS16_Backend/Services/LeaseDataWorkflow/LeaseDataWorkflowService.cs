@@ -46,13 +46,14 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     LeaseData = leaseFormData
                 };
 
-                var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
+                var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData, leaseFormData.ReportingCurrencyID);
 
                 var (leaseLiability, fc_leaseLiability) = await _leaseLiabilityService.PostLeaseLiability(
                     request.TotalNPV,
                     initialRecognitionRes.CashFlow,
                     initialRecognitionRes.Dates,
-                    leaseFormData
+                    leaseFormData,
+                    leaseFormData.ReportingCurrencyID
                 );
 
                 var journalEntries = await _journalEntriesService.PostJEForLease(leaseFormData, leaseLiability, rouSchedule);
@@ -119,6 +120,7 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                 if (existingLease != null)
                 {
                     existingLease.UserID = leaseModificationData.UserID;
+                    existingLease.UserName = leaseModificationData.UserName;
                     existingLease.LeaseName = leaseModificationData.LeaseName;
                     existingLease.Rental = leaseModificationData.Rental;
                     existingLease.EndDate = leaseModificationData.EndDate;
@@ -142,12 +144,13 @@ namespace IFRS16_Backend.Services.LeaseDataWorkflow
                     LeaseData = leaseModificationData
                 };
 
-                var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData);
+                var (rouSchedule, fc_rouSchedule) = await _rouScheduleService.PostROUSchedule(request.TotalNPV, request.LeaseData, leaseModificationData.ReportingCurrencyID);
                 var (leaseLiability, fc_leaseLiability) = await _leaseLiabilityService.PostLeaseLiability(
                     request.TotalNPV,
                     IRResult.CashFlow,
                     IRResult.Dates,
-                    leaseModificationData
+                    leaseModificationData,
+                    leaseModificationData.ReportingCurrencyID
                 );
 
                 var modificationDetails = new ModificationDetails(

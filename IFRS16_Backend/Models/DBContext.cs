@@ -5,8 +5,6 @@ namespace IFRS16_Backend.Models
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public DbSet<LicenseTokenTable> LicenseToken { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<LeaseFormData> LeaseData { get; set; }
         public DbSet<ExtendedLeaseDataSP> LeaseDataSP { get; set; }
         public DbSet<InitialRecognitionTable> InitialRecognition { get; set; }
@@ -14,7 +12,6 @@ namespace IFRS16_Backend.Models
         public DbSet<FC_ROUScheduleTable> FC_ROUSchedule { get; set; }
         public DbSet<LeaseLiabilityTable> LeaseLiability { get; set; }
         public DbSet<FC_LeaseLiabilityTable> FC_LeaseLiability { get; set; }
-        public DbSet<CompanyProfile> CompanyProfile { get; set; }
         public DbSet<JournalEntryTable> JournalEntries { get; set; }
         public DbSet<FC_JournalEntryTable> FC_JournalEntries { get; set; }
         public DbSet<CurrenciesTable> Currencies { get; set; }

@@ -9,12 +9,12 @@ namespace IFRS16_Backend.Services.ROUSchedule
     {
         private readonly GetCurrecyRates _getCurrencyRates = getCurrencyRates;
         private readonly ApplicationDbContext _context = context;
-        public async Task<(List<ROUScheduleTable>, List<FC_ROUScheduleTable>)> PostROUSchedule(double totalNPV, LeaseFormData leaseData)
+        public async Task<(List<ROUScheduleTable>, List<FC_ROUScheduleTable>)> PostROUSchedule(double totalNPV, LeaseFormData leaseData, int reportingCurrencyID)
         {
             // Calculate amortization
             var (_, TotalDays, _) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             List<FC_ROUScheduleTable> fc_RouSchedule = [];
-            List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData);
+            List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData, reportingCurrencyID);
             decimal exchangeRate = 1;
             double opening = (double)((leaseData?.RouOpening != null ? leaseData.RouOpening : totalNPV) + (leaseData.IDC ?? 0));
             double GRV = leaseData.GRV ?? 0;

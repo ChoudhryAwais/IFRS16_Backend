@@ -33,6 +33,7 @@ namespace IFRS16_Backend.Models
         public List<double> CashFlow { get; set; }
         public List<DateTime> Dates { get; set; }
         public LeaseFormData LeaseData { get; set; }
+        public int ReportingCurrencyID { get; set; }
     }
     public class LeaseLiabilityResult
     {

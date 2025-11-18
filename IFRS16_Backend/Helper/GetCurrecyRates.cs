@@ -8,10 +8,9 @@ namespace IFRS16_Backend.Helper
     public class GetCurrecyRates(ApplicationDbContext context)
     {
         private readonly ApplicationDbContext _context = context;
-        public List<ExchangeRateDTO> GetListOfExchangeRates(LeaseFormData leaseData)
+        public List<ExchangeRateDTO> GetListOfExchangeRates(LeaseFormData leaseData, int reportingCurrencyID)
         {
-            CompanyProfile companyProfile = _context.CompanyProfile.FirstOrDefault(profile => profile.CompanyID == leaseData.CompanyID);
-            if (companyProfile?.ReportingCurrencyId != leaseData?.CurrencyID)
+            if (reportingCurrencyID != leaseData?.CurrencyID)
             {
                 List<ExchangeRateDTO> exchangeRates = [.. _context.ExchangeRates
                                         .Where(rate => rate.CurrencyID == leaseData.CurrencyID && rate.ExchangeDate >= leaseData.CommencementDate && rate.ExchangeDate <= leaseData.EndDate)

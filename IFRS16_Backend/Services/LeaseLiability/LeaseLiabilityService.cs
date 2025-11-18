@@ -10,13 +10,13 @@ namespace IFRS16_Backend.Services.LeaseLiability
     {
         private readonly GetCurrecyRates _getCurrencyRates = getCurrencyRates;
         private readonly ApplicationDbContext _context = context;
-        public async Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData, double customOpening = 0, bool fromRemeasure = false)
+        public async Task<(List<LeaseLiabilityTable>, List<FC_LeaseLiabilityTable>)> PostLeaseLiability(double totalNPV, List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData, int companyReportingID = 0, double customOpening = 0, bool fromRemeasure = false)
         {
             var (_, TotalDays, _) = CalculateLeaseDuration.GetLeaseDuration(leaseData.CommencementDate, leaseData.EndDate);
             double xirr = XIRR.XIRRCalculation(cashFlow, dates);
             double xirrDaily = Math.Pow(1 + xirr, 1.0 / 365.0) - 1;
             List<LeaseLiabilityTable> leaseLiability = [];
-            List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData);
+            List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData, companyReportingID);
 
             decimal exchangeRate = 1;
             // Initialize variables
@@ -102,7 +102,7 @@ namespace IFRS16_Backend.Services.LeaseLiability
                             Closing = base_closing
                         });
                     }
-                   
+
                 }
                 // Create a new table entry
                 interest = base_interest * (double)exchangeRate;
@@ -150,13 +150,13 @@ namespace IFRS16_Backend.Services.LeaseLiability
 
             return (leaseLiability, fc_leaseLiability);
         }
-        public async Task<List<LeaseLiabilityTable>> RemeasureLeaseLiability(List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData, DateTime StartDate, double customOriginalOpening, double customOpening = 0)
+        public async Task<List<LeaseLiabilityTable>> RemeasureLeaseLiability(List<double> cashFlow, List<DateTime> dates, LeaseFormData leaseData, DateTime StartDate, int reportingCurrenyID, double customOriginalOpening, double customOpening = 0)
         {
             var (_, TotalDays, _) = CalculateLeaseDuration.GetLeaseDuration(StartDate, leaseData.EndDate);
             double xirr = XIRR.XIRRCalculation(cashFlow, dates);
             double xirrDaily = Math.Pow(1 + xirr, 1.0 / 365.0) - 1;
             List<LeaseLiabilityTable> leaseLiability = [];
-            List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData);
+            List<ExchangeRateDTO> exchangeRatesList = _getCurrencyRates.GetListOfExchangeRates(leaseData, reportingCurrenyID);
 
             decimal exchangeRate = 1;
             // Initialize variables
